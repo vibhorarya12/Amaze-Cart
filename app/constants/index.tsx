@@ -1,0 +1,1 @@
+const Base_api_url : String = 'https://api.escuelajs.co/api/v1/'
