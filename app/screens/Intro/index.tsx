@@ -1,12 +1,20 @@
 import Onboarding from 'react-native-onboarding-swiper';
 import { Intro_img_one, Intro_img_three, Intro_img_two } from '../../../assets/Images';
-import { Button, Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Dimensions, Image, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-
+import { useNavigation } from '@react-navigation/native';
+import * as Animatable from 'react-native-animatable';
+import { LinearGradient } from 'expo-linear-gradient';
+import { theme_primary } from '../../constants';
 const { width, height } = Dimensions.get('screen');
+
+const color = ["#433eb6","#090979"];
+
 
 
 const Intro = () => {
+
+  const navigation = useNavigation();
  
   const boardingItems = [  {
      img: Intro_img_two,
@@ -19,31 +27,39 @@ const Intro = () => {
   } ,
      {img:Intro_img_three,
      text: "Upgrade your tech with top electronics",
-     btn : <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>  {"Shop now"} </Text></TouchableOpacity>
+     btn : <TouchableOpacity  style={styles.button}  onPress={()=>navigation.navigate('Login')} > 
+     <LinearGradient 
+     start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+     colors={color}
+     style={styles.gradientBtn}
+     >
 
+      <Text style={styles.buttonText}>Shop Now</Text>
+     </LinearGradient></TouchableOpacity>
+    
   } ,
 
 ]
 
-  return (<View style={styles.container}>
+  return (<SafeAreaView style={styles.container}>
     <SwiperFlatList
 
       // autoplay
       // autoplayDelay={2}
       // autoplayLoop={true}
       paginationStyle={{ bottom:height*0.04,  opacity: 0.7 , position:'absolute'}}
-
+       
       index={0}
       showPagination
       data={boardingItems}
       renderItem={({ item }) => (
         <ImageBackground  imageStyle={{opacity:0.7, resizeMode:'cover'}} style={styles.child} source={item.img} >
-         <Text style={styles.text}>{item.text} </Text>
+         <Animatable.Text  animation="fadeIn" iterationCount={1} duration={2000} style={styles.text}>{item.text} </Animatable.Text>
          {item.btn?item.btn:null}
         </ImageBackground>
       )}
     />
-  </View>)
+  </SafeAreaView>)
 
 
 }
@@ -73,16 +89,29 @@ const styles = StyleSheet.create({
   },
   button:{
      position:'absolute',
-     width : width*0.5,
-     height : width*0.12,
-     backgroundColor : '#E6AE08',
+    
+    //  backgroundColor : '#E6AE08',
      justifyContent:'center',
-     alignItems:'center',
+     
      alignSelf:'center',
      top:height*0.25,
      borderRadius:17,
-     elevation:5
+     elevation:5,
+     borderWidth:1,
+     borderColor:'white'
+     
   },
+
+   gradientBtn:{
+    width : width*0.5,
+     height : width*0.12,
+     justifyContent:'center',
+     alignItems:'center',
+     borderRadius:17,
+    
+
+   },
+
   buttonText:{
     fontSize : width*0.043,
     color: 'white',
