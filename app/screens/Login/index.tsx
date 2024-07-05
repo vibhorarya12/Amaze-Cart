@@ -4,6 +4,8 @@ import { theme_color, theme_primary } from "../../constants";
 import { Logo_img } from "../../../assets/Images";
 import * as Animatable from 'react-native-animatable';
 import {  TextInput } from 'react-native-paper';
+import { useNavigation } from "@react-navigation/native";
+
 
 
 const { width, height } = Dimensions.get('window');
@@ -11,7 +13,7 @@ const { width, height } = Dimensions.get('window');
 
 const color = [ "#090979", "#433eb6",  "#433eb6"];
 const Login = () => {
-
+  const navigation = useNavigation();
  
 
 
@@ -32,9 +34,9 @@ const Login = () => {
                     value={"+91"}
                     
                 />
-                <TouchableOpacity style={{position:'absolute', top: height * 0.45,left:width*0.12}}><Text style={styles.registerText}>Don't have an account yet?  Register Now</Text></TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate('Register')}  style={{position:'absolute', top: height * 0.45,left:width*0.12}}><Text style={styles.registerText}>Don't have an account yet?  Register Now</Text></TouchableOpacity>
                 
-                <TouchableOpacity style={{position:'absolute', top: height * 0.35, elevation:5}}>
+                <TouchableOpacity onPress={()=>navigation.navigate('OTP')}  style={{position:'absolute', top: height * 0.35, elevation:5}}>
                     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
                         <Text style={styles.btnText}>Login</Text>
                     </LinearGradient>
