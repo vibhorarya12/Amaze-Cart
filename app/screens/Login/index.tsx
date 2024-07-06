@@ -5,6 +5,7 @@ import { Logo_img } from "../../../assets/Images";
 import * as Animatable from 'react-native-animatable';
 import {  TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
+import { setItem } from "../../Utils/utils";
 
 
 
@@ -48,7 +49,7 @@ const Login = () => {
                 <View style={styles.divider}></View>
                 
                 </View>
-                <TouchableOpacity style={{position:'absolute', top: height * 0.6, elevation:5}}>
+                <TouchableOpacity  onPress={()=>setItem("onboarded", "1")} style={{position:'absolute', top: height * 0.6, elevation:5}}>
                     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
                         <Text style={styles.btnText}>Continue as Guest</Text>
                     </LinearGradient>
