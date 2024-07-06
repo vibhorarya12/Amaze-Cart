@@ -31,7 +31,7 @@ const Login = () => {
                     outlineColor="#433eb6"
                     activeOutlineColor="#433eb6"
                     outlineStyle={{ borderWidth: 2 , borderRadius:10}}
-                    value={"+91"}
+                    left={<TextInput.Affix text="+91" />}
                     
                 />
                 <TouchableOpacity onPress={()=>navigation.navigate('Register')}  style={{position:'absolute', top: height * 0.45,left:width*0.12}}><Text style={styles.registerText}>Don't have an account yet?  Register Now</Text></TouchableOpacity>
