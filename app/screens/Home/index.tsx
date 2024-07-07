@@ -1,35 +1,39 @@
-import { View, Text, Dimensions, StyleSheet, ScrollView , StatusBar, Button} from "react-native"
-import CustomTab from "../../components/CustomTab";
+import { View, Text, Dimensions, StyleSheet, ScrollView, StatusBar, Button, Image } from "react-native"
+
 import { useNavigation } from "@react-navigation/native";
+import Header from "../../components/Header";
+import Banner from "../../components/Banner";
 
 const { width, height } = Dimensions.get('window');
-const sh = StatusBar.currentHeight;
+
 
 const Home = () => {
     const navigation = useNavigation();
 
-    return (<><ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <Text>
-            This is Home
-        </Text>
-           
-        
-    </ScrollView></>)
+    return (
+        <View style={{ flex: 1 }}>
+            <Header />
+            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <Banner/>
+                
+            </ScrollView></View>)
 }
 
 
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 2,
+        
         borderColor: 'red',
     },
     contentContainer: {
-        borderWidth: 2,
+
         borderColor: 'red',
         height: height,
-        position:'absolute',
-        width:width,
+       
+        width: width,
+        alignItems:'center',
         
+
 
     }
 })
