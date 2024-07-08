@@ -1,6 +1,7 @@
 import { Dimensions, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 import {
+  Ban_img,
   Ban_img_1,
   Ban_img_2,
   Ban_img_3,
@@ -9,7 +10,7 @@ import {
 
 const { width, height } = Dimensions.get("window");
 
-const items = [Ban_img_1, Ban_img_2, Ban_img_3, Ban_img_4];
+const items = [Ban_img_1, Ban_img, Ban_img_3, Ban_img_4];
 
 const Banner = () => {
   return (
@@ -28,6 +29,7 @@ const Banner = () => {
               style={styles.image}
               source={item}
               resizeMode={"contain"}
+            
             />
           </View>
         )}
@@ -42,7 +44,8 @@ const styles = StyleSheet.create({
     width: width,
     height: height * 0.25, 
     top: height * 0.143,  
-    elevation:5
+    elevation:5,
+   
     
   },
   slide: {
@@ -50,12 +53,14 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+   
+   
     
   },
   image: {
     width: '100%',
     height: '100%',
-    
+   
   },
   paginationDot: {
     width: 8,

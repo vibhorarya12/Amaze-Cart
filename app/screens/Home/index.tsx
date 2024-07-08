@@ -3,6 +3,7 @@ import { View, Text, Dimensions, StyleSheet, ScrollView, StatusBar, Button, Imag
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../components/Header";
 import Banner from "../../components/Banner";
+import CategoryItems from "../../components/Categoryitems";
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,7 +16,7 @@ const Home = () => {
             <Header />
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Banner/>
-                
+                <CategoryItems/>
             </ScrollView></View>)
 }
 
