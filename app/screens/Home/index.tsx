@@ -1,12 +1,11 @@
-import { View, Text, Dimensions, StyleSheet, ScrollView, StatusBar, Button, Image } from "react-native"
-
+import { View, Dimensions, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../components/Header";
 import Banner from "../../components/Banner";
 import CategoryItems from "../../components/Categoryitems";
+import Explore from "../../components/Explore";
 
 const { width, height } = Dimensions.get('window');
-
 
 const Home = () => {
     const navigation = useNavigation();
@@ -15,29 +14,23 @@ const Home = () => {
         <View style={{ flex: 1 }}>
             <Header />
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <Banner/>
-                <CategoryItems/>
-            </ScrollView></View>)
+                <Banner />
+                <CategoryItems />
+                <Explore/>
+            </ScrollView>
+        </View>
+    );
 }
-
 
 const styles = StyleSheet.create({
     container: {
-        
-        borderColor: 'red',
+        flex: 1,
     },
     contentContainer: {
-
-        borderColor: 'red',
-        height: height,
-       
-        width: width,
-        alignItems:'center',
-        
-
-
-    }
-})
-
+        paddingTop:height * 0.15,
+        paddingBottom: height * 0.1,
+        justifyContent:'center'
+    },
+});
 
 export default Home;

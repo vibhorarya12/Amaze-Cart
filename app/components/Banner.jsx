@@ -1,4 +1,4 @@
-import { Dimensions, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 import {
   Ban_img,
@@ -20,16 +20,14 @@ const Banner = () => {
         showPagination
         data={items}
         autoplay
-      autoplayDelay={3}
-      autoplayLoop={true}
-      
+        autoplayDelay={3}
+        autoplayLoop={true}
         renderItem={({ item }) => (
           <View style={styles.slide}>
             <Image
               style={styles.image}
               source={item}
               resizeMode={"contain"}
-            
             />
           </View>
         )}
@@ -43,24 +41,17 @@ const styles = StyleSheet.create({
   container: {
     width: width,
     height: height * 0.25, 
-    top: height * 0.143,  
-    elevation:5,
-   
-    
+    elevation: 5,
   },
   slide: {
     width: width,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-   
-   
-    
   },
   image: {
     width: '100%',
     height: '100%',
-   
   },
   paginationDot: {
     width: 8,
