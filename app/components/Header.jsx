@@ -30,11 +30,11 @@ const Header = () => {
         <TextInput placeholder="search AmazeCart" style={styles.textInput} />
       </Animatable.View>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{ position: "absolute", left: width * 0.85, bottom:height*0.02 }}
       >
-        <Icon name="shoppingcart" size={width * 0.08} color={"white"} />
-      </TouchableOpacity>
+        <Icon name="heart" size={width * 0.08} color={"white"} />
+      </TouchableOpacity> */}
     </LinearGradient>
   );
 };
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    width: width * 0.75,
-    height: width * 0.12,
+    width: width * 0.85,
+    height: width * 0.10,
     position: "absolute",
     bottom:height*0.01,
     borderRadius: 10,

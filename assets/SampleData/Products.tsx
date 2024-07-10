@@ -98,5 +98,26 @@
         "creationAt": "2024-07-08T23:29:11.000Z",
         "updatedAt": "2024-07-08T23:29:11.000Z"
       }
+    },
+    {
+      "id": 965,
+      "title": "Radeon HD",
+      "price": 1222,
+      "description": "gpu red",
+      "images": [
+        "https://images.unsplash.com/photo-1555618568-bdf0a992c512?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      ],
+      "creationAt": "2024-07-05T13:39:42.000Z",
+      "updatedAt": "2024-07-05T13:39:42.000Z",
+      "category": {
+        "id": 5,
+        "name": "Miscellaneous",
+        "image": "https://i.imgur.com/BG8J0Fj.jpg",
+        "creationAt": "2024-07-04T21:12:07.000Z",
+        "updatedAt": "2024-07-04T21:12:07.000Z"
+      }
     }
   ]
+
+
+  

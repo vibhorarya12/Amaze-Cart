@@ -1,7 +1,7 @@
 import React from 'react';
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-native";
-import {  Category_four, Category_one, Category_three, Category_two } from "../../assets/Images";
+import { Category_four, Category_one, Category_three, Category_two } from "../../assets/Images";
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,7 +11,7 @@ const Items = [
     { img: Category_two, text: 'Shoes' },
     { img: Category_three, text: 'Electronics' },
     { img: Category_four, text: 'Furniture' },
-    
+
 ];
 
 const CategoryItem = ({ img, text }) => (
@@ -25,10 +25,13 @@ const CategoryItem = ({ img, text }) => (
 
 const CategoryItems = () => {
     return (
-        <View style={styles.container}>
-            {Items.map((item, index) => (
-                <CategoryItem key={index} img={item.img} text={item.text} />
-            ))}
+        <View>
+            <Text style={styles.textStyle}>Shop by category</Text>
+            <View style={styles.container}>
+                {Items.map((item, index) => (
+                    <CategoryItem key={index} img={item.img} text={item.text} />
+                ))}
+            </View>
         </View>
     );
 }
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: width * 0.025,
         flexWrap: 'wrap',
-        marginTop: height * 0.02,
+        marginTop: height * 0.01,
     },
     itemContainer: {
         width: width * 0.45,
@@ -57,7 +60,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         position: 'absolute',
         right: 0,
-       
+
     },
     itemText: {
         position: 'absolute',
@@ -69,9 +72,20 @@ const styles = StyleSheet.create({
         zIndex: 2,
         bottom: 0,
         alignSelf: 'center',
-        fontWeight:'400',
-       fontStyle:'italic'
-    }
+        fontWeight: '400',
+        fontStyle: 'italic'
+    },
+    textStyle: {
+        fontSize: width * 0.055,
+        fontWeight: '600',
+        color: "#433eb6",
+        textShadowColor: 'rgba(0, 0, 0, 0.4)',
+        textShadowOffset: { width: -1, height: -1 },
+        textShadowRadius: 0.6,
+        left: width * 0.05,
+        alignSelf: 'flex-start'
+
+    },
 });
 
 export default CategoryItems;
