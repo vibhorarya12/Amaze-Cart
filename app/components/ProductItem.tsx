@@ -1,23 +1,39 @@
-import { Dimensions, StyleSheet, View, Image, Text } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Dimensions, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 
 const { width, height } = Dimensions.get('window');
-
+const ShimmerPlaceholder  = createShimmerPlaceholder(LinearGradient);
 const ProductItem = ({ item }) => {
-    return (<View style={styles.constainer}>
+    const truncatedTitle = item.title.length > 28 ? item.title.substring(0, 25) + "..." : item.title;
+    return (<TouchableOpacity  activeOpacity={0.8} style={styles.constainer}>
         <Image resizeMode={"cover"} source={{ uri: item.images[0] }} style={styles.img} />
 
-        <Text style={styles.title}>{item.title + "\n" + "₹" + item.price + "99"}</Text>
-
+        <Text style={styles.title}>{truncatedTitle}</Text>
+        <Text style={styles.priceText}>{"₹ " + item.price + "99"}</Text>
+        
+        
         <StarRatingDisplay
             rating={3.5}
-            style={{alignSelf:'flex-start', paddingLeft:5}}
+            style={{ alignSelf: 'flex-start', paddingLeft: 5 }}
             starSize={width * 0.055}
             starStyle={{ width: width * 0.03, paddingBottom: 10 }}
             color="#FFA400"
 
         />
+       
 
+    </TouchableOpacity >)
+}
+
+
+
+export const ProductSkeleton = ()=>{
+    return(<View style={styles.skltonContainer}>
+        <ShimmerPlaceholder isReversed={true} style={styles.img} />
+        <ShimmerPlaceholder isReversed={true} style={styles.skltnContent} />
     </View>)
 }
 
@@ -28,11 +44,12 @@ const styles = StyleSheet.create({
 
         borderColor: 'grey',
         width: width * 0.45,
-        // height:width*0.75,
+        height: width * 0.8,
         borderRadius: 10,
         borderWidth: 0.3,
-
-        alignItems: 'center'
+        display: 'flex',
+        alignItems: 'center',
+        gap: width * 0.01
 
     },
     img: {
@@ -47,12 +64,39 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         fontWeight: '500',
         marginLeft: width * 0.03,
-        marginBottom: 10,
+
         paddingHorizontal: width * 0.04
         // padding:width*0.04
     },
     priceText: {
+        fontSize: width * 0.035,
+        alignSelf: 'flex-start',
+        fontWeight: '500',
+        marginLeft: width * 0.03,
+        backgroundColor: '#433eb6',
+        paddingHorizontal: width * 0.04,
+        color: 'white',
+        borderRadius: 5,
+        elevation: 3
 
+    },
+    skltonContainer:{
+        
+        width: width * 0.45,
+        height: width * 0.8,
+        borderRadius: 10,
+        opacity:0.6,
+        display: 'flex',
+        alignItems: 'center',
+        gap: width * 0.04
+    },
+    skltnContent:{
+        width:width*0.37,
+        height:height*0.053,
+        borderRadius:7,
+        alignSelf: 'flex-start',
+        opacity:0.6,
+        
 
     }
 
