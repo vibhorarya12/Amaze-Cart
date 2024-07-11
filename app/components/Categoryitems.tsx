@@ -2,26 +2,31 @@ import React from 'react';
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-native";
 import { Category_four, Category_one, Category_three, Category_two } from "../../assets/Images";
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 const colors = ["#090979", "#433eb6"];
 const Items = [
-    { img: Category_one, text: 'Clothing' },
+    { img: Category_one, text: 'Clothes' },
     { img: Category_two, text: 'Shoes' },
     { img: Category_three, text: 'Electronics' },
     { img: Category_four, text: 'Furniture' },
 
 ];
 
-const CategoryItem = ({ img, text }) => (
-    <TouchableOpacity activeOpacity={0.95} style={{ marginTop: height * 0.02 }}>
+
+
+const CategoryItem = ({ img, text }) => {
+    const navigation = useNavigation();
+   
+   return(<TouchableOpacity onPress={() => navigation.navigate('Category', { category: text })}  activeOpacity={0.95} style={{ marginTop: height * 0.02 }}>
         <LinearGradient colors={colors} style={styles.itemContainer}>
             <Image source={img} style={styles.image} resizeMode={"contain"} />
             <Text style={styles.itemText}>{text}</Text>
         </LinearGradient>
-    </TouchableOpacity>
-);
+    </TouchableOpacity>)
+};
 
 const CategoryItems = () => {
     return (

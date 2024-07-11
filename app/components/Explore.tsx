@@ -1,14 +1,43 @@
 import { StyleSheet, View, Dimensions ,Text } from "react-native"
 import { Sample_Products_Data } from "../../assets/SampleData/Products";
 import ProductItem from "./ProductItem";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { URL } from "../constants";
 
 const { width, height } = Dimensions.get('window');
 
 const Explore = ()=>{
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const handleRequest = async()=>{
+     setLoading(true);
+     try{
+            const response = await axios.get(`${URL}/products/category/Miscellaneous`);
+            // console.log(response.data);
+            setItems(response.data);
+
+     }
+     catch(err){
+        console.log(err);
+     }
+     finally{
+        setLoading(false);
+     }
+
+  }
+
+  useEffect(()=>{
+       handleRequest();
+
+  },[])
+  
+
+
     return(<View style={styles.container}>
         <Text style={styles.textStyle}>Explore more products</Text>
         <View style={styles.ProductsContainer}>
-            {Sample_Products_Data.map((item)=>{ return(<ProductItem  key={item.id} item= {item} />)})}
+        { loading?<Text>Loading....</Text>:items.map((item)=>{ return(<ProductItem  key={item._id} item= {item} />)})}     
         </View>
 
     </View>)

@@ -100,23 +100,27 @@
       }
     },
     {
-      "id": 965,
-      "title": "Radeon HD",
-      "price": 1222,
-      "description": "gpu red",
+      "id": 114,
+      "title": "Khakey Mens Cotton Hoodies | Cotton Sweatshirt with Hood | One Piece Monkey D. Luffy Hoodies for Men | Anime Hoodies for Men | P15",
+      "price": 1,
+      "description": "Khakey Mens Cotton Hoodies | Cotton Sweatshirt with Hood | One Piece Monkey D. Luffy Hoodies for Men | Anime Hoodies for Men | P15 ",
       "images": [
-        "https://images.unsplash.com/photo-1555618568-bdf0a992c512?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          "https://m.media-amazon.com/images/I/61w-l5w8eGL._SX569_.jpg",
+          "https://m.media-amazon.com/images/I/31iBCwPuypL.jpg",
+          "https://m.media-amazon.com/images/I/91LbgPAjPkL._SY741_.jpg"
       ],
-      "creationAt": "2024-07-05T13:39:42.000Z",
-      "updatedAt": "2024-07-05T13:39:42.000Z",
+      "creationAt": "2024-07-05T08:19:56.000Z",
+      "updatedAt": "2024-07-05T08:20:44.000Z",
       "category": {
-        "id": 5,
-        "name": "Miscellaneous",
-        "image": "https://i.imgur.com/BG8J0Fj.jpg",
-        "creationAt": "2024-07-04T21:12:07.000Z",
-        "updatedAt": "2024-07-04T21:12:07.000Z"
-      }
-    }
+          "id": 1,
+          "name": "Clothes",
+          "image": "https://i.imgur.com/QkIa5tT.jpeg",
+          "creationAt": "2024-07-04T21:12:07.000Z",
+          "updatedAt": "2024-07-04T21:12:07.000Z"
+      },
+      "_id": "668f8d54b7d7f238719bc392",
+      "__v": 0
+  }
   ]
 
 

@@ -1,7 +1,7 @@
-const Base_api_url : String = 'https://api.escuelajs.co/api/v1/'
+import {BASE_API_URL} from '@env' ;
 
  export const theme_color = ["#cb1249", "#d23361"]
 
  export  const theme_primary =  ["#FC1933"  , "#B00326" ]
 
-
+export const  URL =  BASE_API_URL;
