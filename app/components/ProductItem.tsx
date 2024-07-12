@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions, StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from "react-native";
 
@@ -6,16 +7,17 @@ import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 
 const { width, height } = Dimensions.get('window');
-const ShimmerPlaceholder  = createShimmerPlaceholder(LinearGradient);
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 const ProductItem = ({ item }) => {
+    const navigation = useNavigation();
     const truncatedTitle = item.title.length > 28 ? item.title.substring(0, 25) + "..." : item.title;
-    return (<TouchableOpacity  activeOpacity={0.8} style={styles.constainer}>
+    return (<TouchableOpacity onPress={()=>navigation.navigate('ViewProduct', {productInfo:item})} activeOpacity={0.8} style={styles.constainer}>
         <Image resizeMode={"cover"} source={{ uri: item.images[0] }} style={styles.img} />
 
         <Text style={styles.title}>{truncatedTitle}</Text>
         <Text style={styles.priceText}>{"₹ " + item.price + "99"}</Text>
-        
-        
+
+
         <StarRatingDisplay
             rating={3.5}
             style={{ alignSelf: 'flex-start', paddingLeft: 5 }}
@@ -24,26 +26,26 @@ const ProductItem = ({ item }) => {
             color="#FFA400"
 
         />
-       
+
 
     </TouchableOpacity >)
 }
 
 
 
-export const ProductSkeleton = ()=>{
-    return(<View style={styles.skltonContainer}>
+export const ProductSkeleton = () => {
+    return (<View style={styles.skltonContainer}>
         <ShimmerPlaceholder isReversed={true} style={styles.img} />
         <ShimmerPlaceholder isReversed={true} style={styles.skltnContent} />
     </View>)
 }
 
 export const SkeletonList = () => {
-    const skeletonArray = Array(6).fill(0); 
+    const skeletonArray = Array(6).fill(0);
 
     return (
         <FlatList
-        style={{marginTop:5}}
+            style={{ marginTop: 5 }}
             data={skeletonArray}
             keyExtractor={(item, index) => index.toString()}
             renderItem={() => <ProductSkeleton />}
@@ -98,29 +100,29 @@ const styles = StyleSheet.create({
         elevation: 3
 
     },
-    skltonContainer:{
-        
+    skltonContainer: {
+
         width: width * 0.45,
         height: width * 0.8,
         borderRadius: 10,
-        opacity:0.8,
+        opacity: 0.8,
         display: 'flex',
         alignItems: 'center',
         gap: width * 0.04
     },
-    skltnContent:{
-        width:width*0.37,
-        height:height*0.053,
-        borderRadius:7,
+    skltnContent: {
+        width: width * 0.37,
+        height: height * 0.053,
+        borderRadius: 7,
         alignSelf: 'flex-start',
-        opacity:0.6,
-        
+        opacity: 0.6,
+
 
     },
     contentContainer: {
 
         justifyContent: 'center',
-       alignItems:'flex-start',
+        alignItems: 'flex-start',
         gap: width * 0.04
 
     },

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CommonActions } from "@react-navigation/native";
-import { Cart, Category, Home, Profile, Wishlist } from "../screens";
+import { Cart, Category, Home, Profile, ViewProduct, Wishlist } from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, BottomNavigation, Badge } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,13 +14,14 @@ const Homenav = () => {
 
     return (
         <Tab.Navigator
+          backBehavior={'history'}
             screenOptions={{
                 headerShown: false,
             }}
             tabBar={({ navigation, state, descriptors, insets }) => {
                 const visibleState = {
                     ...state,
-                    routes: state.routes.filter(route => route.name !== 'Category')
+                    routes: state.routes.filter(route => route.name !== 'Category' && route.name !== 'ViewProduct')
                 };
 
                 return (
@@ -123,6 +124,16 @@ const Homenav = () => {
                 component={Category}
                 options={{
                     tabBarLabel: 'Category',
+                    tabBarIcon: ({ color, size }) => {
+                        return <Icon name="home" size={size} color={"#433eb6"} />;
+                    },
+                }}
+            />
+             <Tab.Screen
+                name="ViewProduct"
+                component={ViewProduct}
+                options={{
+                    tabBarLabel: 'ViewProduct',
                     tabBarIcon: ({ color, size }) => {
                         return <Icon name="home" size={size} color={"#433eb6"} />;
                     },
