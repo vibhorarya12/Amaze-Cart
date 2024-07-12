@@ -8,7 +8,7 @@ import {
   Ban_img_4,
 } from "../../assets/Images";
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('screen');
 
 const items = [Ban_img_1, Ban_img, Ban_img_3, Ban_img_4];
 
@@ -41,17 +41,26 @@ const styles = StyleSheet.create({
   container: {
     width: width,
     height: height * 0.25, 
-    elevation: 5,
+    
+   
+  
+   
   },
   slide: {
     width: width,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    // borderWidth:1,
+    // borderColor:'red',
+    
+   
   },
   image: {
     width: '100%',
     height: '100%',
+    borderRadius:5
+
   },
   paginationDot: {
     width: 8,

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentContainer: {
-        paddingTop:height * 0.15,
+        paddingTop:height * 0.12,
         paddingBottom: height * 0.1,
         justifyContent:'center'
     },
