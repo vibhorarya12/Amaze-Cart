@@ -1,5 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { Dimensions, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { Dimensions, StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from "react-native";
+
 
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
@@ -36,6 +37,23 @@ export const ProductSkeleton = ()=>{
         <ShimmerPlaceholder isReversed={true} style={styles.skltnContent} />
     </View>)
 }
+
+export const SkeletonList = () => {
+    const skeletonArray = Array(6).fill(0); 
+
+    return (
+        <FlatList
+        style={{marginTop:5}}
+            data={skeletonArray}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={() => <ProductSkeleton />}
+            contentContainerStyle={styles.contentContainer}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            columnWrapperStyle={{ gap: width * 0.04 }}
+        />
+    );
+};
 
 
 
@@ -85,7 +103,7 @@ const styles = StyleSheet.create({
         width: width * 0.45,
         height: width * 0.8,
         borderRadius: 10,
-        opacity:0.6,
+        opacity:0.8,
         display: 'flex',
         alignItems: 'center',
         gap: width * 0.04
@@ -98,7 +116,14 @@ const styles = StyleSheet.create({
         opacity:0.6,
         
 
-    }
+    },
+    contentContainer: {
+
+        justifyContent: 'center',
+       alignItems:'flex-start',
+        gap: width * 0.04
+
+    },
 
 })
 export default ProductItem;

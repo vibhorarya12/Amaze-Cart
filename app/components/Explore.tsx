@@ -1,6 +1,6 @@
 import { StyleSheet, View, Dimensions ,Text } from "react-native"
 import { Sample_Products_Data } from "../../assets/SampleData/Products";
-import ProductItem from "./ProductItem";
+import ProductItem, { ProductSkeleton, SkeletonList } from "./ProductItem";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { URL } from "../constants";
@@ -37,11 +37,26 @@ const Explore = ()=>{
     return(<View style={styles.container}>
         <Text style={styles.textStyle}>Explore more products</Text>
         <View style={styles.ProductsContainer}>
-        { loading?<Text>Loading....</Text>:items.map((item)=>{ return(<ProductItem  key={item._id} item= {item} />)})}     
+        { loading?<Loader />:items.map((item)=>{ return(<ProductItem  key={item._id} item= {item} />)})}     
+       
         </View>
-
+    
     </View>)
 }
+
+
+const Loader = () => {
+   const skeletonArray = Array(4).fill(0);
+
+   return (
+          <>
+           {skeletonArray.map((item, index) => (
+               <ProductSkeleton key={index} />
+           ))}
+           </>
+       
+   );
+};
 
 
 const styles = StyleSheet.create({

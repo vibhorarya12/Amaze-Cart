@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, FlatList, Dimensions } from "react-native"
 import { Sample_Products_Data } from "../../../assets/SampleData/Products";
-import ProductItem from "../../components/ProductItem";
+import ProductItem, { SkeletonList } from "../../components/ProductItem";
 import Header from "../../components/Header";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState , useEffect} from "react";
@@ -44,13 +44,15 @@ const Category = (props) => {
             colors={color}
         ><Text style={{color:'white'}}>{category}</Text></LinearGradient>
 
-       {loading?<Text>Loading...</Text>:<FlatList style={{marginTop:5}} data={items} keyExtractor={(item) => item._id}
+       {loading?<SkeletonList/>:<FlatList style={{marginTop:5}} data={items} keyExtractor={(item) => item._id}
             renderItem={({ item }) => <ProductItem item={item} />}
             contentContainerStyle={styles.contentContainer}
             showsVerticalScrollIndicator={false}
             numColumns={2}
             columnWrapperStyle={{ gap: width * 0.04 }}
         />}
+
+        
     </View>)
 }
 
