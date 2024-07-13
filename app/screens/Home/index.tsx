@@ -7,15 +7,15 @@ import Explore from "../../components/Explore";
 
 const { width, height } = Dimensions.get('window');
 
-const Home = () => {
-    const navigation = useNavigation();
+const Home = (props) => {
+    // const navigation = useNavigation();
 
     return (
         <View style={{ flex: 1 }}>
             <Header />
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <Banner />
-                <CategoryItems />
+                <CategoryItems navigation = {props.navigation} />
                 <Explore/>
             </ScrollView>
         </View>

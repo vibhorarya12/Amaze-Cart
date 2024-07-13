@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Cart, Category, Home, Profile, ViewProduct, Wishlist } from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, BottomNavigation, Badge } from 'react-native-paper';
@@ -10,11 +10,12 @@ const { height, width } = Dimensions.get('window');
 const Tab = createBottomTabNavigator();
 
 const Homenav = () => {
-    const [cartItemCount, setCartItemCount] = useState(5); // Example initial cart item count
+    const [cartItemCount, setCartItemCount] = useState(5); 
+    const navigation = useNavigation();
 
     return (
         <Tab.Navigator
-          backBehavior={'history'}
+            backBehavior={'history'}
             screenOptions={{
                 headerShown: false,
             }}
@@ -26,7 +27,6 @@ const Homenav = () => {
 
                 return (
                     <BottomNavigation.Bar
-                    
                         style={{ height: height * 0.09 }}
                         renderLabel={() => null}
                         navigationState={visibleState}
@@ -72,37 +72,39 @@ const Homenav = () => {
         >
             <Tab.Screen
                 name="Home"
-                component={Home}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => {
                         return <Icon name="home" size={size} color={"#433eb6"} />;
                     },
                 }}
-            />
+            >
+                {props => <Home {...props} />}
+            </Tab.Screen>
             <Tab.Screen
                 name="Wishlist"
-                component={Wishlist}
                 options={{
                     tabBarLabel: 'Wishlist',
                     tabBarIcon: ({ color, size }) => {
                         return <Icon name="heart" size={size} color={"#433eb6"} />;
                     },
                 }}
-            />
+            >
+                {props => <Wishlist {...props} />}
+            </Tab.Screen>
             <Tab.Screen
                 name="Profile"
-                component={Profile}
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color, size }) => {
                         return <Icon name="account" size={size} color={"#433eb6"} />;
                     },
                 }}
-            />
+            >
+                {props => <Profile {...props} />}
+            </Tab.Screen>
             <Tab.Screen
                 name="Cart"
-                component={Cart}
                 options={{
                     tabBarLabel: 'Cart',
                     tabBarIcon: ({ color, size }) => {
@@ -118,27 +120,31 @@ const Homenav = () => {
                         );
                     },
                 }}
-            />
-             <Tab.Screen
+            >
+                {props => <Cart {...props} />}
+            </Tab.Screen>
+            <Tab.Screen
                 name="Category"
-                component={Category}
                 options={{
                     tabBarLabel: 'Category',
                     tabBarIcon: ({ color, size }) => {
                         return <Icon name="home" size={size} color={"#433eb6"} />;
                     },
                 }}
-            />
-             <Tab.Screen
+            >
+                {props => <Category {...props} />}
+            </Tab.Screen>
+            <Tab.Screen
                 name="ViewProduct"
-                component={ViewProduct}
                 options={{
                     tabBarLabel: 'ViewProduct',
                     tabBarIcon: ({ color, size }) => {
                         return <Icon name="home" size={size} color={"#433eb6"} />;
                     },
                 }}
-            />
+            >
+                {props => <ViewProduct {...props} />}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 }

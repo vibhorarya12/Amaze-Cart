@@ -8,8 +8,8 @@ import { StarRatingDisplay } from 'react-native-star-rating-widget';
 
 const { width, height } = Dimensions.get('window');
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
-const ProductItem = ({ item }) => {
-    const navigation = useNavigation();
+const ProductItem = ({ item , navigation }) => {
+    // const navigation = useNavigation();
     const truncatedTitle = item.title.length > 28 ? item.title.substring(0, 25) + "..." : item.title;
     return (<TouchableOpacity onPress={()=>navigation.navigate('ViewProduct', {productInfo:item})} activeOpacity={0.8} style={styles.constainer}>
         <Image resizeMode={"cover"} source={{ uri: item.images[0] }} style={styles.img} />

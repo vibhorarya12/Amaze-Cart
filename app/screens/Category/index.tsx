@@ -45,7 +45,7 @@ const Category = (props) => {
         ><Text style={{color:'white'}}>{category}</Text></LinearGradient>
 
        {loading?<SkeletonList/>:<FlatList style={{marginTop:5}} data={items} keyExtractor={(item) => item._id}
-            renderItem={({ item }) => <ProductItem item={item} />}
+            renderItem={({ item }) => <ProductItem item={item} navigation = {props.navigation} />}
             contentContainerStyle={styles.contentContainer}
             showsVerticalScrollIndicator={false}
             numColumns={2}

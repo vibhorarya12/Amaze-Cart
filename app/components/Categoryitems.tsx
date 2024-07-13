@@ -17,8 +17,8 @@ const Items = [
 
 
 
-const CategoryItem = ({ img, text }) => {
-    const navigation = useNavigation();
+const CategoryItem = ({ img, text , navigation}) => {
+    // const navigation = useNavigation();
    
    return(<TouchableOpacity onPress={() => navigation.navigate('Category', { category: text })}  activeOpacity={0.95} style={{ marginTop: height * 0.02 }}>
         <LinearGradient colors={colors} style={styles.itemContainer}>
@@ -28,13 +28,13 @@ const CategoryItem = ({ img, text }) => {
     </TouchableOpacity>)
 };
 
-const CategoryItems = () => {
+const CategoryItems = ({navigation}) => {
     return (
         <View>
             <Text style={styles.textStyle}>Shop by category</Text>
             <View style={styles.container}>
                 {Items.map((item, index) => (
-                    <CategoryItem key={index} img={item.img} text={item.text} />
+                    <CategoryItem key={index} img={item.img} text={item.text} navigation={navigation} />
                 ))}
             </View>
         </View>
