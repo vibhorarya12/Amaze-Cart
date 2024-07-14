@@ -46,11 +46,11 @@ const ViewProduct = (props) => {
           color="#FFA400"
 
         />
-        <Text style={{ fontSize: width * 0.04, fontWeight: '600' }}>3.5</Text>
+        <Text style={{ fontSize: width * 0.04, fontWeight: '600',fontFamily:'RobotoSlab_semiBold' }}>3.5</Text>
       </View>
       <View style={styles.priceContainer}>
-        <Text style={{ fontSize: width * 0.05, fontWeight: '500' }} >{"₹" + productInfo.price + "99"}</Text>
-        <Text style={{ fontSize: width * 0.035, opacity: 0.5 }}>exclucing delivery charges</Text>
+        <Text style={{ fontSize: width * 0.05, fontWeight: '500' ,fontFamily:'RobotoSlab_semiBold'}} >{"₹" + productInfo.price + "99"}</Text>
+        <Text style={{ fontSize: width * 0.035, opacity: 0.5 , fontFamily:'RobotoSlab_regular' }}>exclucing delivery charges</Text>
       </View>
       <View style={styles.descriptionContainer}>
         <Text textBreakStrategy={'simple'} style={styles.descriptionText}>{productInfo.description}</Text>
@@ -61,7 +61,7 @@ const ViewProduct = (props) => {
           color={'#433eb6'}
           size={width * 0.08}
         />
-        <Text style={{ fontSize: width * 0.037, fontWeight: '500' }}>Delivery by {getFutureDate(5)}</Text>
+        <Text style={{ fontSize: width * 0.037, fontWeight: '500',fontFamily:'RobotoSlab_regular' }}>Delivery by {getFutureDate(5)}</Text>
       </View>
       <TouchableOpacity  style={{ elevation: 5, left: width * 0.06, }}>
         <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.btn}>
@@ -72,7 +72,8 @@ const ViewProduct = (props) => {
           />
           <Text style={{
             fontSize: width * 0.04,
-            color: 'white'
+            color: 'white',
+            fontFamily:'RobotoSlab_regular'
           }} >Add to cart</Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -190,7 +191,8 @@ const styles = StyleSheet.create({
     fontSize: width * 0.06,
     fontWeight: '600',
     left: width * 0.06,
-    marginTop: height * 0.01
+    marginTop: height * 0.01,
+    fontFamily:'RobotoSlab_semiBold'
   },
   ratingContainer: {
     width: width * 0.45,
@@ -231,6 +233,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: width * 0.037,
+    fontFamily:'RobotoSlab_regular'
   },
   deliveryTextContainer: {
     flexDirection: 'row',

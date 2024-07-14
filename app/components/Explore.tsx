@@ -73,11 +73,10 @@ const styles = StyleSheet.create({
       fontSize: width * 0.055,
       fontWeight: '600',
       color: "#433eb6",
-      textShadowColor: 'rgba(0, 0, 0, 0.4)',
-      textShadowOffset: { width: -1, height: -1 },
-      textShadowRadius: 0.6,
+     
       left: width * 0.05,
-      alignSelf: 'flex-start'
+      alignSelf: 'flex-start',
+      fontFamily:'RobotoSlab_semiBold'
 
 
 

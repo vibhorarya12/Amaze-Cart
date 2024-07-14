@@ -13,11 +13,13 @@ import { Logo_img } from "../../assets/Images";
 import Icon from "react-native-vector-icons/AntDesign";
 import { Badge } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
+import { useState } from "react";
 const { width, height } = Dimensions.get("window");
 const statusBarheight = StatusBar.currentHeight;
 
 const color = ["#090979", "#433eb6", "#433eb6"];
 const Header = () => {
+  const [searchText, setSearchText] = useState(''); 
   return (
     <LinearGradient
       style={styles.container}
@@ -25,9 +27,9 @@ const Header = () => {
       end={{ x: 1, y: 0 }}
       colors={color}
     >
-      <Animatable.View  animation={'slideInLeft'} View style={styles.inputContainer}>
+      <Animatable.View  animation={'fadeInDown'} View style={styles.inputContainer}>
         <Icon name="search1" size={width * 0.05} color={"#433eb6"} />
-        <TextInput placeholder="search AmazeCart" style={styles.textInput} />
+        <TextInput returnKeyType={"search"} onSubmitEditing={()=>console.log(searchText)}  onChangeText={(e)=>setSearchText(e)} placeholder="search AmazeCart" style={styles.textInput} />
       </Animatable.View>
 
       {/* <TouchableOpacity

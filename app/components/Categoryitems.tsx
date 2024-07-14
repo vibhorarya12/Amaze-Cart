@@ -2,7 +2,8 @@ import React from 'react';
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-native";
 import { Category_four, Category_one, Category_three, Category_two } from "../../assets/Images";
-import { useNavigation } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,7 +19,9 @@ const Items = [
 
 
 const CategoryItem = ({ img, text , navigation}) => {
+    
     // const navigation = useNavigation();
+    
    
    return(<TouchableOpacity onPress={() => navigation.navigate('Category', { category: text })}  activeOpacity={0.95} style={{ marginTop: height * 0.02 }}>
         <LinearGradient colors={colors} style={styles.itemContainer}>
@@ -71,24 +74,26 @@ const styles = StyleSheet.create({
         position: 'absolute',
         fontSize: width * 0.05,
         color: 'white',
-        textShadowColor: 'rgba(0, 0, 0, 0.9)',
-        textShadowOffset: { width: -1, height: 1 },
-        textShadowRadius: 10,
+        // textShadowColor: 'rgba(0, 0, 0, 0.9)',
+        // textShadowOffset: { width: -1, height: 1 },
+        // textShadowRadius: 10,
         zIndex: 2,
         bottom: 0,
         alignSelf: 'center',
-        fontWeight: '400',
-        fontStyle: 'italic'
+        // fontWeight: '400',
+       fontFamily: 'RobotoSlab_regular'
     },
     textStyle: {
         fontSize: width * 0.055,
         fontWeight: '600',
         color: "#433eb6",
-        textShadowColor: 'rgba(0, 0, 0, 0.4)',
-        textShadowOffset: { width: -1, height: -1 },
-        textShadowRadius: 0.6,
+        // textShadowColor: 'rgba(0, 0, 0, 0.4)',
+        // textShadowOffset: { width: -1, height: -1 },
+        // textShadowRadius: 0.6,
         left: width * 0.05,
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
+        fontFamily:'RobotoSlab_semiBold'
+       
 
     },
 });

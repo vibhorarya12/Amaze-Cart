@@ -84,14 +84,15 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         fontWeight: '500',
         marginLeft: width * 0.03,
-
-        paddingHorizontal: width * 0.04
+        fontFamily:'RobotoSlab_semiBold',
+        paddingHorizontal: width * 0.04,
+        
         // padding:width*0.04
     },
     priceText: {
         fontSize: width * 0.035,
         alignSelf: 'flex-start',
-        fontWeight: '500',
+       fontFamily:'RobotoSlab_semiBold',
         marginLeft: width * 0.03,
         backgroundColor: '#433eb6',
         paddingHorizontal: width * 0.04,

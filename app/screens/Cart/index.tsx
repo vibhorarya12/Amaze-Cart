@@ -29,7 +29,7 @@ const Cart = ({navigation}) => {
             />
             <View style={styles.checkoutInfoContainer}>
                 <View style={{ borderColor:'black', width:width*0.45, justifyContent:'center',alignItems:'center'}}>
-                <Text style={{fontSize:width*0.042, fontWeight:'600',}}>{'Sub total (3 items)'}</Text>
+                <Text style={{fontSize:width*0.042, fontWeight:'600',fontFamily:'RobotoSlab_semiBold'}}>{'Sub total (3 items)'}</Text>
                 <IconButton
                         icon="arrow-right"
                         iconColor={'#433eb6'}
@@ -39,10 +39,10 @@ const Cart = ({navigation}) => {
                     />
                 </View>
                 <View style={styles.totalPriceContainer}>
-                    <Text style={{fontSize:width*0.05, fontWeight:'600'}}>
-                    {"₹1400"}
+                    <Text style={{fontSize:width*0.05, fontWeight:'600',fontFamily:'RobotoSlab_semiBold'}}>
+                    {"₹ 1400"}
                     </Text>
-                    <Text style={{ fontSize: width * 0.035, opacity: 0.5 }}>{"(excluding shipping charges)"}</Text>
+                    <Text style={{ fontSize: width * 0.035, opacity: 0.5 ,fontFamily:'RobotoSlab_regular'}}>{"(excluding shipping charges)"}</Text>
                 </View>
             </View>
         </View>
@@ -133,7 +133,8 @@ const styles = StyleSheet.create({
         fontSize: width * 0.07,
         marginBottom: 10,
         color: 'white',
-        fontWeight: '500'
+        
+        fontFamily:'RobotoSlab_semiBold'
     },
     cartItemContainer: {
         width: width * 0.9,
@@ -164,7 +165,8 @@ const styles = StyleSheet.create({
     },
     productTitle: {
         fontSize: width * 0.04,
-        fontWeight: '500',
+        // fontWeight: '500',
+        fontFamily:'RobotoSlab_semiBold'
 
     },
 
@@ -200,7 +202,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: width * 0.04,
         color: 'white',
         borderRadius: 5,
-        elevation: 3
+        elevation: 3,
+        fontFamily:'RobotoSlab_regular'
 
     },
     checkoutInfoContainer: {

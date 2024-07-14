@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
         fontSize: width * 0.055,
         top: height * 0.05,
         left: width * 0.12,
-        fontWeight: '700',
+       fontFamily:'RobotoSlab_semiBold',
         color: '#433eb6'
     },
     headerTextTwo: {
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         fontSize: width * 0.04,
         top: height * 0.09,
         left: width * 0.12,
-        fontWeight: '500',
+        fontFamily:'RobotoSlab_semiBold',
         color: '#433eb6'
 
     },
@@ -196,11 +196,12 @@ const styles = StyleSheet.create({
     },
     btnText: {
         fontSize: width * 0.045,
-        color: 'white'
+        color: 'white',
+        fontFamily:'RobotoSlab_regular',
     },
     registerText: {
         fontSize: width * 0.04,
-        fontWeight: '500',
+        fontFamily:'RobotoSlab_semiBold',
         color: '#433eb6'
 
     },

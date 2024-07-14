@@ -28,9 +28,10 @@ const Checkout = ({ navigation }) => {
             />
             <Text style={styles.headerText}>Place order</Text>
         </LinearGradient>
+        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04 ,fontFamily:'RobotoSlab_semiBold'}} >Full name *</Text>
         <TextInput
             mode={"outlined"}
-            label="Full name *"
+           
             style={styles.textInput}
             outlineColor="#433eb6"
             activeOutlineColor="#433eb6"
@@ -38,11 +39,11 @@ const Checkout = ({ navigation }) => {
 
 
         />
-
+    <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04 ,fontFamily:'RobotoSlab_semiBold'}} >Phone number *</Text>
         <TextInput
             keyboardType={"numeric"}
             mode={"outlined"}
-            label="Phone number *"
+            
             style={styles.textInput}
             outlineColor="#433eb6"
             activeOutlineColor="#433eb6"
@@ -50,25 +51,24 @@ const Checkout = ({ navigation }) => {
             left={<TextInput.Affix text="+91" />}
 
         />
-        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04, fontWeight: '500' }} >Shipping Address*</Text>
+        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04 ,fontFamily:'RobotoSlab_semiBold'}} >Shipping address*</Text>
 
         <TextInput
             multiline={true}
             mode={"outlined"}
-            label="address *"
+            
             style={styles.textInputArea}
             outlineColor="#433eb6"
             activeOutlineColor="#433eb6"
             outlineStyle={{ borderWidth: 2, borderRadius: 10 }}
 
         />
-        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04, fontWeight: '500' }} >Payment mode</Text>
+        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold' }} >Payment mode</Text>
         {paymentMode.map((item, index) => {
             return (<View key={index} style={styles.paymentItem}>
                 <Image style={styles.img} resizeMode={"contain"} source={item.img} />
-                <Text style={{ fontSize: width * 0.04, fontWeight: '500' }}>{item.title}</Text>
+                <Text style={{ fontSize: width * 0.04, fontWeight: '500' ,fontFamily:'RobotoSlab_semiBold'}}>{item.title}</Text>
                 <View style={{ marginRight: 5 }}>
-
                     <Checkbox
 
                         color="#433eb6"
@@ -83,26 +83,26 @@ const Checkout = ({ navigation }) => {
         })}
         <View style={styles.subTotal}>
             <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: width * 0.04, fontWeight: '500' }} >{"Subtotal (3 items)"}</Text>
-                <Text style={{ fontSize: width * 0.04, fontWeight: '500' }} >{"₹ " + "1499"}</Text>
+                <Text style={{ fontSize: width * 0.04,fontFamily:'RobotoSlab_semiBold' }} >{"Subtotal (3 items)"}</Text>
+                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold' }} >{"₹ " + "1499"}</Text>
             </View>
             <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: width * 0.04, fontWeight: '500' }} >{"delivery charge"}</Text>
-                <Text style={{ fontSize: width * 0.04, fontWeight: '500' }} >{"₹ " + "99"}</Text>
+                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold'}} >{"delivery charge"}</Text>
+                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold' }} >{"₹ " + "99"}</Text>
             </View>
             <View style={styles.divider}>
                 {/*  divider      */}
             </View>
             <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: width * 0.05, fontWeight: '500' }} >{"Total"}</Text>
-                <Text style={{ fontSize: width * 0.05, fontWeight: '500' }} >{"₹ " + "1598"}</Text>
+                <Text style={{ fontSize: width * 0.05, fontFamily:'RobotoSlab_semiBold'}} >{"Total"}</Text>
+                <Text style={{ fontSize: width * 0.05, fontFamily:'RobotoSlab_semiBold' }} >{"₹ " + "1598"}</Text>
             </View>
          <TouchableOpacity >
             <LinearGradient style={styles.checkoutBtn}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             colors={color}>
-                <Text style={{ fontSize: width * 0.04, fontWeight: '500', color:'white' }} >{"Checkout"}</Text>
+                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold', color:'white' }} >{"Checkout"}</Text>
             </LinearGradient>
          </TouchableOpacity>
         </View>
@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: 'white',
         fontWeight: '500',
+        fontFamily:'RobotoSlab_semiBold'
 
     },
     textInput: {

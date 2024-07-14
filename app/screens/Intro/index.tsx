@@ -54,7 +54,7 @@ const Intro = () => {
       data={boardingItems}
       renderItem={({ item }) => (
         <ImageBackground  imageStyle={{opacity:0.7, resizeMode:'cover'}} style={styles.child} source={item.img} >
-         <Animatable.Text  animation="fadeIn" iterationCount={1} duration={2000} style={styles.text}>{item.text} </Animatable.Text>
+         <Animatable.Text  animation={'fadeInDown'} iterationCount={1} duration={2000} style={styles.text}>{item.text} </Animatable.Text>
          {item.btn?item.btn:null}
         </ImageBackground>
       )}
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.9)',
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
-    
+    fontFamily:'RobotoSlab_semiBold'
   },
   button:{
      position:'absolute',
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
      top:height*0.25,
      borderRadius:17,
      elevation:5,
-     borderWidth:1,
+     borderWidth:0.6,
      borderColor:'white'
      
   },
@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.9)',
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 1
+    textShadowRadius: 1,
+    fontFamily:'RobotoSlab_regular'
 
   }
 });

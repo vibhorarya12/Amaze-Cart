@@ -35,7 +35,7 @@ const Login = () => {
                     left={<TextInput.Affix text="+91" />}
                     
                 />
-                <TouchableOpacity onPress={()=>navigation.navigate('Register')}  style={{position:'absolute', top: height * 0.45,left:width*0.12}}><Text style={styles.registerText}>Don't have an account yet?  Register Now</Text></TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate('Register')}  style={{position:'absolute', top: height * 0.45,left:width*0.12}}><Text style={styles.registerText}>Don't have an account? Sign up now</Text></TouchableOpacity>
                 
                 <TouchableOpacity onPress={()=>navigation.navigate('OTP')}  style={{position:'absolute', top: height * 0.35, elevation:5}}>
                     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
@@ -100,15 +100,17 @@ const styles = StyleSheet.create({
         fontSize:width*0.045,
         top:height*0.08,
         left:width*0.12,
-        fontWeight:'700',
-        color:'#433eb6'
+        
+        color:'#433eb6',
+        fontFamily:'RobotoSlab_semiBold'
+        
     },
     loginTextTwo:{
         position:'absolute',
         fontSize:width*0.04,
         top:height*0.12,
         left:width*0.12,
-        fontWeight:'500',
+       fontFamily:'RobotoSlab_regular',
         color:'#433eb6'
 
     },
@@ -122,12 +124,15 @@ const styles = StyleSheet.create({
     },
     btnText:{
         fontSize:width*0.045,
-        color:'white'
+        color:'white',
+        fontFamily:'RobotoSlab_regular'
     },
     registerText:{
-        fontSize:width*0.04,
+        fontSize:width*0.038,
         fontWeight:'500',
-         color:'#433eb6'
+         color:'#433eb6',
+         fontFamily:'RobotoSlab_semiBold'
+         
        
     },
     divider:{
