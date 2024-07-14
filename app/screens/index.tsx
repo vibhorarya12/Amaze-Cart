@@ -8,3 +8,4 @@ export {default as Cart} from './Cart';
 export {default as Wishlist} from './Wishlist';
 export {default as Category} from './Category' ;
 export {default as ViewProduct} from './ViewProduct' ;
+export {default as Checkout} from './Checkout' ;

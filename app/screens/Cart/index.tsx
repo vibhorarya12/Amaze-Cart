@@ -8,7 +8,7 @@ const { width, height } = Dimensions.get('window');
 
 const color = ["#090979", "#433eb6", "#433eb6"];
 
-const Cart = () => {
+const Cart = ({navigation}) => {
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -35,9 +35,8 @@ const Cart = () => {
                         iconColor={'#433eb6'}
                         size={height*0.05}
                         style={{ alignSelf:'flex-start' }}
-                        onPress={()=>console.log('hello')}                        
+                        onPress={()=>navigation.navigate('Checkout')}                        
                     />
-                    
                 </View>
                 <View style={styles.totalPriceContainer}>
                     <Text style={{fontSize:width*0.05, fontWeight:'600'}}>
@@ -82,7 +81,7 @@ const CartItems = ({ item }) => {
                 <Text style={styles.productTitle}>{item.title.length > 28 ? item.title.substring(0, 25) + "..." : item.title}</Text>
                 <View style={styles.quantityButton}>
                     <IconButton
-                        icon="minus"
+                        icon=  {  capacity===1?"delete-outline":"minus"}
                         iconColor={'#090979'}
                         size={height*0.025}
                         style={{ backgroundColor: '#E7E5DF' }}

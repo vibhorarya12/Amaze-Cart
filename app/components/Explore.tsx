@@ -7,7 +7,7 @@ import { URL } from "../constants";
 
 const { width, height } = Dimensions.get('window');
 
-const Explore = () => {
+const Explore = ({navigation}) => {
    const [items, setItems] = useState([]);
    const [loading, setLoading] = useState(false);
    const handleRequest = async () => {
@@ -37,7 +37,7 @@ const Explore = () => {
    return (<View style={styles.container}>
       <Text style={styles.textStyle}>Explore more products</Text>
       <View style={styles.ProductsContainer}>
-         {loading ? <Loader /> : items.map((item) => { return (<ProductItem key={item._id} item={item} />) })}
+         {loading ? <Loader /> : items.map((item) => { return (<ProductItem key={item._id} item={item} navigation={navigation} />) })}
 
       </View>
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import { Cart, Category, Home, Profile, ViewProduct, Wishlist } from "../screens";
+import { Cart, Category, Checkout, Home, Profile, ViewProduct, Wishlist } from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, BottomNavigation, Badge } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,7 +22,7 @@ const Homenav = () => {
             tabBar={({ navigation, state, descriptors, insets }) => {
                 const visibleState = {
                     ...state,
-                    routes: state.routes.filter(route => route.name !== 'Category' && route.name !== 'ViewProduct')
+                    routes: state.routes.filter(route => route.name !== 'Category' && route.name !== 'ViewProduct' && route.name !== 'Checkout')
                 };
 
                 return (
@@ -145,6 +145,18 @@ const Homenav = () => {
             >
                 {props => <ViewProduct {...props} />}
             </Tab.Screen>
+            <Tab.Screen
+                name="Checkout"
+                options={{
+                    tabBarLabel: 'Checkout',
+                    tabBarIcon: ({ color, size }) => {
+                        return <Icon name="home" size={size} color={"#433eb6"} />;
+                    },
+                }}
+            >
+                {props => <Checkout {...props} />}
+            </Tab.Screen>
+            
         </Tab.Navigator>
     );
 }
