@@ -15,6 +15,7 @@ import Category_four from '../Images/category4.png';
 import Cod from '../Images/Cod.png';
 import Debit from '../Images/Debit.png';
 import Upi from '../Images/Upi.png';
+import Avatar_Img from '../Images/avatar.png';
 
 
 
@@ -22,5 +23,6 @@ import Upi from '../Images/Upi.png';
 export {
     Intro_img_one,
     Intro_img_two, Intro_img_three, Logo_img, Ban_img_1, Ban_img_2, Ban_img_3, Ban_img_4, Ban_img, Category_one,
-    Category_two, Category_three, Category_four, Cod, Debit, Upi
+    Category_two, Category_three, Category_four, Cod, Debit, Upi,
+    Avatar_Img
 };

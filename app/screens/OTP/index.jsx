@@ -55,8 +55,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: height * 0.2,
     fontSize: width * 0.045,
-    fontWeight: "700",
+   
     color: "#433eb6",
+    fontFamily: 'RobotoSlab_semiBold'
   },
   btn: {
     width: width * 0.53,
@@ -68,6 +69,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: width * 0.045,
     color: "white",
+    fontFamily: 'RobotoSlab_regular'
   },
 });
 export default OTP;
