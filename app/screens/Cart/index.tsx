@@ -1,14 +1,23 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, StyleSheet, Dimensions, FlatList, Image, Alert } from "react-native";
+import { View, Text, StyleSheet, Dimensions, FlatList, Image, Alert, Button } from "react-native";
 import { Sample_Products_Data } from "../../../assets/SampleData/Products";
 import { IconButton } from "react-native-paper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromCart } from "../../../redux/Actions/productActions";
 
 const { width, height } = Dimensions.get('window');
 
 const color = ["#090979", "#433eb6", "#433eb6"];
 
 const Cart = ({navigation}) => {
+    const cartData = useSelector((state:any)=> state.products.cartItems)
+
+
+
+  
+  
+
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -19,10 +28,11 @@ const Cart = ({navigation}) => {
             >
                 <Text style={styles.headerText}>Cart</Text>
             </LinearGradient>
+          {/* <Button  title="click" onPress={()=>console.log(cartData)}/> */}
             <FlatList
                 style={styles.flatList}
-                data={Sample_Products_Data}
-                keyExtractor={(item) => item.id}
+                data={cartData}
+                keyExtractor={(item) => item._id}
                 renderItem={({ item }) => <CartItems item={item} />}
                 contentContainerStyle={styles.contentContainer}
                 showsVerticalScrollIndicator={false}
@@ -51,6 +61,7 @@ const Cart = ({navigation}) => {
 
 const CartItems = ({ item }) => {
     const [capacity, setCapacity] = useState(1);
+    const dispatch  = useDispatch();
     const handleAdd =()=> setCapacity(capacity+1);
     const handleReduce = () => {
         if (capacity === 1) {
@@ -65,7 +76,7 @@ const CartItems = ({ item }) => {
                     },
                     {
                         text: 'OK',
-                        onPress: () => setCapacity(0) // or any action to remove the item
+                        onPress: () => dispatch(removeFromCart(item))
                     }
                 ]
             );

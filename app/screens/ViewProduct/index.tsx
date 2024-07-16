@@ -8,14 +8,24 @@ import { Icon, IconButton } from 'react-native-paper';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import { LinearGradient } from 'expo-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { addToCart } from '../../../redux/Actions/productActions';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const color = ["#090979", "#433eb6", "#433eb6"];
 const { width, height } = Dimensions.get('window');
 
 const ViewProduct = (props) => {
+  const dispatch = useDispatch();
+  const cartData = useSelector((state:any)=> state.products.cartItems)
+
   const { productInfo } = props.route.params;
   const isFocused = useIsFocused();
+
+
+  const handleCart = (item)=>{
+       dispatch(addToCart(item));
+  }
 
   const getFutureDate = (daysAhead) => {
     const today = new Date();
@@ -63,7 +73,14 @@ const ViewProduct = (props) => {
         />
         <Text style={{ fontSize: width * 0.037, fontWeight: '500',fontFamily:'RobotoSlab_regular' }}>Delivery by {getFutureDate(5)}</Text>
       </View>
-      <TouchableOpacity  style={{ elevation: 5, left: width * 0.06, }}>
+  {cartData.includes(productInfo)? <View style={styles.priceContainer}>
+      <Icon
+          source="sticker-check-outline"
+          color={'#433eb6'}
+          size={width * 0.08}
+        />
+        <Text style={{ fontSize: width * 0.04, opacity: 0.7 }}>item added to cart</Text>
+      </View> : <TouchableOpacity onPress={()=>handleCart(productInfo)} style={{ elevation: 5, left: width * 0.06, }}>
         <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.btn}>
           <Icon
             source="cart-outline"
@@ -76,15 +93,8 @@ const ViewProduct = (props) => {
             fontFamily:'RobotoSlab_regular'
           }} >Add to cart</Text>
         </LinearGradient>
-      </TouchableOpacity>
-      {/* <View style={styles.priceContainer}>
-      <Icon
-          source="sticker-check-outline"
-          color={'#433eb6'}
-          size={width * 0.08}
-        />
-        <Text style={{ fontSize: width * 0.04, opacity: 0.7 }}>item added to cart</Text>
-      </View> */}
+      </TouchableOpacity>}
+       
       {/* <Spinner
         visible={true}
         color="#090979"

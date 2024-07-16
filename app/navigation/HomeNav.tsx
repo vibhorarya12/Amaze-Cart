@@ -5,14 +5,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, BottomNavigation, Badge } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Dimensions, View } from "react-native";
+import { useSelector } from 'react-redux';
 
 const { height, width } = Dimensions.get('window');
 const Tab = createBottomTabNavigator();
 
 const Homenav = () => {
-    const [cartItemCount, setCartItemCount] = useState(5); 
+  
     const navigation = useNavigation();
-
+    const cartItems = useSelector((state : any)=>state.products.cartItems);
     return (
         <Tab.Navigator
             backBehavior={'history'}
@@ -111,9 +112,9 @@ const Homenav = () => {
                         return (
                             <View>
                                 <Icon name="cart" size={size} color={"#433eb6"} />
-                                {cartItemCount > 0 && (
+                                {cartItems.length > 0 && (
                                     <Badge size={size*0.85} style={{ position: 'absolute', top: -height*0.02, zIndex:1, right:-width*0.03}}>
-                                        {cartItemCount}
+                                        {cartItems.length}
                                     </Badge>
                                 )}
                             </View>

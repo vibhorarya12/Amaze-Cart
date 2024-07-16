@@ -6,6 +6,10 @@ import Navigation from './app/navigation';
 import { useFonts } from 'expo-font';
 import Spinner from 'react-native-loading-spinner-overlay';
 import useLoadFonts from './assets/Fonts';
+import { Provider } from 'react-redux';
+import store from './redux/Store/store';
+
+
 
 export default function App() {
     const loaded = useLoadFonts();
@@ -21,7 +25,10 @@ export default function App() {
       
     }
   return (
-    <Navigation/>
+    <Provider store={store}>
+      <Navigation/>
+    </Provider>
+    
   );
 }
 
