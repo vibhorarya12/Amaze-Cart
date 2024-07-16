@@ -4,31 +4,26 @@ import Onboardnav from "./OnboardNav";
 import { getItem } from "../Utils/utils";
 import Homenav from "./HomeNav";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 
 const Navigation = () => {
-
-    const [showOnboarding, setShowOnboarding] = useState(null);
+    const token : string = useSelector((state:any)=> state.auth.token);
+   
     useEffect(() => {
 
-        AlreadyBoarded();
-    }, [])
+       console.log('token is <<<<', token)
+    }, [token])
 
-    const AlreadyBoarded = async () => {
-        let onBoarded = await getItem("onboarded");
+    
 
-        if (onBoarded == 1) {
-            setShowOnboarding(false);
-        }
-        else {
-            setShowOnboarding(true);
-        }
-    }
-
-
-    return (<NavigationContainer>
-        {showOnboarding ? <Onboardnav /> : <Homenav />}
-    </NavigationContainer>)
+    return (
+            <NavigationContainer>
+        {token.length === 0 ?<Onboardnav />:<Homenav /> }
+        </NavigationContainer>
+    
+    
+    )
 }
 
 export default Navigation;

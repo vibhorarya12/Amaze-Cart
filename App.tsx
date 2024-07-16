@@ -8,9 +8,9 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import useLoadFonts from './assets/Fonts';
 import { Provider } from 'react-redux';
 import store from './redux/Store/store';
-
-
-
+import persistStore from 'redux-persist/es/persistStore';
+import { PersistGate } from 'redux-persist/integration/react';
+const persister = persistStore(store);
 export default function App() {
     const loaded = useLoadFonts();
     // font loads first before rendering main component //
@@ -26,7 +26,9 @@ export default function App() {
     }
   return (
     <Provider store={store}>
+      <PersistGate persistor = {persister} >
       <Navigation/>
+      </PersistGate>
     </Provider>
     
   );

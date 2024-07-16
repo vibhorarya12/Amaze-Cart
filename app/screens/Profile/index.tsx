@@ -18,7 +18,7 @@ const Profile = () => {
             <Button  style={styles.Btn} icon="truck-fast-outline" mode="contained" onPress={() => console.log('Pressed')}>
                 My orders
             </Button>
-            <Button  style={[styles.Btn,{top: height * 0.13 }]} icon="logout" mode="contained" onPress={() => removeItem("onboarded")}>
+            <Button onPressIn={()=>removeItem("onboarded")} style={[styles.Btn,{top: height * 0.13 }]} icon="logout" mode="contained" onPress={() => removeItem("onboarded")}>
                Log out
             </Button>
         </LinearGradient>

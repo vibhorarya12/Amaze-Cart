@@ -6,6 +6,9 @@ import * as Animatable from 'react-native-animatable';
 import {  TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import { setItem } from "../../Utils/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../../redux/Actions/authActions";
+import { useState } from "react";
 
 
 
@@ -15,8 +18,9 @@ const { width, height } = Dimensions.get('window');
 const color = [ "#090979", "#433eb6",  "#433eb6"];
 const Login = () => {
   const navigation = useNavigation();
- 
-
+  const [phone, setPhone] = useState('5555555555'); 
+  const dispatch = useDispatch();
+  const auth = useSelector((state:any)=> state.auth.name);
 
     return (<SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
         <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
@@ -26,6 +30,8 @@ const Login = () => {
                <Text style={styles.loginTextTwo}>Enter your phone number to continue</Text>
 
                 <TextInput
+                onChangeText={(e)=>setPhone(e)}
+                keyboardType={"number-pad"}
                     mode={"outlined"}
                     label="Phone number"
                     style={styles.textInput}
@@ -37,8 +43,8 @@ const Login = () => {
                 />
                 <TouchableOpacity onPress={()=>navigation.navigate('Register')}  style={{position:'absolute', top: height * 0.45,left:width*0.12}}><Text style={styles.registerText}>Don't have an account? Sign up now</Text></TouchableOpacity>
                 
-                <TouchableOpacity onPress={()=>navigation.navigate('OTP')}  style={{position:'absolute', top: height * 0.35, elevation:5}}>
-                    <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
+                <TouchableOpacity onPress={()=>dispatch(login({phone:phone}))}  style={{position:'absolute', top: height * 0.35, elevation:5}}>
+                    <LinearGradient  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
                         <Text style={styles.btnText}>Login</Text>
                     </LinearGradient>
                 </TouchableOpacity>
