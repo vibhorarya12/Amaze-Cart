@@ -7,6 +7,8 @@ import * as Animatable from 'react-native-animatable';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { register } from "../../../redux/Actions/authActions";
 
 
 
@@ -17,18 +19,22 @@ const color = ["#090979", "#433eb6", "#433eb6"];
 
 
 
-const Register = () => {
-
-    const navigation = useNavigation();
+const Register = ({navigation}) => {
+  const dispatch = useDispatch();
+    // const navigation = useNavigation();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-
+ 
     const [nameError, setnameError] = useState(false);
     const [emailError, setEmailError] = useState(false);
     const [phoneError, setPhoneError] = useState(false);
 
-
+    const userInfo = {
+        phone : "5555555556",
+        name : "second user",
+        email: "abcd@gmail.com"
+    }
 
     const showToast = (msg: string) => {
         ToastAndroid.show(msg, ToastAndroid.LONG);
@@ -37,6 +43,8 @@ const Register = () => {
 
 
     const handleRegister = () => {
+        dispatch(register(userInfo));
+        return;
         let valid = true;
 
         // Reset error states
@@ -79,7 +87,7 @@ const Register = () => {
 
     return (<SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
         <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
-            <Animatable.Image animation='zoomIn' duration={1500} tintColor={'white'} source={Logo_img} style={styles.logo} />
+            <Image  tintColor={'white'} source={Logo_img} style={styles.logo} />
             <View style={styles.loginContainer}>
                 <Text style={styles.headerText}>Create an account</Text>
                 <Text style={styles.headerTextTwo}>Please enter your details</Text>

@@ -7,3 +7,7 @@ export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_ERROR = 'REGISTER_ERROR';
 
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+
+export const GUEST_LOGIN =  'GUEST_LOGIN';
+
+

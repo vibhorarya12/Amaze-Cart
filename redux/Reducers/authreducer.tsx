@@ -1,4 +1,7 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_REQUEST } from "../ActionTypes/authTypes";
+
+import { AuthTypes } from "../ActionTypes";
+
+
 
 const initialState = {
   name: '',
@@ -6,17 +9,18 @@ const initialState = {
   phone: '',
   token: '',
   userId: '',
-  loading: false
+  loading: false,
+  guestLogin : false,
 };
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN_REQUEST:
+    case AuthTypes.LOGIN_REQUEST:
       return {
         ...state,
         loading: true
       };
-    case LOGIN_SUCCESS:
+    case AuthTypes.LOGIN_SUCCESS:
       return {
         ...state,
         name: action.data.user.name,
@@ -25,15 +29,41 @@ export const authReducer = (state = initialState, action) => {
         token: action.data.token,
         loading: false
       };
-    case LOGIN_ERROR:
+    case AuthTypes.LOGIN_ERROR:
       return {
         ...state,
         loading: false
       };
-    case LOGOUT_REQUEST:
+    case AuthTypes.LOGOUT_REQUEST:
       return {
         ...initialState
       };
+      case AuthTypes.REGISTER_REQUEST:
+        return {
+          ...state,
+          loading: true
+        };
+
+      case  AuthTypes.REGISTER_SUCCESS:
+        return {
+          ...state,
+          name: action.data.user.name,
+          userId: action.data.user._id,
+          phone: action.data.user.phone,
+          token: action.data.token,
+          loading: false
+        };
+     case AuthTypes.REGISTER_ERROR:
+      return {
+        ...state,
+        loading: false
+      };
+
+      case AuthTypes.GUEST_LOGIN:
+        return {
+          ...state,
+          guestLogin : true
+        }
     default:
       return state;
   }

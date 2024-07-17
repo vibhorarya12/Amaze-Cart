@@ -1,4 +1,6 @@
-import { ADD_TO_CART , REMOVE_FROM_CART} from "../ActionTypes/productTypes";
+import { ProductTypes } from "../ActionTypes";
+
+
 
 
 
@@ -6,7 +8,7 @@ import { ADD_TO_CART , REMOVE_FROM_CART} from "../ActionTypes/productTypes";
 function addToCart (item : any) {
     console.log("item added ");
     return {
-        type :ADD_TO_CART,
+        type :ProductTypes.ADD_TO_CART,
         data : item,
     }
 }
@@ -14,7 +16,7 @@ function addToCart (item : any) {
 function removeFromCart (item : any){
     console.log("item removed ");
      return {
-        type :REMOVE_FROM_CART,
+        type : ProductTypes.REMOVE_FROM_CART,
         data :item
      }
 }

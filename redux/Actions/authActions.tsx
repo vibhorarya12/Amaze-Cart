@@ -1,17 +1,34 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_REQUEST } from "../ActionTypes/authTypes";
+import { AuthTypes } from "../ActionTypes";
+
+
 
 function login(payload) {
     console.log('pay load is <<<<<<<<', payload);
   return {
-    type: LOGIN_REQUEST,
+    type: AuthTypes.LOGIN_REQUEST,
     payload
   };
 }
 
 function logout() {
   return {
-    type: LOGOUT_REQUEST
+    type: AuthTypes.LOGOUT_REQUEST,
   };
 }
 
-export { login, logout };
+function guestLogin(){
+  console.log('logged in as guest !!!')
+  return{
+    type :AuthTypes.GUEST_LOGIN
+  }
+}
+
+
+function register(payload){
+  return {
+      type : AuthTypes.REGISTER_REQUEST,
+      payload
+  }
+}
+
+export { login, logout , guestLogin , register};

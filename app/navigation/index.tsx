@@ -9,17 +9,22 @@ import { useSelector } from "react-redux";
 
 const Navigation = () => {
     const token : string = useSelector((state:any)=> state.auth.token);
+    const guestLogin : boolean = useSelector((state:any)=> state.auth.guestLogin);
    
     useEffect(() => {
 
        console.log('token is <<<<', token)
-    }, [token])
+    }, [guestLogin])
 
     
 
     return (
+        //     <NavigationContainer>
+        // {token.length === 0 ?<Onboardnav />:<Homenav /> }
+        // </NavigationContainer>
+
             <NavigationContainer>
-        {token.length === 0 ?<Onboardnav />:<Homenav /> }
+        {guestLogin?<Homenav />:<Onboardnav /> }
         </NavigationContainer>
     
     

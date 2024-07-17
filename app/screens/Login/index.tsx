@@ -1,14 +1,16 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { theme_color, theme_primary } from "../../constants";
+import { Alert, Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { theme_color, theme_primary, URL } from "../../constants";
 import { Logo_img } from "../../../assets/Images";
 import * as Animatable from 'react-native-animatable';
 import {  TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
-import { setItem } from "../../Utils/utils";
+
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../../redux/Actions/authActions";
+import { guestLogin, login } from "../../../redux/Actions/authActions";
 import { useState } from "react";
+import axios from "axios";
+import Spinner from "react-native-loading-spinner-overlay";
 
 
 
@@ -17,19 +19,41 @@ const { width, height } = Dimensions.get('window');
 
 const color = [ "#090979", "#433eb6",  "#433eb6"];
 const Login = () => {
+    const [loading , setLoading] = useState(false);
   const navigation = useNavigation();
   const [phone, setPhone] = useState('5555555555'); 
   const dispatch = useDispatch();
   const auth = useSelector((state:any)=> state.auth.name);
 
-    return (<SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+        // const response = await axios.post(`${URL}/user/checkExisting`, {phone: phone});
+        // console.log(response.data);
+        //  navigation.navigate('OTP');
+        dispatch(login({phone:phone}))
+    } catch (error) {
+        if (error.response && error.response.data) {
+            Alert.alert('',error.response.data.message)
+            console.log(error.response.data.message);
+        } else {
+            Alert.alert(' ' ,error.message)
+            console.log(error.message);
+        }
+    } finally {
+        setLoading(false);
+    }
+}
+ 
+
+    return (<ScrollView style={{ }} contentContainerStyle={{flex:1}}>
         <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
-            <Animatable.Image animation='zoomIn' duration={1500} tintColor={'white'} source={Logo_img} style={styles.logo} />
+            <Image  tintColor={'white'} source={Logo_img} style={styles.logo} />
             <View style={styles.loginContainer}>
                <Text style={styles.loginText}>Login for best experience</Text>
                <Text style={styles.loginTextTwo}>Enter your phone number to continue</Text>
-
                 <TextInput
+                value={phone}
                 onChangeText={(e)=>setPhone(e)}
                 keyboardType={"number-pad"}
                     mode={"outlined"}
@@ -43,7 +67,7 @@ const Login = () => {
                 />
                 <TouchableOpacity onPress={()=>navigation.navigate('Register')}  style={{position:'absolute', top: height * 0.45,left:width*0.12}}><Text style={styles.registerText}>Don't have an account? Sign up now</Text></TouchableOpacity>
                 
-                <TouchableOpacity onPress={()=>dispatch(login({phone:phone}))}  style={{position:'absolute', top: height * 0.35, elevation:5}}>
+                <TouchableOpacity onPress={()=>handleLogin()}  style={{position:'absolute', top: height * 0.35, elevation:5}}>
                     <LinearGradient  start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
                         <Text style={styles.btnText}>Login</Text>
                     </LinearGradient>
@@ -55,15 +79,20 @@ const Login = () => {
                 <View style={styles.divider}></View>
                 
                 </View>
-                <TouchableOpacity  onPress={()=>setItem("onboarded", "1")} style={{position:'absolute', top: height * 0.6, elevation:5}}>
+                <TouchableOpacity onPress={()=>dispatch(guestLogin())} style={{position:'absolute', top: height * 0.6, elevation:5}}>
                     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
                         <Text style={styles.btnText}>Continue as Guest</Text>
                     </LinearGradient>
                 </TouchableOpacity>
             </View>
-
+            <Spinner
+           
+        visible={loading}
+        color="#090979"
+        size={50}
+      /> 
         </LinearGradient>
-    </SafeAreaView>)
+    </ScrollView>)
 }
 
 const styles = StyleSheet.create({
