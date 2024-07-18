@@ -18,13 +18,21 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.app.Amazecart",
+      "googleServicesFile": "./assets/google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
-    ]
+      "expo-font","@react-native-firebase/app",
+      "@react-native-firebase/auth"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1600cbef-1ea5-4b7f-80cb-2a40ef963c4a"
+      }
+    }
   }
 }
