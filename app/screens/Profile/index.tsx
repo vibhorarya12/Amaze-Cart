@@ -14,7 +14,8 @@ const color = ["#C8C9BE", "#C3C1BB"];
 
 const Profile = ({ navigation }) => {
     const dispatch = useDispatch();
-    const token: string = useSelector((state: any) => state.auth.token);
+  
+    const {token , loading , guestLogin , name}  = useSelector((state) => state.auth);
 
     useEffect(()=>{
         if(token.length===0){
@@ -42,8 +43,8 @@ const Profile = ({ navigation }) => {
 
         </View>: <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.profileContainer}>
             <Avatar.Image style={styles.avatar} size={width * 0.27} source={Avatar_Img} />
-            <Text style={styles.nameText}>Hey Vibhor !</Text>
-            <Button  style={styles.Btn} icon="truck-fast-outline" mode="contained" onPress={() => navigation.navigate('AuthNav')}>
+            <Text style={styles.nameText}>{`Hey ${name} !`}</Text>
+            <Button  style={styles.Btn} icon="truck-fast-outline" mode="contained" onPress={() => console.log("")}>
                 My orders
             </Button>
             <Button onPressIn={()=>dispatch(logout())} style={[styles.Btn,{top: height * 0.13 }]} icon="logout" mode="contained" onPress={() => removeItem("onboarded")}>

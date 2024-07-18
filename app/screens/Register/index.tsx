@@ -5,10 +5,11 @@ import { theme_color, theme_primary } from "../../constants";
 import { Logo_img } from "../../../assets/Images";
 import * as Animatable from 'react-native-animatable';
 import { TextInput } from 'react-native-paper';
-import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { register } from "../../../redux/Actions/authActions";
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { guestLogin, register } from "../../../redux/Actions/authActions";
+import Spinner from "react-native-loading-spinner-overlay";
 
 
 
@@ -20,6 +21,8 @@ const color = ["#090979", "#433eb6", "#433eb6"];
 
 
 const Register = ({navigation}) => {
+  const {token , loading , guestLogin}  = useSelector((state) => state.auth);
+  
   const dispatch = useDispatch();
     // const navigation = useNavigation();
     const [name, setName] = useState('');
@@ -43,6 +46,7 @@ const Register = ({navigation}) => {
 
 
     const handleRegister = () => {
+       
         dispatch(register(userInfo));
         return;
         let valid = true;
@@ -82,6 +86,22 @@ const Register = ({navigation}) => {
             navigation.navigate('OTP');
         }
     }
+
+    useEffect(() => {
+        if (token.length > 0 && guestLogin === true) {
+            showToast('Registered successfully !');
+          
+            // Reset the navigation state and navigate to 'Home'
+            navigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'Home' }],
+                })
+            );
+        }
+    }, [token]);
+
+
 
 
 
@@ -138,7 +158,11 @@ const Register = ({navigation}) => {
 
 
             </View>
-
+            <Spinner
+        visible={loading}
+        color="#090979"
+        size={50}
+      /> 
         </LinearGradient>
     </SafeAreaView>)
 }

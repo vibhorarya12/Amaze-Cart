@@ -13,8 +13,8 @@ const Navigation = () => {
    
     useEffect(() => {
 
-       console.log('token is <<<<', token)
-    }, [guestLogin])
+       console.log('token from navigation check <<<<', token)
+    }, [guestLogin, token])
 
     
 
@@ -24,7 +24,7 @@ const Navigation = () => {
         // </NavigationContainer>
 
             <NavigationContainer>
-        {guestLogin?<Homenav />:<Onboardnav /> }
+         {guestLogin === true || token.length > 1 ? <Homenav /> : <Onboardnav />}
         </NavigationContainer>
     
     

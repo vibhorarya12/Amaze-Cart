@@ -14,6 +14,8 @@ const Tab = createBottomTabNavigator();
 const Homenav = () => {
     const navigation = useNavigation();
     const cartItems = useSelector((state) => state.products.cartItems);
+    const {token} = useSelector((state) => state.auth);
+
 
     return (
         <Tab.Navigator
