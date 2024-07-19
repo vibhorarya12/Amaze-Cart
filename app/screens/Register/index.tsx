@@ -1,7 +1,7 @@
 
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions, Image, SafeAreaView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native"
-import { theme_color, theme_primary } from "../../constants";
+import { theme_color, theme_primary, URL } from "../../constants";
 import { Logo_img } from "../../../assets/Images";
 import * as Animatable from 'react-native-animatable';
 import { TextInput } from 'react-native-paper';
@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { guestLogin, register } from "../../../redux/Actions/authActions";
 import Spinner from "react-native-loading-spinner-overlay";
+import axios from "axios";
 
 
 
@@ -34,9 +35,9 @@ const Register = ({navigation}) => {
     const [phoneError, setPhoneError] = useState(false);
 
     const userInfo = {
-        phone : "5555555556",
-        name : "second user",
-        email: "abcd@gmail.com"
+        phone : "8171405570",
+        name : "vibhor arya",
+        email: "vbhrr24@gmail.com"
     }
 
     const showToast = (msg: string) => {
@@ -44,10 +45,32 @@ const Register = ({navigation}) => {
 
     }
 
+   const handleCheckPhone = async ()=>{
+     
+     try {
+             
+        const response = await axios.post(`${URL}/user/checkExisting`, {phone: userInfo.phone});
+        console.log(response.data.message);
+        alert('Account with this phone number already exists ')
+
+     } catch (error : any) {
+        if(error.response.status=== 400){
+            console.log(error.response.data.message);
+        }
+        else{
+            console.log(error.response.data.message);
+        }
+     }
+   
+
+   }
+
+
+
 
     const handleRegister = () => {
        
-        dispatch(register(userInfo));
+       navigation.navigate('OTP', { phoneNo: userInfo.phone  ,userInfo : userInfo})
         return;
         let valid = true;
 
@@ -87,19 +110,19 @@ const Register = ({navigation}) => {
         }
     }
 
-    useEffect(() => {
-        if (token.length > 0 && guestLogin === true) {
-            showToast('Registered successfully !');
+    // useEffect(() => {
+    //     if (token.length > 0 && guestLogin === true) {
+    //         showToast('Registered successfully !');
           
-            // Reset the navigation state and navigate to 'Home'
-            navigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: 'Home' }],
-                })
-            );
-        }
-    }, [token]);
+    //         // Reset the navigation state and navigate to 'Home'
+    //         navigation.dispatch(
+    //             CommonActions.reset({
+    //                 index: 0,
+    //                 routes: [{ name: 'Home' }],
+    //             })
+    //         );
+    //     }
+    // }, [token]);
 
 
 
@@ -150,7 +173,7 @@ const Register = ({navigation}) => {
                     keyboardType={"numeric"}
                 />
                 <Text style={[styles.registerText, { position: 'absolute', top: height * 0.45, left: width * 0.12, right: width * 0.12 }]}>A 6-digit OTP will be sent to your phone number for verification</Text>
-                <TouchableOpacity onPress={() => handleRegister()} style={{ position: 'absolute', top: height * 0.52, elevation: 5 }}>
+                <TouchableOpacity onPress={() => handleCheckPhone()} style={{ position: 'absolute', top: height * 0.52, elevation: 5 }}>
                     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
                         <Text style={styles.btnText}>Register</Text>
                     </LinearGradient>

@@ -1,104 +1,113 @@
-import { LinearGradient } from "expo-linear-gradient";
 import React, { useState, useEffect } from "react";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Alert
+  Alert,
+  ToastAndroid,
 } from "react-native";
 import OTPTextView from "react-native-otp-textinput";
-import auth from '@react-native-firebase/auth';
+import auth from "@react-native-firebase/auth";
 import Spinner from "react-native-loading-spinner-overlay";
+import { useDispatch, useSelector } from "react-redux";
+import { login, register } from "../../../redux/Actions/authActions";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 
-const color = ["#090979", "#433eb6", "#433eb6"];
 const { width, height } = Dimensions.get("window");
+const GRADIENT_COLORS = ["#090979", "#433eb6", "#433eb6"];
 
-const OTP = (props) => {
+const OTP = ({ route }) => {
+  const { token, guestLogin } = useSelector((state) => state.auth);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
-  const [loadingText, setLoadingText] =useState('');
+  const [loadingText, setLoadingText] = useState("");
   const [otp, setOtp] = useState("");
   const [confirm, setConfirm] = useState(null);
-  const phoneNumber = props.route.params.phoneNo; 
-   const otpFor = props.route.params.otpFor;
-  // Replace with the actual phone number
-  
-  // useEffect(() => {
-  //   // Handle the onAuthStateChanged
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
-  
-  const onAuthStateChanged = (user) => {
-    if (user) {
-      Alert.alert("Success", "You have successfully logged in!");
-      // Navigate to another screen or hide the OTP component
-    }
+
+  const { phoneNo: phoneNumber, otpFor, userInfo } = route.params;
+
+  const showToast = (msg) => ToastAndroid.show(msg, ToastAndroid.LONG);
+
+  const handleOtpFor = async () => {
+    const action = otpFor === "login" ? login({ phone: phoneNumber }) : register(userInfo);
+    setLoadingText(otpFor === "login" ? "Logging in..." : "Registering...");
+    await  dispatch(action);
+    showToast(`${otpFor === "login" ? "Logged in" : "Registered"} successfully!`);
   };
 
-  const signInWithPhoneNumber = async (phoneNumber) => {
+  const signInWithPhoneNumber = async () => {
     try {
-      const confirmation = await auth().signInWithPhoneNumber('+91' + phoneNumber);
+      const confirmation = await auth().signInWithPhoneNumber(`+91${phoneNumber}`);
       setConfirm(confirmation);
     } catch (error) {
-      console.log("Error signing in with phone number:", error);
+      console.error("Error signing in with phone number:", error);
       Alert.alert("Error", "Failed to send OTP. Please try again.");
     }
   };
 
   const confirmCode = async () => {
-    setLoadingText('verifying OTP ');
+    setLoadingText("Verifying OTP...");
     setLoading(true);
     try {
       await confirm.confirm(otp);
-      alert('success otp')
+      handleOtpFor();
     } catch (error) {
-      console.log("Invalid code:", error);
+      console.error("Invalid code:", error);
       Alert.alert("Error", "Invalid code. Please try again.");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
 
-  // Trigger the phone number sign in when component mounts
   useEffect(() => {
-    // signInWithPhoneNumber(phoneNumber);
+    signInWithPhoneNumber();
   }, []);
 
+  useEffect(() => {
+    if (token.length > 0) {
+      
+      if (guestLogin) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "Home" }],
+          })
+        );
+      }
+    }
+  }, [token]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.OtpText}> Enter 6-digit OTP sent to {phoneNumber} </Text>
+      <Text style={styles.otpText}>Enter 6-digit OTP sent to {phoneNumber}</Text>
       <OTPTextView
-        handleTextChange={(e) => setOtp(e)}
-        tintColor={"#433eb6"}
+        handleTextChange={setOtp}
+        tintColor="#433eb6"
         textInputStyle={styles.roundedTextInput}
-        containerStyle={styles.OtpContainer}
+        containerStyle={styles.otpContainer}
         inputCount={6}
       />
-      <TouchableOpacity
-        style={{ position: "absolute", top: height * 0.45, elevation: 5 }}
-        // onPress={confirmCode}
-        onPress={()=>console.log(otpFor)}
-       
-      >
+      <TouchableOpacity style={styles.verifyButtonContainer} onPress={confirmCode}>
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          colors={color}
+          colors={GRADIENT_COLORS}
           style={styles.btn}
         >
           <Text style={styles.btnText}>Verify</Text>
         </LinearGradient>
-        <Spinner
+      </TouchableOpacity>
+      <Spinner
         visible={loading}
         color="#090979"
         size={50}
         textContent={loadingText}
-      /> 
-      </TouchableOpacity>
+      />
     </View>
   );
 };
@@ -106,23 +115,29 @@ const OTP = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     alignItems: "center",
   },
-  OtpContainer: { position: "absolute", top: height * 0.3 },
+  otpContainer: {
+    position: "absolute",
+    top: height * 0.3,
+  },
   roundedTextInput: {
     height: width * 0.13,
     borderRadius: 10,
     borderWidth: 2,
     backgroundColor: "#f5f7f2",
   },
-  OtpText: {
+  otpText: {
     position: "absolute",
     top: height * 0.2,
     fontSize: width * 0.045,
-   
     color: "#433eb6",
-    fontFamily: 'RobotoSlab_semiBold'
+    fontFamily: "RobotoSlab_semiBold",
+  },
+  verifyButtonContainer: {
+    position: "absolute",
+    top: height * 0.45,
+    elevation: 5,
   },
   btn: {
     width: width * 0.53,
@@ -134,7 +149,8 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: width * 0.045,
     color: "white",
-    fontFamily: 'RobotoSlab_regular'
+    fontFamily: "RobotoSlab_regular",
   },
 });
+
 export default OTP;

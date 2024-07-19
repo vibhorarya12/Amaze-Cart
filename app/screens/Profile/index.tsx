@@ -30,6 +30,7 @@ const Profile = ({ navigation }) => {
 
  
         {token.length===0?<View style={[styles.profileContainer, { borderWidth: 0.4, borderColor: 'black', justifyContent: 'center' , gap:height*0.03}]}>
+            <Button onPressIn={()=>dispatch(logout())}>reset</Button>
             <Image style={{height:height*0.35, width:width*0.55}}  source ={Login_img} />
             <Text style={{
                 fontSize: width * 0.06,
@@ -37,9 +38,11 @@ const Profile = ({ navigation }) => {
             }}>
                 Your are not logged in !!
             </Text>
+           
             <Button onPress={() => navigation.navigate('AuthNav')} style={[styles.Btn,{top: 0 }]} icon="logout" mode="contained" >
               Login now
             </Button>
+            
 
         </View>: <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.profileContainer}>
             <Avatar.Image style={styles.avatar} size={width * 0.27} source={Avatar_Img} />

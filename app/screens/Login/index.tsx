@@ -21,7 +21,7 @@ const color = [ "#090979", "#433eb6",  "#433eb6"];
 const Login = () => {
     const [loading , setLoading] = useState(false);
   const navigation = useNavigation();
-  const [phone, setPhone] = useState(''); 
+  const [phone, setPhone] = useState('5555555555'); 
   const dispatch = useDispatch();
   const guestlogin :boolean = useSelector((state:any)=> state.auth.guestLogin);
 
