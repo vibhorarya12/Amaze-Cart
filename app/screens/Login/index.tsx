@@ -5,7 +5,7 @@ import { Logo_img } from "../../../assets/Images";
 import * as Animatable from 'react-native-animatable';
 import {  TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
-
+import auth from '@react-native-firebase/auth';
 import { useDispatch, useSelector } from "react-redux";
 import { guestLogin, login } from "../../../redux/Actions/authActions";
 import { useState } from "react";
@@ -21,17 +21,17 @@ const color = [ "#090979", "#433eb6",  "#433eb6"];
 const Login = () => {
     const [loading , setLoading] = useState(false);
   const navigation = useNavigation();
-  const [phone, setPhone] = useState('5555555555'); 
+  const [phone, setPhone] = useState(''); 
   const dispatch = useDispatch();
-  const auth = useSelector((state:any)=> state.auth.name);
+  const guestlogin :boolean = useSelector((state:any)=> state.auth.guestLogin);
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-        // const response = await axios.post(`${URL}/user/checkExisting`, {phone: phone});
-        // console.log(response.data);
-        //  navigation.navigate('OTP');
-        dispatch(login({phone:phone}))
+        const response = await axios.post(`${URL}/user/checkExisting`, {phone: phone});
+        console.log(response.data);
+         navigation.navigate('OTP',{phoneNo: phone ,otpFor:'login'});
+        // dispatch(login({phone:phone}))
     } catch (error) {
         if (error.response && error.response.data) {
             Alert.alert('',error.response.data.message)
@@ -73,17 +73,21 @@ const Login = () => {
                     </LinearGradient>
                 </TouchableOpacity>
                 
-                <View style={styles.dividercontainer}>
-                <View style={styles.divider}></View>
-                <Text style={{color:'#433eb6', fontSize:width*0.05,fontWeight:'450'}}>OR</Text>
-                <View style={styles.divider}></View>
-                
-                </View>
-                <TouchableOpacity onPress={()=>dispatch(guestLogin())} style={{position:'absolute', top: height * 0.6, elevation:5}}>
-                    <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
-                        <Text style={styles.btnText}>Continue as Guest</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
+                {!guestlogin && (
+  <>
+    <View style={styles.dividercontainer}>
+      <View style={styles.divider}></View>
+      <Text style={{color:'#433eb6', fontSize:width*0.05, fontWeight:'450'}}>OR</Text>
+      <View style={styles.divider}></View>
+    </View>
+    <TouchableOpacity onPress={() => dispatch(guestLogin())} style={{position:'absolute', top: height * 0.6, elevation:5}}>
+      <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
+        <Text style={styles.btnText}>Continue as Guest</Text>
+      </LinearGradient>
+    </TouchableOpacity>
+  </>
+)}
+
             </View>
             <Spinner
            
