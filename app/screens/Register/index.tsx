@@ -22,8 +22,8 @@ const color = ["#090979", "#433eb6", "#433eb6"];
 
 
 const Register = ({navigation}) => {
-  const {token , loading , guestLogin}  = useSelector((state) => state.auth);
-  
+  const {token ,  guestLogin}  = useSelector((state) => state.auth);
+  const [loading , setLoading] = useState(false);
   const dispatch = useDispatch();
     // const navigation = useNavigation();
     const [name, setName] = useState('');
@@ -35,9 +35,9 @@ const Register = ({navigation}) => {
     const [phoneError, setPhoneError] = useState(false);
 
     const userInfo = {
-        phone : "8171405570",
-        name : "vibhor arya",
-        email: "vbhrr24@gmail.com"
+        phone : phone,
+        name : name,
+        email: email
     }
 
     const showToast = (msg: string) => {
@@ -46,7 +46,7 @@ const Register = ({navigation}) => {
     }
 
    const handleCheckPhone = async ()=>{
-     
+     setLoading(true);
      try {
              
         const response = await axios.post(`${URL}/user/checkExisting`, {phone: userInfo.phone});
@@ -56,22 +56,22 @@ const Register = ({navigation}) => {
      } catch (error : any) {
         if(error.response.status=== 400){
             console.log(error.response.data.message);
+                navigation.navigate('OTP', { phoneNo: userInfo.phone  ,userInfo : userInfo})
         }
         else{
             console.log(error.response.data.message);
         }
      }
-   
+   finally{
+    setLoading(false);
+   }
 
    }
 
-
-
-
     const handleRegister = () => {
        
-       navigation.navigate('OTP', { phoneNo: userInfo.phone  ,userInfo : userInfo})
-        return;
+    //    navigation.navigate('OTP', { phoneNo: userInfo.phone  ,userInfo : userInfo})
+    //     return;
         let valid = true;
 
         // Reset error states
@@ -106,7 +106,7 @@ const Register = ({navigation}) => {
         }
 
         if (valid) {
-            navigation.navigate('OTP');
+           handleCheckPhone();
         }
     }
 
@@ -173,7 +173,7 @@ const Register = ({navigation}) => {
                     keyboardType={"numeric"}
                 />
                 <Text style={[styles.registerText, { position: 'absolute', top: height * 0.45, left: width * 0.12, right: width * 0.12 }]}>A 6-digit OTP will be sent to your phone number for verification</Text>
-                <TouchableOpacity onPress={() => handleCheckPhone()} style={{ position: 'absolute', top: height * 0.52, elevation: 5 }}>
+                <TouchableOpacity onPress={() => handleRegister()} style={{ position: 'absolute', top: height * 0.52, elevation: 5 }}>
                     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.loginbtn}>
                         <Text style={styles.btnText}>Register</Text>
                     </LinearGradient>

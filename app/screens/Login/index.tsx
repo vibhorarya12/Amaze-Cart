@@ -2,12 +2,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Alert, Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { theme_color, theme_primary, URL } from "../../constants";
 import { Logo_img } from "../../../assets/Images";
-import * as Animatable from 'react-native-animatable';
+
 import {  TextInput } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
-import auth from '@react-native-firebase/auth';
+
 import { useDispatch, useSelector } from "react-redux";
-import { guestLogin, login } from "../../../redux/Actions/authActions";
+import { guestLogin } from "../../../redux/Actions/authActions";
 import { useState } from "react";
 import axios from "axios";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -23,9 +23,15 @@ const Login = () => {
   const navigation = useNavigation();
   const [phone, setPhone] = useState('5555555555'); 
   const dispatch = useDispatch();
-  const guestlogin :boolean = useSelector((state:any)=> state.auth.guestLogin);
-
+  const guestLoginCheck :boolean = useSelector((state:any)=> state.auth.guestLogin);
+  const tenDigitRegex = /^\d{10}$/; // regular expression for phone validation"
+  
   const handleLogin = async () => {
+    if(!tenDigitRegex.test(phone)){
+        alert('Please enter a 10 digit valid number');
+        return;
+    }
+
     setLoading(true);
     try {
         const response = await axios.post(`${URL}/user/checkExisting`, {phone: phone});
@@ -73,7 +79,7 @@ const Login = () => {
                     </LinearGradient>
                 </TouchableOpacity>
                 
-                {!guestlogin && (
+                {!guestLoginCheck && (
   <>
     <View style={styles.dividercontainer}>
       <View style={styles.divider}></View>
