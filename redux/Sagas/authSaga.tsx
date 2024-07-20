@@ -1,8 +1,5 @@
 // authSaga.js
 import { takeLatest, call, put, all } from 'redux-saga/effects';
-import axios from 'axios';
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR } from '../ActionTypes/authTypes';
-import { URL } from '../../app/constants';
 import { AuthServices } from '../ApiServices';
 import { AuthTypes } from '../ActionTypes';
 

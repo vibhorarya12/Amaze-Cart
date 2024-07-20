@@ -1,10 +1,5 @@
 import { ProductTypes } from "../ActionTypes";
 
-
-
-
-
-
 function addToCart (item : any) {
     console.log("item added ");
     return {
@@ -22,4 +17,21 @@ function removeFromCart (item : any){
 }
 
 
-export {addToCart , removeFromCart} ;
+const addToWishlist = (productId: string, token: string) => {
+    // console.log('tokenn from here is <<<<<', token)
+   return{ 
+    type: ProductTypes.ADD_TO_WISHLIST_REQUEST,
+    payload: { productId, token },
+   }
+};
+
+
+const removeFromWishList = (productId: string, token: string) =>{
+    return {
+        type : ProductTypes.REMOVE_FROM_WISHLIST_REQUEST,
+        payload: { productId, token }
+    }
+}
+
+
+export {addToCart , removeFromCart , addToWishlist , removeFromWishList} ;

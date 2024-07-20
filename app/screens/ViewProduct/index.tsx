@@ -8,22 +8,29 @@ import { Icon, IconButton } from 'react-native-paper';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import { LinearGradient } from 'expo-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { addToCart } from '../../../redux/Actions/productActions';
+import { addToCart, addToWishlist } from '../../../redux/Actions/productActions';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 const color = ["#090979", "#433eb6", "#433eb6"];
 const { width, height } = Dimensions.get('window');
 
+
 const ViewProduct = (props) => {
+  
   const dispatch = useDispatch();
   const cartData = useSelector((state:any)=> state.products.cartItems)
-
+  const token = useSelector((state:any)=> state.auth.token);
+  const wishListItems = useSelector((state:any)=>state.products.wishListItems)
+const prods =useSelector((state:any)=> state.products)
   const { productInfo } = props.route.params;
   const isFocused = useIsFocused();
 
 
   const handleCart = (item)=>{
+
+      console.log(prods.wishList.length);
+       return
        dispatch(addToCart(item));
   }
 
@@ -45,7 +52,7 @@ const ViewProduct = (props) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container} contentContainerStyle={styles.contentContainer}>
       <StatusBar backgroundColor='transparent' style={'auto'} />
-      <ProductImageSwiper key={key} item={productInfo.images} />
+      <ProductImageSwiper key={key} item={productInfo.images} productId= {productInfo._id} />
       <Text style={styles.titleText}>{productInfo.title.split(' ').slice(0, 3).join(' ')}</Text>
       <View style={styles.ratingContainer}>
         <StarRatingDisplay
@@ -105,7 +112,9 @@ const ViewProduct = (props) => {
   );
 }
 
-const ProductImageSwiper = ({ item }) => {
+const ProductImageSwiper = ({ item ,  productId}) => {
+  const dispatch = useDispatch();
+  const token = useSelector((state:any)=> state.auth.token);
   const navigation = useNavigation();
   return (
     <Animatable.View animation={'fadeInDown'} duration={1000} style={styles.pageContainer}>
@@ -122,7 +131,8 @@ const ProductImageSwiper = ({ item }) => {
           iconColor='#433eb6'
           size={30}
           style={{ backgroundColor: '#E7E5DF' }}
-          onPress={() => console.log('Pressed')}
+          onPress={() => dispatch(addToWishlist(productId, token))}
+        
         />
       </View>
       <SwiperFlatList
