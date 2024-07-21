@@ -32,7 +32,7 @@ export const productReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         wishList: [...state.wishList, action.data.product],
-        responseMsg: action.data.message,
+        responseMsg: 'added to wishlist !!',
       };
     case ProductTypes.ADD_TO_WISHLIST_ERROR:
       console.log('error <<<<<', state.responseMsg);

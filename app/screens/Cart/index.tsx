@@ -12,7 +12,7 @@ const color = ["#090979", "#433eb6", "#433eb6"];
 
 const Cart = ({navigation}) => {
     const cartData = useSelector((state:any)=> state.products.cartItems)
-
+    console.log('Cart data is <<<<<',cartData);
 
 
   

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, Image, Dimensions, Text, TouchableOpacity, ToastAndroid, Alert } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as Animatable from 'react-native-animatable';
@@ -8,7 +8,7 @@ import { Icon, IconButton } from 'react-native-paper';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import { LinearGradient } from 'expo-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { addToCart, addToWishlist } from '../../../redux/Actions/productActions';
+import { addToCart, addToWishlist, removeFromWishList } from '../../../redux/Actions/productActions';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -17,21 +17,19 @@ const { width, height } = Dimensions.get('window');
 
 
 const ViewProduct = (props) => {
-  
+
   const dispatch = useDispatch();
-  const cartData = useSelector((state:any)=> state.products.cartItems)
-  const token = useSelector((state:any)=> state.auth.token);
-  const wishListItems = useSelector((state:any)=>state.products.wishListItems)
-const prods =useSelector((state:any)=> state.products)
+  const cartData = useSelector((state: any) => state.products.cartItems)
+  const token = useSelector((state: any) => state.auth.token);
+  const { wishList, responseMsg , loading} = useSelector((state: any) => state.products);
+  const prods = useSelector((state: any) => state.products)
   const { productInfo } = props.route.params;
   const isFocused = useIsFocused();
 
-
-  const handleCart = (item)=>{
-
-      console.log(prods.wishList.length);
-       return
-       dispatch(addToCart(item));
+  const check = (productId) => wishList.some(wishItem => wishItem._id === productId);
+  const handleCart = async (item) => {
+    await dispatch(addToCart(item));
+    alert('items added to cart');
   }
 
   const getFutureDate = (daysAhead) => {
@@ -52,7 +50,7 @@ const prods =useSelector((state:any)=> state.products)
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container} contentContainerStyle={styles.contentContainer}>
       <StatusBar backgroundColor='transparent' style={'auto'} />
-      <ProductImageSwiper key={key} item={productInfo.images} productId= {productInfo._id} />
+      <ProductImageSwiper key={key} item={productInfo.images} productId={productInfo._id} inWishList={check(productInfo._id)} />
       <Text style={styles.titleText}>{productInfo.title.split(' ').slice(0, 3).join(' ')}</Text>
       <View style={styles.ratingContainer}>
         <StarRatingDisplay
@@ -63,11 +61,11 @@ const prods =useSelector((state:any)=> state.products)
           color="#FFA400"
 
         />
-        <Text style={{ fontSize: width * 0.04, fontWeight: '600',fontFamily:'RobotoSlab_semiBold' }}>3.5</Text>
+        <Text style={{ fontSize: width * 0.04, fontWeight: '600', fontFamily: 'RobotoSlab_semiBold' }}>3.5</Text>
       </View>
       <View style={styles.priceContainer}>
-        <Text style={{ fontSize: width * 0.05, fontWeight: '500' ,fontFamily:'RobotoSlab_semiBold'}} >{"₹" + productInfo.price + "99"}</Text>
-        <Text style={{ fontSize: width * 0.035, opacity: 0.5 , fontFamily:'RobotoSlab_regular' }}>exclucing delivery charges</Text>
+        <Text style={{ fontSize: width * 0.05, fontWeight: '500', fontFamily: 'RobotoSlab_semiBold' }} >{"₹" + productInfo.price + "99"}</Text>
+        <Text style={{ fontSize: width * 0.035, opacity: 0.5, fontFamily: 'RobotoSlab_regular' }}>exclucing delivery charges</Text>
       </View>
       <View style={styles.descriptionContainer}>
         <Text textBreakStrategy={'simple'} style={styles.descriptionText}>{productInfo.description}</Text>
@@ -78,16 +76,16 @@ const prods =useSelector((state:any)=> state.products)
           color={'#433eb6'}
           size={width * 0.08}
         />
-        <Text style={{ fontSize: width * 0.037, fontWeight: '500',fontFamily:'RobotoSlab_regular' }}>Delivery by {getFutureDate(5)}</Text>
+        <Text style={{ fontSize: width * 0.037, fontWeight: '500', fontFamily: 'RobotoSlab_regular' }}>Delivery by {getFutureDate(5)}</Text>
       </View>
-  {cartData.includes(productInfo)? <View style={styles.priceContainer}>
-      <Icon
+      {cartData.includes(productInfo) ? <View style={styles.priceContainer}>
+        <Icon
           source="sticker-check-outline"
           color={'#433eb6'}
           size={width * 0.08}
         />
         <Text style={{ fontSize: width * 0.04, opacity: 0.7 }}>item added to cart</Text>
-      </View> : <TouchableOpacity onPress={()=>handleCart(productInfo)} style={{ elevation: 5, left: width * 0.06, }}>
+      </View> : <TouchableOpacity onPress={() => handleCart(productInfo)} style={{ elevation: 5, left: width * 0.06, }}>
         <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.btn}>
           <Icon
             source="cart-outline"
@@ -97,25 +95,62 @@ const prods =useSelector((state:any)=> state.products)
           <Text style={{
             fontSize: width * 0.04,
             color: 'white',
-            fontFamily:'RobotoSlab_regular'
+            fontFamily: 'RobotoSlab_regular'
           }} >Add to cart</Text>
         </LinearGradient>
       </TouchableOpacity>}
-       
-      {/* <Spinner
-        visible={true}
-        color="#090979"
+
+      <Spinner
+        visible={loading}
+        color="white"
         size={50}
-      /> */}
+      />
 
     </ScrollView>
   );
 }
 
-const ProductImageSwiper = ({ item ,  productId}) => {
+const ProductImageSwiper = ({ item, productId, inWishList }) => {
   const dispatch = useDispatch();
-  const token = useSelector((state:any)=> state.auth.token);
+  const token = useSelector((state: any) => state.auth.token);
+  const showToast = (msg) => ToastAndroid.show(msg, ToastAndroid.LONG);
   const navigation = useNavigation();
+  const { responseMsg ,loading} = useSelector((state: any) => state.products);
+
+  const handleAddToWishList = async () => {
+    if (inWishList) {
+      Alert.alert(
+        '',
+        'remove item from wishlist?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+
+              await dispatch(removeFromWishList(productId, token))
+             
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+
+
+    }
+    else {
+
+           const res=   await dispatch(addToWishlist(productId, token));
+           console.log('dispatch <<<<<<',res)
+      // alert(responseMsg);
+    }
+
+
+  }
   return (
     <Animatable.View animation={'fadeInDown'} duration={1000} style={styles.pageContainer}>
       <View style={styles.iconContainer}>
@@ -127,12 +162,13 @@ const ProductImageSwiper = ({ item ,  productId}) => {
           onPress={() => navigation.goBack()}
         />
         <IconButton
+
           icon="heart"
-          iconColor='#433eb6'
+          iconColor={inWishList ? '#433eb6' : 'grey'}
           size={30}
           style={{ backgroundColor: '#E7E5DF' }}
-          onPress={() => dispatch(addToWishlist(productId, token))}
-        
+          onPress={() => handleAddToWishList()}
+
         />
       </View>
       <SwiperFlatList
@@ -212,7 +248,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     left: width * 0.06,
     marginTop: height * 0.01,
-    fontFamily:'RobotoSlab_semiBold'
+    fontFamily: 'RobotoSlab_semiBold'
   },
   ratingContainer: {
     width: width * 0.45,
@@ -253,7 +289,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: width * 0.037,
-    fontFamily:'RobotoSlab_regular'
+    fontFamily: 'RobotoSlab_regular'
   },
   deliveryTextContainer: {
     flexDirection: 'row',

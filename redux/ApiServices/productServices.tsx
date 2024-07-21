@@ -21,7 +21,7 @@ export const removeFromWishlist = async ({token, productId})=>{
          console.log( 'api resonse<<<<<<<' ,response.data);
         return response.data;
       } catch (error:any) {
-        // console.log( 'api resonse<<<<<<<' ,error.response.data);
+        console.log( 'api resonse<<<<<<<' ,error.response.data.message);
         return { error: true, message: error.message };
       }
 
