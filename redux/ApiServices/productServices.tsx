@@ -27,5 +27,17 @@ export const removeFromWishlist = async ({token, productId})=>{
 
 }
 
+export const getWishListProducts = async ({token})=>{
+  try {
+    const response = await axios.post(`${URL}/products/getWishListProducts`, { token });
+    //  console.log( 'api resonse<<<<<<<' ,response.data);
+    return response.data;
+  } catch (error:any) {
+    console.log( 'api resons error <<<<<<<' ,error.response);
+    return { error: true, message: error.message };
+  }
+ 
+ 
+}
 
 

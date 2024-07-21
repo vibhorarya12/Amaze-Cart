@@ -27,7 +27,7 @@ export const productReducer = (state = initialState, action: any) => {
         loading: true,
       };
     case ProductTypes.ADD_TO_WISHLIST_SUCCESS:
-      console.log('wishlist items are <<<<<', state.wishList);
+      // console.log('wishlist items are <<<<<', state.wishList);
       return {
         ...state,
         loading: false,
@@ -65,6 +65,32 @@ export const productReducer = (state = initialState, action: any) => {
         loading: false,
         responseMsg: action.error,
       };
+
+
+    case ProductTypes.GET_WISHLIST_PRODUCTS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ProductTypes.GET_WISHLIST_PRODUCTS_SUCCESS:
+      console.log('action data is <<<<', action);
+      return {
+        ...state,
+        loading: false,
+        wishList: action.data,
+      }
+
+   case ProductTypes.GET_WISHLIST_PRODUCTS_ERROR:
+    return {
+      ...state,
+      loading: false,
+      responseMsg: action.error,
+    }
+
+    case ProductTypes.CLEAR_WISHLIST:
+      return {
+        ...initialState
+      }
 
     default:
       return state;

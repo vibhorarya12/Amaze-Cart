@@ -44,7 +44,27 @@ function* removeFromWishlist(action) {
 }
 
 
+function* getWishListProducts(action) {
+    const { token } = action.payload;
+    try {
+        const res = yield call(ProductServices.getWishListProducts, { token });
+        if (res.error) {
+            yield put({ type: ProductTypes.GET_WISHLIST_PRODUCTS_ERROR, error: res.message });
+        } else {
+            yield put({
+                type: ProductTypes.GET_WISHLIST_PRODUCTS_SUCCESS,
+                data: res,
+            });
+        }
+    } catch (error) {
+        yield put({ type: ProductTypes.GET_WISHLIST_PRODUCTS_ERROR, error: error.message });
+    }
+}
+
+
+
 export default function* productsSaga() {
     yield takeLatest(ProductTypes.ADD_TO_WISHLIST_REQUEST, addToWishlist);
     yield takeLatest(ProductTypes.REMOVE_FROM_WISHLIST_REQUEST, removeFromWishlist);
+    yield takeLatest(ProductTypes.GET_WISHLIST_PRODUCTS_REQUEST, getWishListProducts);
 }

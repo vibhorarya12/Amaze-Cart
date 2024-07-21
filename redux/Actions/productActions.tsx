@@ -34,4 +34,20 @@ const removeFromWishList = (productId: string, token: string) =>{
 }
 
 
-export {addToCart , removeFromCart , addToWishlist , removeFromWishList} ;
+const getWishListProducts = (token : string) =>{
+
+    return{
+        type :ProductTypes.GET_WISHLIST_PRODUCTS_REQUEST,
+        payload : {token}
+    }
+}
+
+
+const clearWishList = ()=>{
+
+     return {
+        type : ProductTypes.CLEAR_WISHLIST,
+     }
+}
+
+export {addToCart , removeFromCart , addToWishlist , removeFromWishList , clearWishList , getWishListProducts} ;

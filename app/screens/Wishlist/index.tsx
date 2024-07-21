@@ -1,16 +1,18 @@
 import { View ,Text, Button, StyleSheet, Dimensions, FlatList} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import ProductItem from "../../components/ProductItem";
-import { removeFromWishList } from "../../../redux/Actions/productActions";
+import { clearWishList, getWishListProducts, removeFromWishList } from "../../../redux/Actions/productActions";
 import { LinearGradient } from "expo-linear-gradient";
+import { ProductServices } from "../../../redux/ApiServices";
 const { width, height } = Dimensions.get('window');
 
 const color = ["#090979", "#433eb6", "#433eb6"];
 
 const Wishlist = ({navigation})=>{
     const wishListItems = useSelector(state=> state.products.wishList);
+    const {token} = useSelector(state=>state.auth);
+    const dispatch = useDispatch();
     
-
     return (<View style={styles.Conatiner}>
         <LinearGradient
             style={styles.headerContainer}
@@ -18,7 +20,7 @@ const Wishlist = ({navigation})=>{
             end={{ x: 1, y: 0 }}
             colors={color}
         ><Text style={{color:'white'}}>Wishlist</Text></LinearGradient>
-
+            <Button title="remove all" onPress={()=>dispatch(getWishListProducts(token)) }/>
        {<FlatList style={{marginTop:5}} data={wishListItems} keyExtractor={(item) => item._id}
             renderItem={({ item }) => <ProductItem item={item} navigation = {navigation} />}
             contentContainerStyle={styles.contentContainer}
