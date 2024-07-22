@@ -21,7 +21,7 @@ const ViewProduct = (props) => {
   const dispatch = useDispatch();
   const cartData = useSelector((state: any) => state.products.cartItems)
   const token = useSelector((state: any) => state.auth.token);
-  const { wishList, responseMsg , loading} = useSelector((state: any) => state.products);
+  const { wishList, loading} = useSelector((state: any) => state.products);
   const prods = useSelector((state: any) => state.products)
   const { productInfo } = props.route.params;
   const isFocused = useIsFocused();
