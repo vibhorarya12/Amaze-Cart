@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import store from './redux/Store/store';
 import persistStore from 'redux-persist/es/persistStore';
 import { PersistGate } from 'redux-persist/integration/react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const persister = persistStore(store);
 export default function App() {
     const loaded = useLoadFonts();
@@ -27,7 +28,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor = {persister} >
+        <GestureHandlerRootView>
       <Navigation/>
+      </GestureHandlerRootView>
       </PersistGate>
     </Provider>
     
