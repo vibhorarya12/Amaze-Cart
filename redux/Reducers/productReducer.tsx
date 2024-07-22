@@ -73,7 +73,7 @@ export const productReducer = (state = initialState, action: any) => {
         loading: true,
       };
     case ProductTypes.GET_WISHLIST_PRODUCTS_SUCCESS:
-      console.log('action data is <<<<', action);
+      // console.log('action data is <<<<', action);
       return {
         ...state,
         loading: false,

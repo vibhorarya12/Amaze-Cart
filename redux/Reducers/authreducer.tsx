@@ -1,8 +1,6 @@
 
 import { AuthTypes } from "../ActionTypes";
 
-
-
 const initialState = {
   name: '',
   email: '',
