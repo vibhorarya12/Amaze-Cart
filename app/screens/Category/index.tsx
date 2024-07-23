@@ -22,7 +22,9 @@ const Category = (props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const handleOpen = () => bottomSheetRef.current?.snapToIndex(0);
   const handleClose = () => bottomSheetRef.current?.close();
-  const [sortBy, setSortBy] = useState({ type: 'def', from: '' });
+  const [sortBy, setSortBy] = useState({ type: 'price', from: '' });
+  const [type, setType] = useState('price');
+  const [from , setFrom] = useState('');
 
   const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
   const handleRequest = async () => {
@@ -41,6 +43,22 @@ const Category = (props) => {
     }
 
   }
+
+  const handleSort = () => {
+    setItems(prevItems => {
+      const sortedItems = [...prevItems].sort((a, b) => {
+        if (from === 'lowToHigh') {
+          return a.price - b.price;
+        } else if (from === 'highToLow') {
+          return b.price - a.price;
+        } else {
+          return 0; 
+        }
+      });
+      return sortedItems;
+    });
+    handleClose();
+  };
 
   useEffect(() => {
     handleRequest();
@@ -61,7 +79,7 @@ const Category = (props) => {
       />
       <Image resizeMode={"contain"} source={Sale_img} style={styles.salesImage} />
       <IconButton
-        icon="filter"
+       icon={"filter"}
         iconColor='#433eb6'
         size={height * 0.025}
         style={{ backgroundColor: '#E7E5DF' }}
@@ -86,22 +104,16 @@ const Category = (props) => {
         <RadioButton
           value="price"
           color="#433eb6"
-          status={ sortBy.type==='price'?'checked':'unchecked'}
-          onPress={() => setSortBy((prev) => ({
-            ...prev,
-            type: 'price',
-          }))}
+          status={ type==='price'?'checked':'unchecked'}
+          onPress={()=>setType('price')}
 
         />
         <Text style={styles.radioBtnText}>Price</Text>
         <RadioButton
           value="ratings"
           color="#433eb6"
-          status={ sortBy.type==='ratings'?'checked':'unchecked'}
-          onPress={() => setSortBy((prev) => ({
-            ...prev,
-            type: 'ratings',
-          }))}
+          status={ type==='ratings'?'checked':'unchecked'}
+          onPress={()=>setType('ratings')}
 
 
         />
@@ -115,11 +127,8 @@ const Category = (props) => {
         <RadioButton
           value="lowToHigh"
           color="#433eb6"
-          status={ sortBy.from==='lowToHigh'?'checked':'unchecked'}
-          onPress={() => setSortBy((prev) => ({
-            ...prev,
-            from: 'lowToHigh',
-          }))}
+          status={ from==='lowToHigh'?'checked':'unchecked'}
+          onPress={()=>setFrom('lowToHigh')}
 
 
         />
@@ -129,16 +138,13 @@ const Category = (props) => {
         <RadioButton
           value="HighToLow"
           color="#433eb6"
-          status={ sortBy.from==='highToLow'?'checked':'unchecked'}
-          onPress={() => setSortBy((prev) => ({
-            ...prev,
-           from: 'highToLow'
-          }))}
+          status={ from==='highToLow'?'checked':'unchecked'}
+          onPress={()=>setFrom('highToLow')}
 
 
         />
       </BottomSheetView>
-      {/* <Button title="click"  onPress={()=>console.log(sortBy)}/> */}
+      <Button title="click"  onPress={()=>handleSort()}/>
     </BottomSheet>
 
   </View>)
