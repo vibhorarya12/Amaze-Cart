@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, Dimensions, Image, Button } from "react-native"
+import { View, Text, StyleSheet, FlatList, Dimensions, Image} from "react-native"
 import { Sample_Products_Data } from "../../../assets/SampleData/Products";
 import ProductItem, { SkeletonList } from "../../components/ProductItem";
 import Header from "../../components/Header";
@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { URL } from "../../constants";
 import axios from "axios";
-import { Checkbox, IconButton, RadioButton } from "react-native-paper";
+import { Button, Checkbox, IconButton, RadioButton } from "react-native-paper";
 import { Sale_img } from "../../../assets/Images";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 const { width, height } = Dimensions.get('window');
@@ -22,7 +22,6 @@ const Category = (props) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const handleOpen = () => bottomSheetRef.current?.snapToIndex(0);
   const handleClose = () => bottomSheetRef.current?.close();
-  const [sortBy, setSortBy] = useState({ type: 'price', from: '' });
   const [type, setType] = useState('price');
   const [from , setFrom] = useState('');
 
@@ -60,7 +59,11 @@ const Category = (props) => {
     handleClose();
   };
 
+  
+
   useEffect(() => {
+    setFrom('');
+      setType('price');
     handleRequest();
 
   }, [category])
@@ -79,7 +82,7 @@ const Category = (props) => {
       />
       <Image resizeMode={"contain"} source={Sale_img} style={styles.salesImage} />
       <IconButton
-       icon={"filter"}
+       icon={ from !=''?"filter-check":'filter'}
         iconColor='#433eb6'
         size={height * 0.025}
         style={{ backgroundColor: '#E7E5DF' }}
@@ -141,10 +144,13 @@ const Category = (props) => {
           status={ from==='highToLow'?'checked':'unchecked'}
           onPress={()=>setFrom('highToLow')}
 
-
         />
       </BottomSheetView>
-      <Button title="click"  onPress={()=>handleSort()}/>
+      {/* <Button title="click"  onPress={()=>handleSort()}/> */}
+   {from !=''?<Button   onPress={()=>handleSort()} mode={'contained-tonal'} style={{backgroundColor:'#433eb6' , width:width*0.36, marginLeft:4, marginTop:3}} textColor="white">
+        apply
+      </Button>:null }
+      
     </BottomSheet>
 
   </View>)
