@@ -6,12 +6,13 @@ import { Cod, Debit, Upi } from "../../../assets/Images"; import { useState } fr
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
-const Checkout = ({ navigation }) => {
+const Checkout = ({ navigation ,route }) => {
     const paymentMode = [{ title: 'Cash on delivery', img: Cod },
     { title: 'UPI', img: Upi },
     { title: 'Debit/Credit', img: Debit }]
     const [selectedPay, setSelectedPay] = useState('');
-
+    const checkoutData = route.params.checkoutData;
+    const subTotal = checkoutData.reduce((sum, item) => sum + item.price * item.quantity, 0);
     return (<ScrollView style={styles.container} contentContainerStyle={styles.contentConatiner}>
         <LinearGradient
             style={styles.headerContainer}
@@ -83,8 +84,9 @@ const Checkout = ({ navigation }) => {
         })}
         <View style={styles.subTotal}>
             <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: width * 0.04,fontFamily:'RobotoSlab_semiBold' }} >{"Subtotal (3 items)"}</Text>
-                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold' }} >{"₹ " + "1499"}</Text>
+                <Text style={{ fontSize: width * 0.04,fontFamily:'RobotoSlab_semiBold' }} >{`Sub total (${checkoutData.reduce((sum, item)=> sum + item.quantity,0)} items)`}</Text>
+                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold' }} > {"₹" + subTotal}</Text>
+                
             </View>
             <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold'}} >{"delivery charge"}</Text>
@@ -95,9 +97,9 @@ const Checkout = ({ navigation }) => {
             </View>
             <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Text style={{ fontSize: width * 0.05, fontFamily:'RobotoSlab_semiBold'}} >{"Total"}</Text>
-                <Text style={{ fontSize: width * 0.05, fontFamily:'RobotoSlab_semiBold' }} >{"₹ " + "1598"}</Text>
+                <Text style={{ fontSize: width * 0.05, fontFamily:'RobotoSlab_semiBold' }} >{"₹ " + (subTotal + 99)}</Text>
             </View>
-         <TouchableOpacity >
+         <TouchableOpacity  onPress={()=> console.log(checkoutData)}>
             <LinearGradient style={styles.checkoutBtn}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}

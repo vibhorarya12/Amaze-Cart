@@ -44,7 +44,7 @@ const Cart = ({ navigation }) => {
                 contentContainerStyle={styles.contentContainer}
                 showsVerticalScrollIndicator={false}
             />
-            <View style={styles.checkoutInfoContainer}>
+           {cartData.length===0?null:<View style={styles.checkoutInfoContainer}>
                 <View style={{ borderColor:'black', width: width * 0.45, justifyContent:'center', alignItems:'center'}}>
                     <Text style={{ fontSize: width * 0.042, fontWeight: '600', fontFamily: 'RobotoSlab_semiBold' }}>{`Sub total (${checkoutData.reduce((sum, item)=> sum + item.quantity,0)} items)`}</Text>
                     <IconButton
@@ -52,16 +52,16 @@ const Cart = ({ navigation }) => {
                         iconColor={'#433eb6'}
                         size={height * 0.05}
                         style={{ alignSelf:'flex-start' }}
-                        onPress={() => console.log(checkoutData)}                        
+                        onPress={() => navigation.navigate('Checkout',{checkoutData})}                        
                     />
                 </View>
                 <View style={styles.totalPriceContainer}>
                     <Text style={{ fontSize: width * 0.05, fontWeight: '600', fontFamily: 'RobotoSlab_semiBold' }}>
-                        {checkoutData.reduce((sum, item) => sum + item.price * item.quantity, 0)}
+                      {"₹" + checkoutData.reduce((sum, item) => sum + item.price * item.quantity, 0)}
                     </Text>
                     <Text style={{ fontSize: width * 0.035, opacity: 0.5 ,fontFamily: 'RobotoSlab_regular' }}>{"(excluding shipping charges)"}</Text>
                 </View>
-            </View>
+            </View>}
         </View>
     );
 };
