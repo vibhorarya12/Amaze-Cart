@@ -14,13 +14,14 @@ const Cart = ({ navigation }) => {
     const [checkoutData, setCheckoutData] = useState([]);
 
     useEffect(() => {
-        setCheckoutData(cartData.map((item:any) => ({ productId: item._id, price: item.price, quantity: 1 })));
+        // setCheckoutData(cartData.map((item:any) => ({ productId: item._id, price: item.price, quantity: 1 })));
+        setCheckoutData(cartData.map((item:any) => ({...item, quantity:1 })));
     }, [cartData]);
 
     const handleQuantity = (productId:string, quantity:number) => {
         setCheckoutData(prevData => 
             prevData.map(item => 
-                productId === item.productId ? { ...item, quantity: quantity } : item
+                productId === item._id ? { ...item, quantity: quantity } : item
             )
         );
     };
@@ -37,7 +38,7 @@ const Cart = ({ navigation }) => {
             </LinearGradient>
             <FlatList
                 style={styles.flatList}
-                data={cartData}
+                data={checkoutData}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => <CartItems handleQuantity={handleQuantity} item={item} />}
                 contentContainerStyle={styles.contentContainer}
@@ -66,21 +67,20 @@ const Cart = ({ navigation }) => {
 };
 
 const CartItems = ({ item, handleQuantity }) => {
-    const [capacity, setCapacity] = useState(1);
+    const [capacity, setCapacity] = useState(0);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setCapacity(1);
+       console.log('updated....');
     }, [item]);
 
     const handleAdd = () => {
-        const newCapacity = capacity + 1;
-        setCapacity(newCapacity);
-        handleQuantity(item._id, newCapacity);
+        
+        handleQuantity(item._id, item.quantity+1);
     };
 
     const handleReduce = () => {
-        if (capacity === 1) {
+        if (item.quantity === 1) {
             Alert.alert(
                 'Warning',
                 'This will remove the item from the cart',
@@ -100,9 +100,9 @@ const CartItems = ({ item, handleQuantity }) => {
                 ]
             );
         } else {
-            const newCapacity = capacity - 1;
-            setCapacity(newCapacity);
-            handleQuantity(item._id, newCapacity);
+            // const newCapacity = capacity - 1;
+            // setCapacity(newCapacity);
+            handleQuantity(item._id, item.quantity - 1);
         }
     };
 
@@ -119,7 +119,7 @@ const CartItems = ({ item, handleQuantity }) => {
                         style={{ backgroundColor: '#E7E5DF' }}
                         onPress={handleReduce}
                     />
-                    <Text>{capacity}</Text>
+                    <Text>{item.quantity}</Text>
                     <IconButton
                         icon="plus"
                         iconColor={'#090979'}
@@ -128,7 +128,9 @@ const CartItems = ({ item, handleQuantity }) => {
                         onPress={handleAdd}
                     />
                 </View>
-                <Text style={styles.priceText}>{"₹ " + item.price + "99"}</Text>
+                <Text style={styles.priceText}>{"₹ " + item.price}</Text>
+                {/* <Text style={styles.priceText}>{"quantity : " + item.quantity}</Text> */}
+
             </View>
         </View>
     );
