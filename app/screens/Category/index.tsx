@@ -63,7 +63,7 @@ const Category = (props) => {
 
   useEffect(() => {
     setFrom('');
-      setType('price');
+    setType('price');
     handleRequest();
 
   }, [category])
