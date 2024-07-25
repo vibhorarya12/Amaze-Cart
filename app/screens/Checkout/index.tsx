@@ -1,13 +1,13 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { View, Text, StyleSheet, ScrollView, Dimensions, Image, TouchableOpacity, ToastAndroid } from "react-native"
-import { Checkbox, IconButton, RadioButton, TextInput } from "react-native-paper";
-import { Cod, Debit, Upi } from "../../../assets/Images"; import { useRef, useState } from "react";
-
+import { Button, IconButton, RadioButton, TextInput } from "react-native-paper";
+import { Cod, Debit, Upi } from "../../../assets/Images"; import { useCallback, useRef, useState } from "react";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
 
-const Checkout = ({ navigation ,route }) => {
+const Checkout = ({ navigation, route }) => {
     const scrollViewRef = useRef(null);
     const paymentMode = [{ title: 'Cash on delivery', img: Cod },
     { title: 'UPI', img: Upi },
@@ -20,58 +20,61 @@ const Checkout = ({ navigation ,route }) => {
         phone: '',
         address: '',
         paymentMode: '',
-        amount : subTotal + 99,
+        amount: subTotal + 99,
         products: checkoutData.map((item) => ({
-          productId: item._id,
-          price: item.price,
-          quantity: item.quantity
+            productId: item._id,
+            price: item.price,
+            quantity: item.quantity
         }))
-      });
-    
-  const [error , setError] = useState({nameError :false , phoneError : false, addressError:false});
- 
+    });
 
-//   const handleScroll = ()=> scrollViewRef.current.scrollTo({x: 0, y: height * 0.02, animated: true});
+    const [error, setError] = useState({ nameError: false, phoneError: false, addressError: false });
+    const snapPoints = ['70%'];
+    const bottomSheetRef = useRef<BottomSheet>(null);
+    const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop  appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
 
-
-    const handleValidation = ()=>{
+    // handle input feilds validations //
+    const handleValidation = () => {
+        bottomSheetRef.current?.snapToIndex(0);
+        return;
         setError({
             nameError: false,
             phoneError: false,
             addressError: false
-          });
-          
+        });
+
         const phonePattern = /^[0-9]{10}$/;
-        
-        if(orderData.name.length===0){
-            setError((prev)=>({...prev, nameError:true}))
-            scrollViewRef.current.scrollTo({x: 0, y: height * 0.02, animated: true})
+
+        if (orderData.name.length === 0) {
+            setError((prev) => ({ ...prev, nameError: true }))
+            //scroll to input feild on error //
+            scrollViewRef.current.scrollTo({ x: 0, y: height * 0.02, animated: true })
             ToastAndroid.show('name feild cannot be left blank', ToastAndroid.LONG);
             return false;
-            
+
         }
 
-        if(!phonePattern.test(orderData.phone)){
-            setError((prev)=>({...prev, phoneError:true}))
-            scrollViewRef.current.scrollTo({x: 0, y: height * 0.02, animated: true})
+        if (!phonePattern.test(orderData.phone)) {
+            setError((prev) => ({ ...prev, phoneError: true }))
+            scrollViewRef.current.scrollTo({ x: 0, y: height * 0.02, animated: true })
             ToastAndroid.show('please enter valid phone number', ToastAndroid.LONG);
             return false;
 
         }
-            
-        if(orderData.address.length===0){
-            setError((prev)=>({...prev, addressError:true}))
-            scrollViewRef.current.scrollTo({x: 0, y: height * 0.01, animated: true})
+
+        if (orderData.address.length === 0) {
+            setError((prev) => ({ ...prev, addressError: true }))
+            scrollViewRef.current.scrollTo({ x: 0, y: height * 0.01, animated: true })
             ToastAndroid.show('address feild cannot be left blank', ToastAndroid.LONG);
             return false;
         }
-        if(orderData.paymentMode.length===0){
+        if (orderData.paymentMode.length === 0) {
             ToastAndroid.show('please select a payment mode', ToastAndroid.LONG);
             return false;
         }
         return true;
-        
-    }  
+
+    }
 
 
     return (<ScrollView ref={scrollViewRef} style={styles.container} contentContainerStyle={styles.contentConatiner}>
@@ -90,50 +93,50 @@ const Checkout = ({ navigation ,route }) => {
             />
             <Text style={styles.headerText}>Place order</Text>
         </LinearGradient>
-        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04 ,fontFamily:'RobotoSlab_semiBold'}} >Full name *</Text>
+        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Full name *</Text>
         <TextInput
             mode={"outlined"}
-           error = {error.nameError}
+            error={error.nameError}
             style={styles.textInput}
             outlineColor="#433eb6"
             activeOutlineColor="#433eb6"
             outlineStyle={{ borderWidth: 2, borderRadius: 10 }}
-            value= {orderData.name}
-            onChangeText= {(e)=> setOrderData((prev)=>({...prev, name:e}))}
+            value={orderData.name}
+            onChangeText={(e) => setOrderData((prev) => ({ ...prev, name: e }))}
 
 
         />
-    <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04 ,fontFamily:'RobotoSlab_semiBold'}} >Phone number *</Text>
+        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Phone number *</Text>
         <TextInput
             keyboardType={"numeric"}
             mode={"outlined"}
-             error = {error.phoneError}
+            error={error.phoneError}
             style={styles.textInput}
             outlineColor="#433eb6"
             activeOutlineColor="#433eb6"
             outlineStyle={{ borderWidth: 2, borderRadius: 10 }}
             left={<TextInput.Affix text="+91" />}
-            onChangeText= {(e)=> setOrderData((prev)=>({...prev, phone:e}))}
+            onChangeText={(e) => setOrderData((prev) => ({ ...prev, phone: e }))}
 
         />
-        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04 ,fontFamily:'RobotoSlab_semiBold'}} >Shipping address*</Text>
+        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Shipping address*</Text>
 
         <TextInput
             multiline={true}
             mode={"outlined"}
-            error = {error.addressError}
+            error={error.addressError}
             style={styles.textInputArea}
             outlineColor="#433eb6"
             activeOutlineColor="#433eb6"
             outlineStyle={{ borderWidth: 2, borderRadius: 10 }}
-            onChangeText= {(e)=> setOrderData((prev)=>({...prev, address:e}))}
+            onChangeText={(e) => setOrderData((prev) => ({ ...prev, address: e }))}
 
         />
-        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold' }} >Payment mode</Text>
+        <Text style={{ alignSelf: 'flex-start', left: width * 0.09, fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Payment mode</Text>
         {paymentMode.map((item, index) => {
             return (<View key={index} style={styles.paymentItem}>
                 <Image style={styles.img} resizeMode={"contain"} source={item.img} />
-                <Text style={{ fontSize: width * 0.04, fontWeight: '500' ,fontFamily:'RobotoSlab_semiBold'}}>{item.title}</Text>
+                <Text style={{ fontSize: width * 0.04, fontWeight: '500', fontFamily: 'RobotoSlab_semiBold' }}>{item.title}</Text>
                 <View style={{ marginRight: 5 }}>
                     <RadioButton
                         value={item.title}
@@ -143,42 +146,84 @@ const Checkout = ({ navigation ,route }) => {
                             setOrderData((prevData) => ({
                                 ...prevData,
                                 paymentMode: item.title
-                              }));
+                            }));
                         }}
                     />
                 </View>
 
             </View>)
         })}
-        <View style={styles.subTotal}>
-            <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: width * 0.04,fontFamily:'RobotoSlab_semiBold' }} >{`Sub total (${checkoutData.reduce((sum, item)=> sum + item.quantity,0)} items)`}</Text>
-                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold' }} > {"₹" + subTotal}</Text>
-                
-            </View>
-            <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold'}} >{"delivery charge"}</Text>
-                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold' }} >{"₹ " + "99"}</Text>
-            </View>
-            <View style={styles.divider}>
-                {/*  divider      */}
-            </View>
-            <View style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: width * 0.05, fontFamily:'RobotoSlab_semiBold'}} >{"Total"}</Text>
-                <Text style={{ fontSize: width * 0.05, fontFamily:'RobotoSlab_semiBold' }} >{"₹ " + (subTotal + 99)}</Text>
-            </View>
-         <TouchableOpacity  onPress={()=> handleValidation()}>
+       
+
+        {/* checkout button */}
+        <TouchableOpacity onPress={() => handleValidation()}>
             <LinearGradient style={styles.checkoutBtn}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            colors={color}>
-                <Text style={{ fontSize: width * 0.04, fontFamily:'RobotoSlab_semiBold', color:'white' }} >{"Checkout"}</Text>
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                colors={color}>
+                <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold', color: 'white' }} >{"Checkout"}</Text>
             </LinearGradient>
-         </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+
+
+
+        {/*  bottom sheet container */}
+        <BottomSheet   backgroundStyle={{backgroundColor:'#f2f3f2'}}  backdropComponent={renderBackDrop} style={{ justifyContent: 'center', alignItems: 'center',gap:10 }} ref={bottomSheetRef} index={-1} snapPoints={snapPoints} enablePanDownToClose={true}>
+           
+             {/* checkout details container */}
+            <BottomSheetView style={styles.subTotal}>
+                 {/* name details */}
+                <BottomSheetView style={{ width: width * 0.8, height: height * 0.06, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Name</Text>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_regular' }} > {orderData.name}</Text>
+
+                </BottomSheetView>
+                  
+                  {/* phone details */}
+                <BottomSheetView style={{ width: width * 0.8, height: height * 0.06, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Phone</Text>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_regular' }} >{"+91" + orderData.phone}</Text>
+                </BottomSheetView>
+                {/* Shipping details */}
+                <BottomSheetView style={{ width: width * 0.8, borderColor: 'black',  alignItems: 'flex-start',  }}>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Shipping Address</Text>
+                    <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_regular', textAlign: 'justify', }} >{orderData.address}</Text>
+                </BottomSheetView>
+                {/* payment mode details */}
+                <BottomSheetView style={{ width: width * 0.8, height: height * 0.06, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Payment mode : </Text>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_regular' }} >{orderData.paymentMode}</Text>
+                </BottomSheetView>
+
+                <BottomSheetView style={{ width: width * 0.8, height: height * 0.06, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >{`Sub total (${checkoutData.reduce((sum, item) => sum + item.quantity, 0)} items)`}</Text>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} > {"₹" + subTotal}</Text>
+
+                </BottomSheetView>
+                <BottomSheetView style={{ width: width * 0.8, height: height * 0.06, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >{"delivery charge"}</Text>
+                    <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >{"₹ " + "99"}</Text>
+                </BottomSheetView>
+                <BottomSheetView style={styles.divider}>
+                    {/*  divider      */}
+                </BottomSheetView>
+                <BottomSheetView style={{ width: width * 0.8, height: height * 0.07, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: width * 0.05, fontFamily: 'RobotoSlab_semiBold' }} >{"Total"}</Text>
+                    <Text style={{ fontSize: width * 0.05, fontFamily: 'RobotoSlab_semiBold' }} >{"₹ " + (subTotal + 99)}</Text>
+                </BottomSheetView>
+                <Button onPress={()=> console.log('book')} mode={'contained-tonal'} style={{backgroundColor:color[1] , marginBottom:height*0.02, width:width*0.4}}>
+                  <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_regular' , color:'white'}}>Place Order</Text>
+                </Button>
+            </BottomSheetView>
+        </BottomSheet>
     </ScrollView>)
 
+
 }
+
+ const ProductItem = ()=> (<View style={styles.productItem}>
+    <Text>item</Text>
+ </View>)
 
 
 const styles = StyleSheet.create({
@@ -192,7 +237,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "flex-end",
         justifyContent: 'center',
-        zIndex: 2,
+       
 
     },
     contentConatiner: {
@@ -207,14 +252,14 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: 'white',
         fontWeight: '500',
-        fontFamily:'RobotoSlab_semiBold'
+        fontFamily: 'RobotoSlab_semiBold'
 
     },
     textInput: {
 
         width: width * 0.85,
         height: width * 0.12,
-       
+
 
         backgroundColor: 'transparent'
 
@@ -246,11 +291,14 @@ const styles = StyleSheet.create({
     subTotal: {
         width: width * 0.91,
         backgroundColor: '#E7E5DF',
-        height: height * 0.32,
-        borderRadius: 15,
+        
+        borderRadius: 20,
         marginBottom: 20,
         // justifyContent:'center',
         alignItems: 'center',
+        alignSelf:'center',
+        marginTop:height*0.015,
+       
 
 
 
@@ -262,13 +310,22 @@ const styles = StyleSheet.create({
         opacity: 0.6
 
     },
-    checkoutBtn:{
+    checkoutBtn: {
         width: width * 0.6,
         height: width * 0.14,
-        borderRadius:20,
-        justifyContent:'center',
-        alignItems:'center'
-    }
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    productItem:{
+        width:width*0.45,
+        height:height*0.2,
+        borderColor:'black',
+        borderWidth:1
+    },
+
+   
 
 })
 

@@ -37,7 +37,7 @@ const Homenav = () => {
                 };
 
                 return (
-                    focusedRouteName !== 'AuthNav' && (
+                    focusedRouteName !== 'AuthNav' && focusedRouteName !== 'Checkout' && (
                         <BottomNavigation.Bar
                             style={{ height: height * 0.09 }}
                             renderLabel={() => null}
