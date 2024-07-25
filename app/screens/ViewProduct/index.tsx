@@ -162,7 +162,6 @@ const ProductImageSwiper = ({ item, productId, inWishList }) => {
           onPress={() => navigation.goBack()}
         />
         <IconButton
-
           icon="heart"
           iconColor={inWishList ? '#433eb6' : 'grey'}
           size={30}
