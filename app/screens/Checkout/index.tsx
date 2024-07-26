@@ -212,7 +212,7 @@ const Checkout = ({ navigation, route }) => {
                     <Text style={{ fontSize: width * 0.05, fontFamily: 'RobotoSlab_semiBold' }} >{"₹ " + (subTotal + 99)}</Text>
                 </BottomSheetView>
                 <Button onPress={()=> console.log('book')} mode={'contained-tonal'} style={{backgroundColor:color[1] , marginBottom:height*0.02, width:width*0.4}}>
-                  <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_regular' , color:'white'}}>Place Order</Text>
+                  <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_regular' , color:'white'}}>{orderData.paymentMode==='Cash on delivery'?'Place Order':'Razorpay Checkout'}</Text>
                 </Button>
             </BottomSheetView>
         </BottomSheet>
