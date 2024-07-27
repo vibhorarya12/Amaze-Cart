@@ -1,13 +1,14 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { View, Text, StyleSheet, ScrollView, Dimensions, Image, TouchableOpacity, ToastAndroid } from "react-native"
+import { View, Text, StyleSheet, ScrollView, Dimensions, Image, TouchableOpacity, ToastAndroid, BackHandler } from "react-native"
 import { Button, IconButton, RadioButton, TextInput } from "react-native-paper";
-import { Cod, Debit, Upi } from "../../../assets/Images"; import { useCallback, useRef, useState } from "react";
+import { Cod, Debit, Upi } from "../../../assets/Images"; import { useCallback, useEffect, useRef, useState } from "react";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
 
 const Checkout = ({ navigation, route }) => {
+    
     const scrollViewRef = useRef(null);
     const paymentMode = [{ title: 'Cash on delivery', img: Cod },
     { title: 'UPI', img: Upi },
@@ -29,14 +30,30 @@ const Checkout = ({ navigation, route }) => {
     });
 
     const [error, setError] = useState({ nameError: false, phoneError: false, addressError: false });
-    const snapPoints = ['70%'];
+    const snapPoints = ['65%'];
     const bottomSheetRef = useRef<BottomSheet>(null);
     const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop  appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
 
+   
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+      
+        return () => backHandler.remove();
+      }, []);
+
+      const handleBackPress = () => {
+        if (bottomSheetRef.current?.index !== -1) {
+            bottomSheetRef.current?.close();
+            return true;
+        }
+       
+        return false;
+    };
+
+
     // handle input feilds validations //
     const handleValidation = () => {
-        bottomSheetRef.current?.snapToIndex(0);
-        return;
+       
         setError({
             nameError: false,
             phoneError: false,
@@ -72,10 +89,13 @@ const Checkout = ({ navigation, route }) => {
             ToastAndroid.show('please select a payment mode', ToastAndroid.LONG);
             return false;
         }
-        return true;
+        bottomSheetRef.current?.snapToIndex(0);
+        return;
 
     }
+  
 
+  
 
     return (<ScrollView ref={scrollViewRef} style={styles.container} contentContainerStyle={styles.contentConatiner}>
         <LinearGradient
@@ -168,7 +188,7 @@ const Checkout = ({ navigation, route }) => {
 
 
         {/*  bottom sheet container */}
-        <BottomSheet   backgroundStyle={{backgroundColor:'#f2f3f2'}}  backdropComponent={renderBackDrop} style={{ justifyContent: 'center', alignItems: 'center',gap:10 }} ref={bottomSheetRef} index={-1} snapPoints={snapPoints} enablePanDownToClose={true}>
+        <BottomSheet   backgroundStyle={{backgroundColor:'#f2f3f2'}}  backdropComponent={renderBackDrop} style={{ justifyContent: 'center', alignItems: 'center',gap:10,  }} ref={bottomSheetRef} index={-1} snapPoints={snapPoints} enablePanDownToClose={true}>
            
              {/* checkout details container */}
             <BottomSheetView style={styles.subTotal}>
@@ -211,9 +231,15 @@ const Checkout = ({ navigation, route }) => {
                     <Text style={{ fontSize: width * 0.05, fontFamily: 'RobotoSlab_semiBold' }} >{"Total"}</Text>
                     <Text style={{ fontSize: width * 0.05, fontFamily: 'RobotoSlab_semiBold' }} >{"₹ " + (subTotal + 99)}</Text>
                 </BottomSheetView>
-                <Button onPress={()=> console.log('book')} mode={'contained-tonal'} style={{backgroundColor:color[1] , marginBottom:height*0.02, width:width*0.4}}>
-                  <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_regular' , color:'white'}}>{orderData.paymentMode==='Cash on delivery'?'Place Order':'Razorpay Checkout'}</Text>
-                </Button>
+                <TouchableOpacity >
+            <LinearGradient style={styles.bottomSheetBtn}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                colors={color}>
+                <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold', color: 'white' }} >{orderData.paymentMode==='Cash on delivery'?'Place Order':'Razorpay Checkout'}</Text>
+            </LinearGradient>
+        </TouchableOpacity>
+                
             </BottomSheetView>
         </BottomSheet>
     </ScrollView>)
@@ -325,6 +351,17 @@ const styles = StyleSheet.create({
         borderWidth:1
     },
 
+  bottomSheetBtn:{
+    width: width * 0.7,
+    height: width * 0.14,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:height*0.03,
+    marginTop:height*0.012,
+    
+
+  }
    
 
 })
