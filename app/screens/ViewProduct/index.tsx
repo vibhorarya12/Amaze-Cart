@@ -100,11 +100,11 @@ const ViewProduct = (props) => {
         </LinearGradient>
       </TouchableOpacity>}
 
-      <Spinner
+      {/* <Spinner
         visible={loading}
         color="white"
         size={50}
-      />
+      /> */}
 
     </ScrollView>
   );

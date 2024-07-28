@@ -1,8 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { View, Text, StyleSheet, ScrollView, Dimensions, Image, TouchableOpacity, ToastAndroid, BackHandler } from "react-native"
+import { View, Text, StyleSheet, ScrollView, Dimensions, Image, TouchableOpacity, ToastAndroid, BackHandler } from "react-native";
+import RazorpayCheckout from 'react-native-razorpay';
 import { Button, IconButton, RadioButton, TextInput } from "react-native-paper";
 import { Cod, Debit, Upi } from "../../../assets/Images"; import { useCallback, useEffect, useRef, useState } from "react";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
+import { Razorpay_Key } from "../../constants";
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
@@ -95,6 +97,36 @@ const Checkout = ({ navigation, route }) => {
     }
   
 
+
+    //   handle razorpay Checkout
+
+  const  handleRazorpay =async ()=>{
+    var options = {
+        description: 'Credits towards consultation',
+        image: 'https://i.imgur.com/3g7nmJC.jpg',
+        currency: 'INR',
+        key: Razorpay_Key,
+        amount: '1000',
+        name: 'Acme Corp',
+        order_id: '',
+        prefill: {
+          email: 'gaurav.kumar@example.com',
+          contact: '9191919191',
+          name: 'Gaurav Kumar'
+        },
+        theme: {color: '#433eb6'}
+      }
+     
+      RazorpayCheckout.open(options).then((data) => {
+        // handle success
+        alert(`Success: ${data.razorpay_payment_id}`);
+      }).catch((error) => {
+        // handle failure
+        alert(`Error: ${error.code} | ${error.description}`);
+      });
+
+
+  }
   
 
     return (<ScrollView ref={scrollViewRef} style={styles.container} contentContainerStyle={styles.contentConatiner}>
@@ -176,7 +208,7 @@ const Checkout = ({ navigation, route }) => {
        
 
         {/* checkout button */}
-        <TouchableOpacity onPress={() => handleValidation()}>
+        <TouchableOpacity onPress={() => handleRazorpay()}>
             <LinearGradient style={styles.checkoutBtn}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
