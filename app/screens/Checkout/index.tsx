@@ -103,7 +103,7 @@ const Checkout = ({ navigation, route }) => {
   const  handleRazorpay =async ()=>{
     var options = {
         description: 'Credits towards consultation',
-        image: 'https://i.imgur.com/3g7nmJC.jpg',
+        image: 'https://www.ecommerce-nation.com/wp-content/uploads/2019/02/razorpay.webp',
         currency: 'INR',
         key: Razorpay_Key,
         amount: '1000',
