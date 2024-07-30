@@ -1,15 +1,16 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, StyleSheet, Dimensions, FlatList, Image, Alert } from "react-native";
+import { View, Text, StyleSheet, Dimensions, FlatList, Image, Alert, Button } from "react-native";
 import { IconButton } from "react-native-paper";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart } from "../../../redux/Actions/productActions";
+import { clearCart, removeFromCart } from "../../../redux/Actions/productActions";
 
 const { width, height } = Dimensions.get('window');
 
 const color = ["#090979", "#433eb6", "#433eb6"];
 
 const Cart = ({ navigation }) => {
+    const dispatch = useDispatch();
     const cartData = useSelector((state:any) => state.products.cartItems);
     const [checkoutData, setCheckoutData] = useState([]);
 
@@ -36,6 +37,7 @@ const Cart = ({ navigation }) => {
             >
                 <Text style={styles.headerText}>Cart</Text>
             </LinearGradient>
+            <Button title="clear" onPress={()=> dispatch(clearCart())}/>
             <FlatList
                 style={styles.flatList}
                 data={checkoutData}

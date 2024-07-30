@@ -20,6 +20,11 @@ export const productReducer = (state = initialState, action: any) => {
         ...state,
         cartItems: state.cartItems.filter(item => item._id !== action.data._id)
       };
+    case ProductTypes.CLEAR_CART:
+      return {
+        ...state,
+        cartItems: []
+      };
 
     case ProductTypes.ADD_TO_WISHLIST_REQUEST:
       return {
@@ -80,12 +85,12 @@ export const productReducer = (state = initialState, action: any) => {
         wishList: action.data,
       }
 
-   case ProductTypes.GET_WISHLIST_PRODUCTS_ERROR:
-    return {
-      ...state,
-      loading: false,
-      responseMsg: action.error,
-    }
+    case ProductTypes.GET_WISHLIST_PRODUCTS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        responseMsg: action.error,
+      }
 
     case ProductTypes.CLEAR_WISHLIST:
       return {

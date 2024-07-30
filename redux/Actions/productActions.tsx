@@ -16,7 +16,12 @@ function removeFromCart (item : any){
      }
 }
 
-
+function clearCart (){
+    console.log("cart cleared");
+    return {
+        type :ProductTypes.CLEAR_CART
+    }
+}
 const addToWishlist = (productId: string, token: string) => {
     // console.log('tokenn from here is <<<<<', token)
    return{ 
@@ -50,4 +55,4 @@ const clearWishList = ()=>{
      }
 }
 
-export {addToCart , removeFromCart , addToWishlist , removeFromWishList , clearWishList , getWishListProducts} ;
+export {addToCart ,clearCart, removeFromCart , addToWishlist , removeFromWishList , clearWishList , getWishListProducts} ;

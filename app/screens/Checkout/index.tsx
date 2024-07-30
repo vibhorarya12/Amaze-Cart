@@ -38,6 +38,8 @@ const Checkout = ({ navigation, route }) => {
         }))
     });
 
+    //  response data after successfull creation of order
+    const [resData , setResData] = useState(null);
     const [error, setError] = useState({ nameError: false, phoneError: false, addressError: false , emailError :false });
     const snapPoints = ['65%'];
     const bottomSheetRef = useRef<BottomSheet>(null);
@@ -45,10 +47,52 @@ const Checkout = ({ navigation, route }) => {
 
    
     useEffect(() => {
+        // handle back button action //
+        console.log("new items on cart");
+        
         const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
       
         return () => backHandler.remove();
-      }, []);
+        
+      }, [checkoutData]);
+
+     useEffect(()=>{
+        if (resData && ['UPI', 'Debit/Credit'].includes(resData.paymentMode)) {
+            // Your code here
+            var options = {
+                description: `Payment for OrderID  ${resData._id}`,
+                image: 'https://www.ecommerce-nation.com/wp-content/uploads/2019/02/razorpay.webp',
+                currency: 'INR',
+                key: Razorpay_Key,
+                amount: (subTotal + 99)*100,
+                name: 'AmazeCart',
+                order_id: resData.paymentData.paymentId,
+                prefill: {
+                  email: orderData.email,
+                  contact: orderData.phone,
+                  name: orderData.name
+                },
+                theme: {color: '#433eb6'}
+              }
+             
+              RazorpayCheckout.open(options).then((data) => {
+                // handle success
+                alert(`Success: ${data.razorpay_payment_id}`);
+                console.log("razor data is <<<<", data);
+              }).catch((error) => {
+                // handle failure
+                alert(`Error: ${error.code} | ${error.description}`);
+                console.log("razor error  is <<<<", error);
+              });
+        
+
+          }
+          else{
+            //  navigation.navigate('Home');
+
+          }
+
+     }, [resData])
 
       const handleBackPress = () => {
         if (bottomSheetRef.current?.index !== -1) {
@@ -79,7 +123,7 @@ const Checkout = ({ navigation, route }) => {
             //scroll to input feild on error //
             scrollViewRef.current.scrollTo({ x: 0, y: height * 0.02, animated: true })
             ToastAndroid.show('name feild cannot be left blank', ToastAndroid.LONG);
-            return false;
+            return ;
 
         }
 
@@ -87,7 +131,7 @@ const Checkout = ({ navigation, route }) => {
             setError((prev) => ({ ...prev, phoneError: true }))
             scrollViewRef.current.scrollTo({ x: 0, y: height * 0.02, animated: true })
             ToastAndroid.show('please enter valid phone number', ToastAndroid.LONG);
-            return false;
+            return ;
 
         }
         
@@ -95,20 +139,20 @@ const Checkout = ({ navigation, route }) => {
             setError((prev) => ({ ...prev, emailError: true }))
             scrollViewRef.current.scrollTo({ x: 0, y: height * 0.02, animated: true })
             ToastAndroid.show('please enter valid email', ToastAndroid.LONG);
-            return false;
+            return ;
          } 
         if (orderData.address.length === 0) {
             setError((prev) => ({ ...prev, addressError: true }))
             scrollViewRef.current.scrollTo({ x: 0, y: height * 0.01, animated: true })
             ToastAndroid.show('address feild cannot be left blank', ToastAndroid.LONG);
-            return false;
+            return ;
         }
         if (orderData.paymentMode.length === 0) {
             ToastAndroid.show('please select a payment mode', ToastAndroid.LONG);
-            return false;
+            return ;
         }
         bottomSheetRef.current?.snapToIndex(0);
-        return true;
+        return ;
 
     }
   
@@ -120,9 +164,12 @@ const  createOrder = async ()=>{
      
           const res =  await axios.post(`${URL}/order/createOrder`, orderData);
           console.log(res.data);
+          setResData(res.data.order);
           alert(res.data.message);
+          console.log( 'resdata is <<<<<<<<<<' ,resData);
        } catch (error) {
            console.log(error);
+           alert('failed to create order !!!');
        }
        finally{
            setLoading(false)
@@ -252,7 +299,7 @@ const  createOrder = async ()=>{
        
 
         {/* checkout button */}
-        <TouchableOpacity  style={{paddingBottom:height*0.1}} onPress={() => handleValidation()}>
+        <TouchableOpacity  style={{marginBottom:height*0.1}} onPress={() => handleValidation()}>
             <LinearGradient style={styles.checkoutBtn}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
