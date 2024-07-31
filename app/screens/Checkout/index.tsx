@@ -3,14 +3,13 @@ import { View, Text, StyleSheet, ScrollView, Dimensions, Image, TouchableOpacity
 import RazorpayCheckout from 'react-native-razorpay';
 import { Button, IconButton, RadioButton, TextInput } from "react-native-paper";
 import { Cod, Debit, Upi } from "../../../assets/Images"; import { useCallback, useEffect, useRef, useState } from "react";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetModal, BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import { Razorpay_Key, URL } from "../../constants";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Spinner from "react-native-loading-spinner-overlay";
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
-
 
 const Checkout = ({ navigation, route }) => {
     
@@ -41,10 +40,12 @@ const Checkout = ({ navigation, route }) => {
     //  response data after successfull creation of order
     const [resData , setResData] = useState(null);
     const [error, setError] = useState({ nameError: false, phoneError: false, addressError: false , emailError :false });
-    const snapPoints = ['65%'];
-    const bottomSheetRef = useRef<BottomSheet>(null);
-    const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop  appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
 
+    // bottomSheet Config
+    const snapPoints = ['70%'];
+    const bottomSheetRef = useRef<BottomSheetModal>(null);
+    const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop  appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
+  const handleOpenModal = ()=>bottomSheetRef.current?.present()
    
     useEffect(() => {
         // handle back button action //
@@ -151,7 +152,7 @@ const Checkout = ({ navigation, route }) => {
             ToastAndroid.show('please select a payment mode', ToastAndroid.LONG);
             return ;
         }
-        bottomSheetRef.current?.snapToIndex(0);
+        bottomSheetRef.current?.present();
         return ;
 
     }
@@ -299,7 +300,7 @@ const  createOrder = async ()=>{
        
 
         {/* checkout button */}
-        <TouchableOpacity  style={{marginBottom:height*0.1}} onPress={() => handleValidation()}>
+        <TouchableOpacity  style={{marginBottom:height*0.035}} onPress={() => handleValidation()}>
             <LinearGradient style={styles.checkoutBtn}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -310,8 +311,8 @@ const  createOrder = async ()=>{
 
 
 
-        {/*  bottom sheet container */}
-        <BottomSheet   backgroundStyle={{backgroundColor:'#f2f3f2'}}  backdropComponent={renderBackDrop} style={{ justifyContent: 'center', alignItems: 'center',gap:10,  }} ref={bottomSheetRef} index={-1} snapPoints={snapPoints} enablePanDownToClose={true}>
+        {/*  bottom sheet modal container */}
+        <BottomSheetModal   backgroundStyle={{backgroundColor:'#f2f3f2'}}  backdropComponent={renderBackDrop} style={{ justifyContent: 'center', alignItems: 'center',gap:10,  }} ref={bottomSheetRef}  snapPoints={snapPoints} enablePanDownToClose={true}>
            
              {/* checkout details container */}
             <BottomSheetView style={styles.subTotal}>
@@ -377,7 +378,7 @@ const  createOrder = async ()=>{
         textContent="creating order..."
       />
             </BottomSheetView>
-        </BottomSheet>
+        </BottomSheetModal>
     </ScrollView>)
 
 

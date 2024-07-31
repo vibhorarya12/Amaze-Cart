@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Dimensions, View } from "react-native";
 import { useSelector } from 'react-redux';
 import AuthNav from './Authnav';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const { height, width } = Dimensions.get('window');
 const Tab = createBottomTabNavigator();
@@ -18,6 +19,7 @@ const Homenav = () => {
 
 
     return (
+        <BottomSheetModalProvider>
         <Tab.Navigator
             backBehavior={'history'}
             screenOptions={{
@@ -179,6 +181,7 @@ const Homenav = () => {
                 {props => <AuthNav {...props} />}
             </Tab.Screen>
         </Tab.Navigator>
+        </BottomSheetModalProvider>
     );
 }
 

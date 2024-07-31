@@ -13,6 +13,7 @@ const Cart = ({ navigation }) => {
     const dispatch = useDispatch();
     const cartData = useSelector((state:any) => state.products.cartItems);
     const [checkoutData, setCheckoutData] = useState([]);
+    
 
     useEffect(() => {
         // setCheckoutData(cartData.map((item:any) => ({ productId: item._id, price: item.price, quantity: 1 })));
