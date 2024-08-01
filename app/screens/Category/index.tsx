@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, Dimensions, Image} from "react-native"
+import { View, Text, StyleSheet, FlatList, Dimensions, Image, BackHandler} from "react-native"
 import { Sample_Products_Data } from "../../../assets/SampleData/Products";
 import ProductItem, { SkeletonList } from "../../components/ProductItem";
 import Header from "../../components/Header";
@@ -8,7 +8,7 @@ import { URL } from "../../constants";
 import axios from "axios";
 import { Button, Checkbox, IconButton, RadioButton } from "react-native-paper";
 import { Sale_img } from "../../../assets/Images";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView ,BottomSheetModal } from '@gorhom/bottom-sheet';
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
@@ -19,8 +19,8 @@ const Category = (props) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const snapPoints = ['35%'];
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const handleOpen = () => bottomSheetRef.current?.snapToIndex(0);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const handleOpen = () => bottomSheetRef.current?.present();
   const handleClose = () => bottomSheetRef.current?.close();
   const [type, setType] = useState('price');
   const [from , setFrom] = useState('');
@@ -65,10 +65,20 @@ const Category = (props) => {
     setFrom('');
     setType('price');
     handleRequest();
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+      
+    return () => backHandler.remove();
 
   }, [category])
 
-
+  const handleBackPress = () => {
+    if (bottomSheetRef.current?.index !== -1) {
+        bottomSheetRef.current?.close();
+        return true;
+    }
+   return false;
+    
+};
   return (<View style={styles.Conatiner}>
 
 
@@ -99,7 +109,7 @@ const Category = (props) => {
       columnWrapperStyle={{ gap: width * 0.04 }}
     />}
 
-    <BottomSheet style={{ gap: 10 }} backdropComponent={renderBackDrop} ref={bottomSheetRef} index={-1} snapPoints={snapPoints} enablePanDownToClose={true} >
+    <BottomSheetModal style={{ gap: 10 }} backdropComponent={renderBackDrop} ref={bottomSheetRef}  snapPoints={snapPoints} enablePanDownToClose={true} >
       <BottomSheetView style={{ borderColor: 'black' }}>
         <Text style={styles.btmSheetHeader}>Sort By</Text>
       </BottomSheetView>
@@ -151,7 +161,7 @@ const Category = (props) => {
         apply
       </Button>:null }
       
-    </BottomSheet>
+    </BottomSheetModal>
 
   </View>)
 }
