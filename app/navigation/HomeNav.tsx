@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import { Cart, Category, Checkout, Home, Login, Profile, ViewProduct, Wishlist } from "../screens";
+import { Cart, Category, Checkout,  ConfirmOrder,  Home, Login, Profile, ViewProduct, Wishlist } from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, BottomNavigation, Badge } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -179,6 +179,17 @@ const Homenav = () => {
                 }}
             >
                 {props => <AuthNav {...props} />}
+            </Tab.Screen>
+            <Tab.Screen
+                name="ConfirmOrder"
+                options={{
+                    tabBarLabel: 'ConfirmOrder',
+                    tabBarIcon: ({ color, size }) => {
+                        return <Icon name="home" size={size} color={"#433eb6"} />;
+                    },
+                }}
+            >
+                {props =><ConfirmOrder {...props} />}
             </Tab.Screen>
         </Tab.Navigator>
         </BottomSheetModalProvider>

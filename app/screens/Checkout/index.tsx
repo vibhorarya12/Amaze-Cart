@@ -88,6 +88,7 @@ const Checkout = ({ navigation, route }) => {
                     const res = await axios.post(`${URL}/order/confirmPayment`, { token: orderData.token, orderId: resData._id, paymentStatus: 'Completed' });
                     console.log('confimation done <<<',res.data);
                     alert('Payment Confirmed');
+                    bottomSheetRef.current?.close();
                     dispatch(clearCart());
                     navigation.navigate('Home');
                 } catch (error) {
