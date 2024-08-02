@@ -38,7 +38,7 @@ const Cart = ({ navigation }) => {
             >
                 <Text style={styles.headerText}>Cart</Text>
             </LinearGradient>
-            <Button title="clear" onPress={()=> dispatch(clearCart())}/>
+           
             <FlatList
                 style={styles.flatList}
                 data={checkoutData}

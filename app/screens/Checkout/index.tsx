@@ -5,28 +5,30 @@ import { Button, IconButton, RadioButton, TextInput } from "react-native-paper";
 import { Cod, Debit, Upi } from "../../../assets/Images"; import { useCallback, useEffect, useRef, useState } from "react";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetFlatList, BottomSheetModal, BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import { Razorpay_Key, URL } from "../../constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Spinner from "react-native-loading-spinner-overlay";
+import { clearCart } from "../../../redux/Actions/productActions";
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
 const Checkout = ({ navigation, route }) => {
-    
+    const dispatch = useDispatch();
     const scrollViewRef = useRef(null);
-    const authData = useSelector(state=> state.auth);
+    const authData = useSelector(state => state.auth);
     const paymentMode = [{ title: 'Cash on delivery', img: Cod },
     { title: 'UPI', img: Upi },
     { title: 'Debit/Credit', img: Debit }]
     const [selectedPay, setSelectedPay] = useState('');
-    const [loading , setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [loadingText, setLoadingText] = useState('');
     const checkoutData = route.params.checkoutData;
     const subTotal = checkoutData.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const [orderData, setOrderData] = useState({
         token: authData.token,
         name: '',
         phone: '',
-        email:'',
+        email: '',
         address: '',
         paymentMode: '',
         amount: subTotal + 99,
@@ -38,26 +40,27 @@ const Checkout = ({ navigation, route }) => {
     });
 
     //  response data after successfull creation of order
-    const [resData , setResData] = useState(null);
-    const [error, setError] = useState({ nameError: false, phoneError: false, addressError: false , emailError :false });
+    const [resData, setResData] = useState(null);
+    const [error, setError] = useState({ nameError: false, phoneError: false, addressError: false, emailError: false });
 
     // bottomSheet Config
     const snapPoints = ['70%'];
     const bottomSheetRef = useRef<BottomSheetModal>(null);
-    const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop  appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
-  const handleOpenModal = ()=>bottomSheetRef.current?.present()
-   
+    const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
+    const handleOpenModal = () => bottomSheetRef.current?.present()
+
     useEffect(() => {
         // handle back button action //
         console.log("new items on cart");
-        
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-      
-        return () => backHandler.remove();
-        
-      }, [checkoutData]);
+        setResData(null);
 
-     useEffect(()=>{
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        return () => backHandler.remove();
+
+    }, [checkoutData]);
+
+    useEffect(() => {
         if (resData && ['UPI', 'Debit/Credit'].includes(resData.paymentMode)) {
             // Your code here
             var options = {
@@ -65,54 +68,70 @@ const Checkout = ({ navigation, route }) => {
                 image: 'https://www.ecommerce-nation.com/wp-content/uploads/2019/02/razorpay.webp',
                 currency: 'INR',
                 key: Razorpay_Key,
-                amount: (subTotal + 99)*100,
+                amount: (subTotal + 99) * 100,
                 name: 'AmazeCart',
                 order_id: resData.paymentData.paymentId,
                 prefill: {
-                  email: orderData.email,
-                  contact: orderData.phone,
-                  name: orderData.name
+                    email: orderData.email,
+                    contact: orderData.phone,
+                    name: orderData.name
                 },
-                theme: {color: '#433eb6'}
-              }
-             
-              RazorpayCheckout.open(options).then((data) => {
+                theme: { color: '#433eb6' }
+            }
+
+            RazorpayCheckout.open(options).then(async (data) => {
                 // handle success
-                alert(`Success: ${data.razorpay_payment_id}`);
-                console.log("razor data is <<<<", data);
-              }).catch((error) => {
+                // alert(`Success: ${data.razorpay_payment_id}`);
+                setLoadingText('Confirming order ...');
+                setLoading(true);
+                try {
+                    const res = await axios.post(`${URL}/order/confirmPayment`, { token: orderData.token, orderId: resData._id, paymentStatus: 'Completed' });
+                    console.log('confimation done <<<',res.data);
+                    alert('Payment Confirmed');
+                    dispatch(clearCart());
+                    navigation.navigate('Home');
+                } catch (error) {
+                    console.log(error);
+                    alert('failed');
+                }
+                finally {
+                    setLoading(false);
+                }
+                // console.log("razor data is <<<<", data);
+            }).catch((error) => {
                 // handle failure
                 alert(`Error: ${error.code} | ${error.description}`);
                 console.log("razor error  is <<<<", error);
-              });
-        
+            });
 
-          }
-          else{
-            //  navigation.navigate('Home');
 
-          }
+        }
+        if (resData && resData.paymentMode === 'Cash on delivery') {
+            bottomSheetRef.current?.close();
+            dispatch(clearCart());
+            navigation.navigate('Home');
+        }
 
-     }, [resData])
+    }, [resData])
 
-      const handleBackPress = () => {
+    const handleBackPress = () => {
         if (bottomSheetRef.current?.index !== -1) {
             bottomSheetRef.current?.close();
             return true;
         }
-       
+
         return false;
     };
 
 
     // handle input feilds validations //
     const handleValidation = () => {
-       
+
         setError({
             nameError: false,
             phoneError: false,
             addressError: false,
-            emailError:false
+            emailError: false
         });
 
         const phonePattern = /^[0-9]{10}$/;
@@ -124,7 +143,7 @@ const Checkout = ({ navigation, route }) => {
             //scroll to input feild on error //
             scrollViewRef.current.scrollTo({ x: 0, y: height * 0.02, animated: true })
             ToastAndroid.show('name feild cannot be left blank', ToastAndroid.LONG);
-            return ;
+            return;
 
         }
 
@@ -132,81 +151,57 @@ const Checkout = ({ navigation, route }) => {
             setError((prev) => ({ ...prev, phoneError: true }))
             scrollViewRef.current.scrollTo({ x: 0, y: height * 0.02, animated: true })
             ToastAndroid.show('please enter valid phone number', ToastAndroid.LONG);
-            return ;
+            return;
 
         }
-        
-         if(!emailRegex.test(orderData.email)){
+
+        if (!emailRegex.test(orderData.email)) {
             setError((prev) => ({ ...prev, emailError: true }))
             scrollViewRef.current.scrollTo({ x: 0, y: height * 0.02, animated: true })
             ToastAndroid.show('please enter valid email', ToastAndroid.LONG);
-            return ;
-         } 
+            return;
+        }
         if (orderData.address.length === 0) {
             setError((prev) => ({ ...prev, addressError: true }))
             scrollViewRef.current.scrollTo({ x: 0, y: height * 0.01, animated: true })
             ToastAndroid.show('address feild cannot be left blank', ToastAndroid.LONG);
-            return ;
+            return;
         }
         if (orderData.paymentMode.length === 0) {
             ToastAndroid.show('please select a payment mode', ToastAndroid.LONG);
-            return ;
+            return;
         }
         bottomSheetRef.current?.present();
-        return ;
+        return;
 
     }
-  
 
-// handle create order
-const  createOrder = async ()=>{
-   setLoading(true)
-       try {
-     
-          const res =  await axios.post(`${URL}/order/createOrder`, orderData);
-          console.log(res.data);
-          setResData(res.data.order);
-          alert(res.data.message);
-          console.log( 'resdata is <<<<<<<<<<' ,resData);
-       } catch (error) {
-           console.log(error);
-           alert('failed to create order !!!');
-       }
-       finally{
-           setLoading(false)
-       }
-}
+
+    // handle create order
+    const createOrder = async () => {
+        setLoadingText('creating order !!!');
+        setLoading(true)
+        try {
+
+            const res = await axios.post(`${URL}/order/createOrder`, orderData);
+            console.log(res.data);
+            setResData(res.data.order);
+            alert(res.data.message);
+            console.log('resdata is <<<<<<<<<<', resData);
+        } catch (error) {
+            console.log(error);
+            alert('failed to create order !!!');
+        }
+        finally {
+            setLoadingText('');
+            setLoading(false);
+
+        }
+    }
 
     //   handle razorpay Checkout
 
-  const  handleRazorpay =async ()=>{
-    var options = {
-        description: 'Credits towards consultation',
-        image: 'https://www.ecommerce-nation.com/wp-content/uploads/2019/02/razorpay.webp',
-        currency: 'INR',
-        key: Razorpay_Key,
-        amount: '1000',
-        name: 'Acme Corp',
-        order_id: '',
-        prefill: {
-          email: 'gaurav.kumar@example.com',
-          contact: '9191919191',
-          name: 'Gaurav Kumar'
-        },
-        theme: {color: '#433eb6'}
-      }
-     
-      RazorpayCheckout.open(options).then((data) => {
-        // handle success
-        alert(`Success: ${data.razorpay_payment_id}`);
-      }).catch((error) => {
-        // handle failure
-        alert(`Error: ${error.code} | ${error.description}`);
-      });
-
-
-  }
-  
+    
 
     return (<ScrollView ref={scrollViewRef} style={styles.container} contentContainerStyle={styles.contentConatiner}>
         <LinearGradient
@@ -259,7 +254,7 @@ const  createOrder = async ()=>{
             outlineColor="#433eb6"
             activeOutlineColor="#433eb6"
             outlineStyle={{ borderWidth: 2, borderRadius: 10 }}
-            
+
             onChangeText={(e) => setOrderData((prev) => ({ ...prev, email: e }))}
 
         />
@@ -297,10 +292,10 @@ const  createOrder = async ()=>{
 
             </View>)
         })}
-       
+
 
         {/* checkout button */}
-        <TouchableOpacity  style={{marginBottom:height*0.035}} onPress={() => handleValidation()}>
+        <TouchableOpacity style={{ marginBottom: height * 0.035 }} onPress={() => handleValidation()}>
             <LinearGradient style={styles.checkoutBtn}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -312,31 +307,31 @@ const  createOrder = async ()=>{
 
 
         {/*  bottom sheet modal container */}
-        <BottomSheetModal   backgroundStyle={{backgroundColor:'#f2f3f2'}}  backdropComponent={renderBackDrop} style={{ justifyContent: 'center', alignItems: 'center',gap:10,  }} ref={bottomSheetRef}  snapPoints={snapPoints} enablePanDownToClose={true}>
-           
-             {/* checkout details container */}
+        <BottomSheetModal backgroundStyle={{ backgroundColor: '#f2f3f2' }} backdropComponent={renderBackDrop} style={{ justifyContent: 'center', alignItems: 'center', gap: 10, }} ref={bottomSheetRef} snapPoints={snapPoints} enablePanDownToClose={true}>
+
+            {/* checkout details container */}
             <BottomSheetView style={styles.subTotal}>
-                 {/* name details */}
+                {/* name details */}
                 <BottomSheetView style={{ width: width * 0.8, height: height * 0.06, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Name</Text>
                     <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_regular' }} > {orderData.name}</Text>
 
                 </BottomSheetView>
-                  
-                  {/* phone details */}
+
+                {/* phone details */}
 
                 <BottomSheetView style={{ width: width * 0.8, height: height * 0.06, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Phone</Text>
                     <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_regular' }} >{"+91" + orderData.phone}</Text>
                 </BottomSheetView>
-               {/* email details  */}
+                {/* email details  */}
                 <BottomSheetView style={{ width: width * 0.8, height: height * 0.06, borderColor: 'black', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Email</Text>
                     <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_regular' }} >{orderData.email}</Text>
                 </BottomSheetView>
 
                 {/* Shipping details */}
-                <BottomSheetView style={{ width: width * 0.8, borderColor: 'black',  alignItems: 'flex-start',  }}>
+                <BottomSheetView style={{ width: width * 0.8, borderColor: 'black', alignItems: 'flex-start', }}>
                     <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }} >Shipping Address</Text>
                     <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_regular', textAlign: 'justify', }} >{orderData.address}</Text>
                 </BottomSheetView>
@@ -362,21 +357,21 @@ const  createOrder = async ()=>{
                     <Text style={{ fontSize: width * 0.05, fontFamily: 'RobotoSlab_semiBold' }} >{"Total"}</Text>
                     <Text style={{ fontSize: width * 0.05, fontFamily: 'RobotoSlab_semiBold' }} >{"₹ " + (subTotal + 99)}</Text>
                 </BottomSheetView>
-                <TouchableOpacity disabled={loading} onPress={()=>createOrder()}>
-            <LinearGradient style={styles.bottomSheetBtn}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                colors={color}>
-                <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold', color: 'white' }} >{orderData.paymentMode==='Cash on delivery'?'Place Order':'Razorpay Checkout'}</Text>
-            </LinearGradient>
-        </TouchableOpacity>
-        
-        <Spinner
-        visible={loading}
-        color="#090979"
-        size={50}
-        textContent="creating order..."
-      />
+                <TouchableOpacity disabled={loading} onPress={() => createOrder()}>
+                    <LinearGradient style={styles.bottomSheetBtn}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        colors={color}>
+                        <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold', color: 'white' }} >{orderData.paymentMode === 'Cash on delivery' ? 'Place Order' : 'Razorpay Checkout'}</Text>
+                    </LinearGradient>
+                </TouchableOpacity>
+
+                <Spinner
+                    visible={loading}
+                    color="#090979"
+                    size={50}
+                    textContent={loadingText}
+                />
             </BottomSheetView>
         </BottomSheetModal>
     </ScrollView>)
@@ -384,9 +379,9 @@ const  createOrder = async ()=>{
 
 }
 
- const ProductItem = ()=> (<View style={styles.productItem}>
+const ProductItem = () => (<View style={styles.productItem}>
     <Text>item</Text>
- </View>)
+</View>)
 
 
 const styles = StyleSheet.create({
@@ -400,7 +395,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "flex-end",
         justifyContent: 'center',
-       
+
 
     },
     contentConatiner: {
@@ -454,14 +449,14 @@ const styles = StyleSheet.create({
     subTotal: {
         width: width * 0.91,
         backgroundColor: '#E7E5DF',
-        
+
         borderRadius: 20,
         marginBottom: 20,
         // justifyContent:'center',
         alignItems: 'center',
-        alignSelf:'center',
-        marginTop:height*0.015,
-       
+        alignSelf: 'center',
+        marginTop: height * 0.015,
+
 
 
 
@@ -481,25 +476,25 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    productItem:{
-        width:width*0.45,
-        height:height*0.2,
-        borderColor:'black',
-        borderWidth:1
+    productItem: {
+        width: width * 0.45,
+        height: height * 0.2,
+        borderColor: 'black',
+        borderWidth: 1
     },
 
-  bottomSheetBtn:{
-    width: width * 0.7,
-    height: width * 0.14,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:height*0.03,
-    marginTop:height*0.012,
-    
+    bottomSheetBtn: {
+        width: width * 0.7,
+        height: width * 0.14,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: height * 0.03,
+        marginTop: height * 0.012,
 
-  }
-   
+
+    }
+
 
 })
 
