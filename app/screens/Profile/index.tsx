@@ -10,7 +10,7 @@ import { logout } from "../../../redux/Actions/authActions";
 import { useEffect } from "react";
 
 const { width, height } = Dimensions.get('window');
-const color = ["#C8C9BE", "#C3C1BB"];
+const color = [ '#E7E5DF'];
 
 const Profile = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -47,14 +47,12 @@ const Profile = ({ navigation }) => {
         </View>: <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={color} style={styles.profileContainer}>
             <Avatar.Image style={styles.avatar} size={width * 0.27} source={Avatar_Img} />
             <Text style={styles.nameText}>{`Hey ${name} !`}</Text>
-            <Button  style={styles.Btn} icon="truck-fast-outline" mode="contained" onPress={() => console.log("")}>
+            <Button  style={styles.Btn} icon="truck-fast-outline" mode="contained" onPress={() => navigation.navigate('MyOrders')}>
                 My orders
             </Button>
             <Button onPressIn={()=>dispatch(logout())} style={[styles.Btn,{top: height * 0.13 }]} icon="logout" mode="contained" onPress={() => removeItem("onboarded")}>
                Log out
             </Button>
-
-
         </LinearGradient> }
         
 
