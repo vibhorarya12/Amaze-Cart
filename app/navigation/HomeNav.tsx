@@ -34,12 +34,13 @@ const Homenav = () => {
                         route.name !== 'Category' && 
                         route.name !== 'ViewProduct' && 
                         route.name !== 'Checkout' && 
-                        route.name !== 'AuthNav'
+                        route.name !== 'AuthNav' &&
+                        route.name != 'ConfirmOrder'
                     ),
                 };
 
                 return (
-                    focusedRouteName !== 'AuthNav' && focusedRouteName !== 'Checkout' && (
+                    focusedRouteName !== 'AuthNav' && focusedRouteName !== 'Checkout' && focusedRouteName !='ConfirmOrder' && (
                         <BottomNavigation.Bar
                             style={{ height: height * 0.09 }}
                             renderLabel={() => null}

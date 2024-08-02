@@ -9,8 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Spinner from "react-native-loading-spinner-overlay";
 import { clearCart } from "../../../redux/Actions/productActions";
+import { CommonActions } from "@react-navigation/native";
 const { width, height } = Dimensions.get('window');
-const color = ["#090979", "#433eb6", "#433eb6"];
+const color = ["#090979", "#433eb6", "#433eb6"]; 
 
 const Checkout = ({ navigation, route }) => {
     const dispatch = useDispatch();
@@ -110,8 +111,9 @@ const Checkout = ({ navigation, route }) => {
         if (resData && resData.paymentMode === 'Cash on delivery') {
             bottomSheetRef.current?.close();
             dispatch(clearCart());
-            navigation.navigate('Home');
+            navigation.navigate('ConfirmOrder', {orderData : resData});
         }
+
 
     }, [resData])
 
@@ -127,7 +129,7 @@ const Checkout = ({ navigation, route }) => {
 
     // handle input feilds validations //
     const handleValidation = () => {
-
+       
         setError({
             nameError: false,
             phoneError: false,
@@ -187,7 +189,7 @@ const Checkout = ({ navigation, route }) => {
             const res = await axios.post(`${URL}/order/createOrder`, orderData);
             console.log(res.data);
             setResData(res.data.order);
-            alert(res.data.message);
+            // alert(res.data.message);
             console.log('resdata is <<<<<<<<<<', resData);
         } catch (error) {
             console.log(error);
