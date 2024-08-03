@@ -10,7 +10,7 @@ import { logout } from "../../../redux/Actions/authActions";
 import { useEffect } from "react";
 
 const { width, height } = Dimensions.get('window');
-const color = [ '#E7E5DF'];
+const color = [ '#E7E5DF' , '#E7E5DF'];
 
 const Profile = ({ navigation }) => {
     const dispatch = useDispatch();
