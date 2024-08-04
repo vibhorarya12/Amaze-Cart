@@ -1,7 +1,7 @@
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useEffect, useState } from "react";
-import { View, Text, StyleSheet, Dimensions, FlatList, Button, Image } from "react-native";
+import { View, Text, StyleSheet, Dimensions, FlatList, Button, Image, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { URL } from "../../constants";
 import { useFocusEffect } from "@react-navigation/native";
@@ -9,7 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
-const MyOrders = () => {
+const MyOrders = ({navigation}) => {
   const { token } = useSelector(state => state.auth);
   const [loading, setLoading] = useState(false);
   const [order, setOrders] = useState([]);
@@ -50,7 +50,7 @@ const MyOrders = () => {
       style={styles.flatList}
       data={order}
       keyExtractor={(item: string) => item._id}
-      renderItem={({ item }) => <OrderItems item={item} key={item._id} />}
+      renderItem={({ item }) => <OrderItems item={item} key={item._id} navigation ={navigation}/>}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     />
@@ -59,25 +59,23 @@ const MyOrders = () => {
 
 
 
-const OrderItems = ({ item }) => {
+const OrderItems = ({ item , navigation}) => {
 
   const image_url = item.products[0].productId.images[0];
   const quantity  =  item.products.reduce((sum, item)=> sum + item.quantity,0)
   console.log(quantity);
 
-  return (<View style={styles.orderItemContainer}>
+  return (<TouchableOpacity onPress={()=>console.log(item)
+  } activeOpacity={0.8} style={styles.orderItemContainer}>
     <Image resizeMode={'cover'} style={styles.orderImage} source={{ uri: image_url }} />
     <View style={styles.infoContainer}>
       <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_semiBold', marginTop:5 }}>{'OrderID\n' + item._id}</Text>
-     
-      <Text style={{ fontSize: width * 0.035, fontFamily: 'RobotoSlab_semiBold' }}>
-      {new Date(item.createdAt).toLocaleDateString('en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  })}
-      </Text>
+      {item.paymentData.paymentId!='' && item.paymentData.paymentStatus==='Pending'?<Text style={{ fontSize: width * 0.038, color:'red', fontFamily: 'RobotoSlab_semiBold' }}>
+      Payment failed
+      </Text>:<Text style={{ fontSize: width * 0.038, color:'green', fontFamily: 'RobotoSlab_semiBold' }}>
+      Processed
+      </Text>}
+      
       
       <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }}>
         {'item(s): ' + quantity}
@@ -86,7 +84,8 @@ const OrderItems = ({ item }) => {
         {'₹ ' + item.amount}
       </Text>
     </View>
-  </View>)
+    
+  </TouchableOpacity>)
 }
 
 
