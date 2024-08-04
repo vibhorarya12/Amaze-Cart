@@ -11,3 +11,4 @@ export {default as ViewProduct} from './ViewProduct' ;
 export {default as Checkout} from './Checkout' ;
 export {default as ConfirmOrder} from './ConfirmOrder';
 export {default as MyOrders} from './MyOrders';
+export {default as ViewOrder} from './ViewOrder';

@@ -63,14 +63,14 @@ const OrderItems = ({ item , navigation}) => {
 
   const image_url = item.products[0].productId.images[0];
   const quantity  =  item.products.reduce((sum, item)=> sum + item.quantity,0)
-  console.log(quantity);
+  // console.log(quantity);
 
-  return (<TouchableOpacity onPress={()=>console.log(item)
+  return (<TouchableOpacity onPress={()=>navigation.navigate('ViewOrder', {orderDetails:item})
   } activeOpacity={0.8} style={styles.orderItemContainer}>
     <Image resizeMode={'cover'} style={styles.orderImage} source={{ uri: image_url }} />
     <View style={styles.infoContainer}>
       <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_semiBold', marginTop:5 }}>{'OrderID\n' + item._id}</Text>
-      {item.paymentData.paymentId!='' && item.paymentData.paymentStatus==='Pending'?<Text style={{ fontSize: width * 0.038, color:'red', fontFamily: 'RobotoSlab_semiBold' }}>
+      {item.paymentData.paymentId!='' && item.paymentData.paymentStatus==='Pending'?<Text style={{ fontSize: width * 0.038, color:'#FA4B4B', fontFamily: 'RobotoSlab_semiBold' }}>
       Payment failed
       </Text>:<Text style={{ fontSize: width * 0.038, color:'green', fontFamily: 'RobotoSlab_semiBold' }}>
       Processed
