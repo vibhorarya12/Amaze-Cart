@@ -20,7 +20,7 @@ const MyOrders = ({navigation}) => {
       setLoading(true);
       try {
         const res = await axios.post(`${URL}/order/getOrdersByUser`, { token });
-        console.log(res.data.message);
+        // console.log(res.data.message);
         setOrders(res.data.orders);
       } catch (error) {
         console.log(error);
