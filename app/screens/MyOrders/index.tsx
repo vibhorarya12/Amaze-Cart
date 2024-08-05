@@ -5,11 +5,12 @@ import { View, Text, StyleSheet, Dimensions, FlatList, Button, Image, TouchableO
 import { useSelector } from "react-redux";
 import { URL } from "../../constants";
 import { useFocusEffect } from "@react-navigation/native";
+import { IconButton } from "react-native-paper";
 
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
-const MyOrders = ({navigation}) => {
+const MyOrders = ({ navigation }) => {
   const { token } = useSelector(state => state.auth);
   const [loading, setLoading] = useState(false);
   const [order, setOrders] = useState([]);
@@ -43,6 +44,13 @@ const MyOrders = ({navigation}) => {
       end={{ x: 1, y: 0 }}
       colors={color}
     >
+      <IconButton
+        icon="keyboard-backspace"
+        iconColor='#433eb6'
+        size={width * 0.04}
+        style={{ backgroundColor: '#E7E5DF' }}
+        onPress={() => navigation.goBack()}
+      />
       <Text style={styles.headerText}>Orders</Text>
     </LinearGradient>
     {/* <Button  title="show" onPress={()=>console.log(order)}/> */}
@@ -50,7 +58,7 @@ const MyOrders = ({navigation}) => {
       style={styles.flatList}
       data={order}
       keyExtractor={(item: string) => item._id}
-      renderItem={({ item }) => <OrderItems item={item} key={item._id} navigation ={navigation}/>}
+      renderItem={({ item }) => <OrderItems item={item} key={item._id} navigation={navigation} />}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     />
@@ -59,32 +67,32 @@ const MyOrders = ({navigation}) => {
 
 
 
-const OrderItems = ({ item , navigation}) => {
+const OrderItems = ({ item, navigation }) => {
 
   const image_url = item.products[0].productId.images[0];
-  const quantity  =  item.products.reduce((sum, item)=> sum + item.quantity,0)
+  const quantity = item.products.reduce((sum, item) => sum + item.quantity, 0)
   // console.log(quantity);
 
-  return (<TouchableOpacity onPress={()=>navigation.navigate('ViewOrder', {orderDetails:item})
+  return (<TouchableOpacity onPress={() => navigation.navigate('ViewOrder', { orderDetails: item })
   } activeOpacity={0.8} style={styles.orderItemContainer}>
     <Image resizeMode={'cover'} style={styles.orderImage} source={{ uri: image_url }} />
     <View style={styles.infoContainer}>
-      <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_semiBold', marginTop:5 }}>{'OrderID\n' + item._id}</Text>
-      {item.paymentData.paymentId!='' && item.paymentData.paymentStatus==='Pending'?<Text style={{ fontSize: width * 0.038, color:'#FA4B4B', fontFamily: 'RobotoSlab_semiBold' }}>
-      Payment failed
-      </Text>:<Text style={{ fontSize: width * 0.038, color:'green', fontFamily: 'RobotoSlab_semiBold' }}>
-      Processed
+      <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_semiBold', marginTop: 5 }}>{'OrderID\n' + item._id}</Text>
+      {item.paymentData.paymentId !== '' && (item.paymentData.paymentStatus === 'Pending' || item.paymentData.paymentStatus === 'Failed') ? <Text style={{ fontSize: width * 0.038, color: '#FA4B4B', fontFamily: 'RobotoSlab_semiBold' }}>
+        Payment failed
+      </Text> : <Text style={{ fontSize: width * 0.038, color: 'green', fontFamily: 'RobotoSlab_semiBold' }}>
+        Processed
       </Text>}
-      
-      
+
+
       <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }}>
         {'item(s): ' + quantity}
       </Text>
-      <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold'  }}>
+      <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold' }}>
         {'₹ ' + item.amount}
       </Text>
     </View>
-    
+
   </TouchableOpacity>)
 }
 
@@ -95,11 +103,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   headerText: {
-    left: width * 0.07,
-    fontSize: width * 0.06,
+    left: width * 0.3,
+    fontSize: width * 0.054,
     marginBottom: 10,
     color: 'white',
-    fontFamily: 'RobotoSlab_semiBold'
+    fontFamily: 'RobotoSlab_regular',
   },
   headerContainer: {
     width: width,
@@ -143,7 +151,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     width: width * 0.55,
     height: height * 0.18,
-   marginLeft:5,
+    marginLeft: 5,
     borderColor: 'black',
     gap: 5
 

@@ -11,7 +11,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { clearCart } from "../../../redux/Actions/productActions";
 import { CommonActions } from "@react-navigation/native";
 const { width, height } = Dimensions.get('window');
-const color = ["#090979", "#433eb6", "#433eb6"]; 
+const color = ["#090979", "#433eb6", "#433eb6"];
 
 const Checkout = ({ navigation, route }) => {
     const dispatch = useDispatch();
@@ -39,6 +39,8 @@ const Checkout = ({ navigation, route }) => {
             quantity: item.quantity
         }))
     });
+
+    const [paymentStatus, setPaymentStatus] = useState('');
 
     //  response data after successfull creation of order
     const [resData, setResData] = useState(null);
@@ -81,37 +83,29 @@ const Checkout = ({ navigation, route }) => {
             }
 
             RazorpayCheckout.open(options).then(async (data) => {
-                // handle success
-                // alert(`Success: ${data.razorpay_payment_id}`);
+
                 setLoadingText('Confirming order ...');
-                setLoading(true);
-                try {
-                    const res = await axios.post(`${URL}/order/confirmPayment`, { token: orderData.token, orderId: resData._id, paymentStatus: 'Completed' });
-                    console.log('confimation done <<<',res.data);
-                    alert('Payment Confirmed');
-                    bottomSheetRef.current?.close();
-                    dispatch(clearCart());
-                    navigation.navigate('Home');
-                } catch (error) {
-                    console.log(error);
-                    alert('failed');
-                }
-                finally {
-                    setLoading(false);
-                }
+                await confirmPayment('Completed');
+                alert('Payment Confirmed');
+                bottomSheetRef.current?.close();
+                dispatch(clearCart());
+                navigation.navigate('ConfirmOrder', { orderData: resData });
+
                 // console.log("razor data is <<<<", data);
-            }).catch((error) => {
+            }).catch(async (error) => {
                 // handle failure
                 alert(`Error: ${error.code} | ${error.description}`);
+                await confirmPayment('Failed');
                 console.log("razor error  is <<<<", error);
-            });
+
+            })
 
 
         }
         if (resData && resData.paymentMode === 'Cash on delivery') {
             bottomSheetRef.current?.close();
             dispatch(clearCart());
-            navigation.navigate('ConfirmOrder', {orderData : resData});
+            navigation.navigate('ConfirmOrder', { orderData: resData });
         }
 
 
@@ -129,7 +123,7 @@ const Checkout = ({ navigation, route }) => {
 
     // handle input feilds validations //
     const handleValidation = () => {
-       
+
         setError({
             nameError: false,
             phoneError: false,
@@ -202,9 +196,27 @@ const Checkout = ({ navigation, route }) => {
         }
     }
 
-    //   handle razorpay Checkout
+    // handle payment confirmation for razorpay checkout
+    const confirmPayment = async (status: string) => {
+        setLoading(true);
+        console.log('payment status is <<<', status);
+        try {
 
-    
+            const res = await axios.post(`${URL}/order/confirmPayment`, { token: orderData.token, orderId: resData._id, paymentStatus: status });
+            console.log('confimation done <<<', res.data);
+
+        } catch (error) {
+            console.log(error);
+            alert('something went wrong');
+        }
+        finally {
+            setLoading(false);
+        }
+
+    }
+
+
+
 
     return (<ScrollView ref={scrollViewRef} style={styles.container} contentContainerStyle={styles.contentConatiner}>
         <LinearGradient
@@ -374,6 +386,7 @@ const Checkout = ({ navigation, route }) => {
                     color="#090979"
                     size={50}
                     textContent={loadingText}
+                    textStyle={{color:'white'}}
                 />
             </BottomSheetView>
         </BottomSheetModal>
@@ -382,9 +395,7 @@ const Checkout = ({ navigation, route }) => {
 
 }
 
-const ProductItem = () => (<View style={styles.productItem}>
-    <Text>item</Text>
-</View>)
+
 
 
 const styles = StyleSheet.create({

@@ -9,7 +9,7 @@ const color = ["#090979", "#433eb6", "#433eb6"];
 const ViewOrder = ({ navigation, route }) => {
     const { orderDetails } = route.params;
     // console.log("<<<<", orderDetails);
-    const checkConfirm: boolean = orderDetails.paymentData.paymentId != '' && orderDetails.paymentData.paymentStatus === 'Pending';
+    const checkConfirm: boolean = orderDetails.paymentData.paymentId !== '' && (orderDetails.paymentData.paymentStatus === 'Pending' || orderDetails.paymentData.paymentStatus === 'Failed');
     const subTotal = orderDetails.products.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
     const labels = [checkConfirm ? 'not confirmed ❌' : 'Confirmed', 'Processing', 'Shipped', 'In Transit', 'Delivered'];
@@ -36,7 +36,9 @@ const ViewOrder = ({ navigation, route }) => {
     }
 
 
-    return (<ScrollView><LinearGradient
+    return (<ScrollView>
+         {/* header container */}
+        <LinearGradient
         style={styles.headerContainer}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -49,6 +51,7 @@ const ViewOrder = ({ navigation, route }) => {
             style={{ backgroundColor: '#E7E5DF' }}
             onPress={() => navigation.goBack()}
         />
+        <Text style={styles.headerText}>Order summary</Text>
     </LinearGradient>
         <View style={styles.orderHeader}>
             <Text style={{ fontSize: width * 0.037, fontFamily: 'RobotoSlab_semiBold', color: '#090979' }}>Order ID : {orderDetails._id} </Text>
@@ -179,11 +182,12 @@ const Products = ({ item }) => {
 
 const styles = StyleSheet.create({
     headerText: {
-        left: width * 0.07,
+        left: width * 0.15,
         fontSize: width * 0.054,
         marginBottom: 10,
         color: 'white',
-        fontFamily: 'RobotoSlab_semiBold'
+        fontFamily: 'RobotoSlab_regular',
+        
     },
     headerContainer: {
         width: width,
@@ -197,14 +201,15 @@ const styles = StyleSheet.create({
     orderHeader: {
         width: width * 0.9,
         height: height * 0.075,
-        borderWidth: 0.6,
+        // borderWidth: 0.6,
         borderColor: 'grey',
-
+        backgroundColor:'#F7F7F7',
         marginTop: height * 0.015,
         borderRadius: 10,
         alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        elevation:5
     },
     stepIndicatorContainer: {
         height: height * 0.5,
@@ -222,12 +227,12 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     products: {
-        borderWidth: 0.8,
+        // borderWidth: 0.8,
         borderColor: '#CDCDCD',
         width: width * 0.7,
         height: height * 0.15,
-
-        // backgroundColor:'red',
+        elevation:1,
+        backgroundColor:'#F7F7F7',
         marginRight: 5,
         borderRadius: 15,
         flexDirection: 'row',
@@ -256,6 +261,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         marginTop: height * 0.015,
+        elevation:1
         
     },
     divider: {
