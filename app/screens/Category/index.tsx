@@ -9,6 +9,7 @@ import axios from "axios";
 import { Button, Checkbox, IconButton, RadioButton } from "react-native-paper";
 import { Sale_img } from "../../../assets/Images";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView ,BottomSheetModal } from '@gorhom/bottom-sheet';
+import ErrorView from "../../components/ErrorView";
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
@@ -82,7 +83,7 @@ const Category = (props) => {
   return (<View style={styles.Conatiner}>
 
 
-    <View style={styles.headerContainer}>
+  {items.length!=0?<View style={styles.headerContainer}>
       <IconButton
         icon="keyboard-backspace"
         iconColor='#433eb6'
@@ -98,9 +99,9 @@ const Category = (props) => {
         style={{ backgroundColor: '#E7E5DF' }}
         onPress={() => handleOpen()}
       />
-    </View>
+    </View>:null}
 
-
+    
     {loading ? <SkeletonList /> : <FlatList style={{ marginTop: 5 }} data={items} keyExtractor={(item) => item._id}
       renderItem={({ item }) => <ProductItem item={item} navigation={props.navigation} />}
       contentContainerStyle={styles.contentContainer}
@@ -108,6 +109,7 @@ const Category = (props) => {
       numColumns={2}
       columnWrapperStyle={{ gap: width * 0.04 }}
     />}
+    {items.length===0 && !loading ?<ErrorView handleClick={handleRequest}/>:null}
 
     <BottomSheetModal style={{ gap: 10 }} backdropComponent={renderBackDrop} ref={bottomSheetRef}  snapPoints={snapPoints} enablePanDownToClose={true} >
       <BottomSheetView style={{ borderColor: 'black' }}>

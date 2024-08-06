@@ -1,9 +1,10 @@
-import { StyleSheet, View, Dimensions, Text } from "react-native"
-import { Sample_Products_Data } from "../../assets/SampleData/Products";
+import { StyleSheet, View, Dimensions, Text,  } from "react-native"
 import ProductItem, { ProductSkeleton, SkeletonList } from "./ProductItem";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { URL } from "../constants";
+
+import ErrorView from "./ErrorView";
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,6 +17,7 @@ const Explore = ({navigation}) => {
          const response = await axios.get(`${URL}/products/category/Miscellaneous`);
          // console.log(response.data);
          setItems(response.data);
+         console.log('datafetched');
 
       }
       catch (err) {
@@ -38,13 +40,13 @@ const Explore = ({navigation}) => {
       <Text style={styles.textStyle}>Explore more products</Text>
       <View style={styles.ProductsContainer}>
          {loading ? <Loader /> : items.map((item) => { return (<ProductItem key={item._id} item={item} navigation={navigation} />) })}
-
+        
       </View>
-
+   {items.length===0 && !loading ?<ErrorView handleClick={handleRequest}/>:null}
    </View>)
 }
 
-
+// skeleton loader
 const Loader = () => {
    const skeletonArray = Array(4).fill(0);
 
@@ -91,7 +93,8 @@ const styles = StyleSheet.create({
       flexWrap: 'wrap',
 
       gap: width * 0.04
-   }
+   },
+  
 })
 
 

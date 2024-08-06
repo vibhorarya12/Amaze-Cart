@@ -5,7 +5,9 @@ import { View, Text, StyleSheet, Dimensions, FlatList, Button, Image, TouchableO
 import { useSelector } from "react-redux";
 import { URL } from "../../constants";
 import { useFocusEffect } from "@react-navigation/native";
-import { IconButton } from "react-native-paper";
+import { Icon, IconButton } from "react-native-paper";
+import Spinner from "react-native-loading-spinner-overlay";
+import ErrorView from "../../components/ErrorView";
 
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
@@ -14,17 +16,19 @@ const MyOrders = ({ navigation }) => {
   const { token } = useSelector(state => state.auth);
   const [loading, setLoading] = useState(false);
   const [order, setOrders] = useState([]);
-
+  const [error, setError] = useState(false);
 
   const fetchOrders = useCallback(() => {
     const fetchData = async () => {
       setLoading(true);
+      setError(false);
       try {
         const res = await axios.post(`${URL}/order/getOrdersByUser`, { token });
         // console.log(res.data.message);
         setOrders(res.data.orders);
       } catch (error) {
         console.log(error);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -54,14 +58,28 @@ const MyOrders = ({ navigation }) => {
       <Text style={styles.headerText}>Orders</Text>
     </LinearGradient>
     {/* <Button  title="show" onPress={()=>console.log(order)}/> */}
-    <FlatList
+    <Spinner textContent="" visible={loading} color={color[0]} />
+    {error && order.length ===0 ?<ErrorView handleClick={fetchOrders} />:<FlatList
       style={styles.flatList}
       data={order}
       keyExtractor={(item: string) => item._id}
       renderItem={({ item }) => <OrderItems item={item} key={item._id} navigation={navigation} />}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
-    />
+    /> }
+
+  {order.length ===0 && !error && !loading ?<View style={styles.emptyContainer}>
+      <Icon
+        source="database-alert"
+        color={color[0]}
+        size={width * 0.3}
+      />
+      <Text style={{
+        fontSize: width * 0.056, color: color[0],
+        fontFamily: 'RobotoSlab_regular'
+      }}>No orders yet</Text>
+    </View> : null}
+
   </View>)
 }
 
@@ -156,6 +174,14 @@ const styles = StyleSheet.create({
     gap: 5
 
 
+  },
+  emptyContainer: {
+    width: width * 0.8,
+    height: height * 0.3,
+    borderColor: 'black',
+    gap: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 

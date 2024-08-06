@@ -19,6 +19,7 @@ import Avatar_Img from '../Images/avatar.png';
 import Login_img from '../Images/login.png';
 import Sale_img from '../Images/sale.png';
 import empty_cart_img from '../Images/empty.png';
+import error_img from '../Images/error.png';
 
 
 
@@ -27,5 +28,5 @@ export {
     Intro_img_one,
     Intro_img_two, Intro_img_three, Logo_img, Ban_img_1, Ban_img_2, Ban_img_3, Ban_img_4, Ban_img, Category_one,
     Category_two, Category_three, Category_four, Cod, Debit, Upi,
-    Avatar_Img, Login_img, Sale_img , empty_cart_img
+    Avatar_Img, Login_img, Sale_img, empty_cart_img, error_img
 };

@@ -5,6 +5,7 @@ import ProductItem, { SkeletonList } from "../../components/ProductItem";
 import { getWishListProducts } from "../../../redux/Actions/productActions";
 import { LinearGradient } from "expo-linear-gradient";
 import { useIsFocused } from "@react-navigation/native";
+import { IconButton } from "react-native-paper";
 
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
@@ -31,6 +32,7 @@ const Wishlist = ({ navigation }) => {
 
     const memoizedWishList = useMemo(() => wishList, [wishList]);
 
+
     return (
         <View style={styles.Container}>
             <LinearGradient
@@ -39,12 +41,19 @@ const Wishlist = ({ navigation }) => {
                 end={{ x: 1, y: 0 }}
                 colors={color}
             >
-                <Text style={{color:'white'}}>{loading ? 'loading....' : null}</Text>
+                <IconButton
+                    icon="keyboard-backspace"
+                    iconColor='#433eb6'
+                    size={width * 0.042}
+                    style={{ backgroundColor: '#E7E5DF' }}
+                    onPress={() => navigation.goBack()}
+                />
+                <Text style={styles.headerText}>Wishlist</Text>
             </LinearGradient>
-          
-      {loading?<SkeletonList/>:<FlatList 
-                style={{marginTop: 5}} 
-                data={memoizedWishList} 
+
+            {loading ? <SkeletonList /> : <FlatList
+                style={{ marginTop: 5 }}
+                data={memoizedWishList}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
                 contentContainerStyle={styles.contentContainer}
@@ -66,14 +75,22 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         gap: width * 0.04
     },
+    headerText: {
+        left: width * 0.3,
+        fontSize: width * 0.054,
+        marginBottom: 10,
+        color: 'white',
+        fontFamily: 'RobotoSlab_regular',
+    },
     headerContainer: {
         width: width,
-        height: height * 0.08,
+        height: height * 0.13,
         display: "flex",
         flexDirection: "row",
         alignItems: "flex-end",
+        justifyContent: 'flex-start',
         zIndex: 2
-    }
+    },
 });
 
 export default React.memo(Wishlist);
