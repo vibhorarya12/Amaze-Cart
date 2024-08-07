@@ -13,7 +13,7 @@ const Home = ({navigation}) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <Header />
+            <Header navigation= {navigation} />
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
               
                 <Banner />

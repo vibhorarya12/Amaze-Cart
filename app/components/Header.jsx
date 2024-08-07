@@ -18,7 +18,7 @@ const { width, height } = Dimensions.get("window");
 
 
 const color = ["#090979", "#433eb6", "#433eb6"];
-const Header = () => {
+const Header = ({navigation}) => {
   const [searchText, setSearchText] = useState(''); 
   return (
     <LinearGradient
@@ -29,7 +29,7 @@ const Header = () => {
     >
       <Animatable.View  animation={'fadeInDown'} View style={styles.inputContainer}>
         <Icon name="search1" size={width * 0.05} color={"#433eb6"} />
-        <TextInput returnKeyType={"search"} onSubmitEditing={()=>console.log(searchText)}  onChangeText={(e)=>setSearchText(e)} placeholder="search AmazeCart" style={styles.textInput} />
+        <TextInput returnKeyType={"search"} onSubmitEditing={()=>navigation.navigate('SearchResults', {query : searchText})}  onChangeText={(e)=>setSearchText(e)} placeholder="search AmazeCart" style={styles.textInput} />
       </Animatable.View>
 
       {/* <TouchableOpacity

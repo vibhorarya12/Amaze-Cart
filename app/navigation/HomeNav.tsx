@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import { Cart, Category, Checkout,  ConfirmOrder,  Home, Login, MyOrders, Profile, ViewOrder, ViewProduct, Wishlist } from "../screens";
+import { Cart, Category, Checkout,  ConfirmOrder,  Home, Login, MyOrders, Profile, SearchResults, ViewOrder, ViewProduct, Wishlist } from "../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, BottomNavigation, Badge } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -37,7 +37,8 @@ const Homenav = () => {
                         route.name !== 'AuthNav' &&
                         route.name != 'ConfirmOrder' &&
                         route.name != 'MyOrders' &&
-                        route.name != 'ViewOrder'
+                        route.name != 'ViewOrder' && 
+                        route.name != 'SearchResults'
                     ),
                 };
 
@@ -215,6 +216,17 @@ const Homenav = () => {
                 }}
             >
                 {props =><ViewOrder {...props} />}
+            </Tab.Screen>
+            <Tab.Screen
+                name="SearchResults"
+                options={{
+                    tabBarLabel: "SearchResults",
+                    tabBarIcon: ({ color, size }) => {
+                        return <Icon name="home" size={size} color={"#433eb6"} />;
+                    },
+                }}
+            >
+                {props =><SearchResults {...props} />}
             </Tab.Screen>
         </Tab.Navigator>
         </BottomSheetModalProvider>
