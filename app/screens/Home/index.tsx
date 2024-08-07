@@ -29,17 +29,11 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentContainer: {
-        paddingTop:height * 0.12,
+        // paddingTop:height * 0.12,
         paddingBottom: height * 0.1,
         justifyContent:'center'
     },
-    salesImage:{
-        width:width*0.3,
-        height:height*0.1,
-        
-        top:100,
-        zIndex:5
-    }
+   
 });
 
 export default Home;

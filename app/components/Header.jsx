@@ -8,14 +8,14 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import { Logo_img } from "../../assets/Images";
+
 
 import Icon from "react-native-vector-icons/AntDesign";
 import { Badge } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
 import { useState } from "react";
 const { width, height } = Dimensions.get("window");
-const statusBarheight = StatusBar.currentHeight;
+
 
 const color = ["#090979", "#433eb6", "#433eb6"];
 const Header = () => {
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   container: {
     width: width,
     height: height*0.14,
-    position: "absolute",
+    
     top: 0,
     zIndex: 1000,
     display: "flex",

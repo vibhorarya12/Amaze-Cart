@@ -40,10 +40,9 @@ const Banner = () => {
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height * 0.25, 
-    
-   
-  
+    height: height * 0.24, 
+    // borderWidth:2,
+    borderColor:'red'
    
   },
   slide: {
