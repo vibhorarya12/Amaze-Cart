@@ -5,7 +5,8 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useNavigation } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
-import { theme_primary } from '../../constants';
+import { StatusBar } from 'expo-status-bar';
+
 const { width, height } = Dimensions.get('screen');
 
 const color = ["#433eb6","#090979"];
@@ -42,6 +43,7 @@ const Intro = () => {
 ]
 
   return (<SafeAreaView style={styles.container}>
+     <StatusBar translucent={true} backgroundColor={'transparent'} />
     <SwiperFlatList
 
       // autoplay
@@ -76,8 +78,8 @@ const styles = StyleSheet.create({
     position: 'absolute', 
     top: height * 0.08, 
     fontSize: width * 0.07, 
-    fontWeight: '600', 
-    color: 'white', 
+  
+    color: '#F4F4F4', 
     elevation: 5, 
     opacity: 0.9, 
     left: width * 0.08,
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.9)',
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
-    fontFamily:'RobotoSlab_semiBold'
+    fontFamily:'RobotoSlab_regular'
   },
   button:{
      position:'absolute',

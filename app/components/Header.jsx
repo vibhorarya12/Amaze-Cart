@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import {
   Dimensions,
   StyleSheet,
-  StatusBar,
+  
   TextInput,
   View,
   TouchableOpacity,
@@ -14,6 +14,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import { Badge } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
 import { useState } from "react";
+import { StatusBar } from "expo-status-bar";
 const { width, height } = Dimensions.get("window");
 
 
@@ -27,6 +28,7 @@ const Header = ({navigation}) => {
       end={{ x: 1, y: 0 }}
       colors={color}
     >
+      <StatusBar translucent={true} backgroundColor={'transparent'} />
       <Animatable.View  animation={'fadeInDown'} View style={styles.inputContainer}>
         <Icon name="search1" size={width * 0.05} color={"#433eb6"} />
         <TextInput returnKeyType={"search"} onSubmitEditing={()=>navigation.navigate('SearchResults', {query : searchText})}  onChangeText={(e)=>setSearchText(e)} placeholder="search AmazeCart" style={styles.textInput} />
