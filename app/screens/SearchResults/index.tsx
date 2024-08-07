@@ -1,32 +1,33 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, TextInput, FlatList } from "react-native"
+import React, { useState, useCallback, useRef } from "react";
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, TextInput, FlatList } from "react-native";
 import { IconButton } from "react-native-paper";
 import Icon from "react-native-vector-icons/AntDesign";
+import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 import { URL } from "../../constants";
-import ProductItem from "../../components/ProductItem";
+import ProductItem, { SkeletonList } from "../../components/ProductItem";
+
 const { width, height } = Dimensions.get('window');
 
+const DEBOUNCE_DELAY = 1000; 
 
 const SearchResults = ({ navigation, route }) => {
-
-    // console.log(route);
-    const {query} = route.params;
-    const [searchQuery , setSearchQuery] = useState<String>('');
-    const [loading , setLoading] = useState<Boolean>(false);
+    const { query } = route.params;
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const [results, setResults] = useState([]);
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-    const  getresults = async() =>{
-        setLoading(true);
-        if(searchQuery.length===0){
+    const getResults = useCallback(async (searchTerm: string) => {
+        if (searchTerm.length === 0) {
+            setResults([]);
             return;
         }
+        setLoading(true);
         try {
-            const res = await axios.post(`${URL}/products/getSuggestions`, {query:searchQuery});
-            // console.log("results are <<<<<<", res.data.suggestions);
+            const res = await axios.post(`${URL}/products/getSuggestions`, { query: searchTerm });
             setResults(res.data.suggestions);
             console.log("length", res.data.suggestions.length);
-
         } catch (error) {
             console.log("Error: ", error);
             if (error.response) {
@@ -34,43 +35,74 @@ const SearchResults = ({ navigation, route }) => {
             } else {
                 console.log("Error message: ", error.message);
             }
-        }
-        finally{
+        } finally {
             setLoading(false);
         }
+    }, []);
 
-    }
-    useEffect(()=>{
-        setSearchQuery(query);
-       getresults();
+    const debouncedSearch = useCallback((searchTerm: string) => {
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+        debounceTimeout.current = setTimeout(() => {
+            getResults(searchTerm);
+        }, DEBOUNCE_DELAY);
+    }, [getResults]);
 
+    useFocusEffect(
+        useCallback(() => {
+            setSearchQuery(query);
+            getResults(query); // Immediate search for initial query
+            return () => {
+                if (debounceTimeout.current) {
+                    clearTimeout(debounceTimeout.current);
+                }
+            };
+        }, [query, getResults])
+    );
 
-    }, [searchQuery ,query])
-    return (<SafeAreaView style={styles.container}>
-        <View style={styles.headerContainer}>
-        <IconButton
-            icon="keyboard-backspace"
-            iconColor='#433eb6'
-            size={width * 0.047}
-            style={{ backgroundColor: '#E7E5DF' }}
-            onPress={() => navigation.goBack()}
-        />
-         
-        <TextInput value= {searchQuery} onChangeText={(e)=> setSearchQuery(e)} returnKeyType={"search"} placeholder="search AmazeCart" style={styles.textInput} />
-        <Icon name="search1" size={width * 0.05} color={"#433eb6"} />
-     
-       
-        </View>
-        <FlatList style={{ marginTop: 5 }} data={results} keyExtractor={(item) => item._id}
-      renderItem={({ item }) => <ProductItem item={item} navigation={navigation} />}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={false}
-      numColumns={2}
-      columnWrapperStyle={{ gap: width * 0.04 }}
-    />
-    </SafeAreaView>)
+    const handleSearchChange = useCallback((text: string) => {
+        setSearchQuery(text);
+        debouncedSearch(text);
+    }, [debouncedSearch]);
 
-}
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.headerContainer}>
+                <IconButton
+                    icon="keyboard-backspace"
+                    iconColor='#433eb6'
+                    size={width * 0.047}
+                    style={{ backgroundColor: '#E7E5DF' }}
+                    onPress={() => navigation.goBack()}
+                />
+                <TextInput
+                    value={searchQuery}
+                    onChangeText={handleSearchChange}
+                    returnKeyType="search"
+                    placeholder="search AmazeCart"
+                    style={styles.textInput}
+                />
+                <Icon name="search1" size={width * 0.05} color="#433eb6" />
+            </View>
+            
+            {loading ? (
+               <SkeletonList />
+            ) : (
+                <FlatList
+                    style={{ marginTop: 5 }}
+                    data={results}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item }) => <ProductItem item={item} navigation={navigation} />}
+                    contentContainerStyle={styles.contentContainer}
+                    showsVerticalScrollIndicator={false}
+                    numColumns={2}
+                    columnWrapperStyle={{ gap: width * 0.04 }}
+                />
+            )}
+        </SafeAreaView>
+    );
+};
 
 
 const styles = StyleSheet.create({
