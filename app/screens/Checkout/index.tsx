@@ -86,7 +86,7 @@ const Checkout = ({ navigation, route }) => {
 
                 setLoadingText('Confirming order ...');
                 await confirmPayment('Completed');
-                alert('Payment Confirmed');
+                // alert('Payment Confirmed');
                 bottomSheetRef.current?.close();
                 dispatch(clearCart());
                 navigation.navigate('ConfirmOrder', { orderData: resData });
@@ -377,7 +377,7 @@ const Checkout = ({ navigation, route }) => {
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                         colors={color}>
-                        <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold', color: 'white' }} >{orderData.paymentMode === 'Cash on delivery' ? 'Place Order' : 'Razorpay Checkout'}</Text>
+                        <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold', color: 'white' }} >{orderData.paymentMode === 'Cash on delivery' ? 'Place Order' : `Pay ₹ ${subTotal + 99} `}</Text>
                     </LinearGradient>
                 </TouchableOpacity>
 
