@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, Image, Dimensions, Text, TouchableOpacity, ToastAndroid, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, Image, Dimensions, Text, TouchableOpacity, ToastAndroid, Alert, ActivityIndicator } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import * as Animatable from 'react-native-animatable';
@@ -20,9 +20,9 @@ const ViewProduct = (props) => {
 
   const dispatch = useDispatch();
   const cartData = useSelector((state: any) => state.products.cartItems)
-  const token = useSelector((state: any) => state.auth.token);
-  const { wishList, loading} = useSelector((state: any) => state.products);
-  const prods = useSelector((state: any) => state.products)
+
+  const { wishList} = useSelector((state: any) => state.products);
+
   const { productInfo } = props.route.params;
   const isFocused = useIsFocused();
 
@@ -161,14 +161,15 @@ const ProductImageSwiper = ({ item, productId, inWishList }) => {
           style={{ backgroundColor: '#E7E5DF' }}
           onPress={() => navigation.goBack()}
         />
-        <IconButton
+   {loading?<ActivityIndicator color={'white'} size={width*0.07} style={{right:width*0.07}} />:<IconButton
           icon="heart"
           iconColor={inWishList ? '#433eb6' : 'grey'}
-          size={30}
+          size={width*0.07}
           style={{ backgroundColor: '#E7E5DF' }}
           onPress={() => handleAddToWishList()}
 
-        />
+        />}     
+        
       </View>
       <SwiperFlatList
         index={0}
