@@ -21,7 +21,7 @@ const ViewProduct = (props) => {
   const dispatch = useDispatch();
   const cartData = useSelector((state: any) => state.products.cartItems)
 
-  const { wishList} = useSelector((state: any) => state.products);
+  const { wishList } = useSelector((state: any) => state.products);
 
   const { productInfo } = props.route.params;
   const isFocused = useIsFocused();
@@ -51,17 +51,20 @@ const ViewProduct = (props) => {
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container} contentContainerStyle={styles.contentContainer}>
       <StatusBar backgroundColor='transparent' style={'auto'} />
       <ProductImageSwiper key={key} item={productInfo.images} productId={productInfo._id} inWishList={check(productInfo._id)} />
-      <Text style={styles.titleText}>{productInfo.title.split(' ').slice(0, 3).join(' ')}</Text>
+      <Text style={styles.titleText}>{productInfo.title.length > 55
+                    ? productInfo.title.substring(0, 55) + '...'
+                    : productInfo.title}</Text>
       <View style={styles.ratingContainer}>
         <StarRatingDisplay
-          rating={3.5}
+          rating={productInfo.rating?productInfo.rating:3.5}
 
           starSize={width * 0.055}
           starStyle={{ width: width * 0.03 }}
           color="#FFA400"
 
         />
-        <Text style={{ fontSize: width * 0.04, fontWeight: '600', fontFamily: 'RobotoSlab_semiBold' }}>3.5</Text>
+        <Text style={{ fontSize: width * 0.04, fontWeight: '600', fontFamily: 'RobotoSlab_semiBold' }}>{productInfo.rating?productInfo.rating:3.5}
+        </Text>
       </View>
       <View style={styles.priceContainer}>
         <Text style={{ fontSize: width * 0.05, fontWeight: '500', fontFamily: 'RobotoSlab_semiBold' }} >{"₹" + productInfo.price + "99"}</Text>
@@ -115,7 +118,7 @@ const ProductImageSwiper = ({ item, productId, inWishList }) => {
   const token = useSelector((state: any) => state.auth.token);
   const showToast = (msg) => ToastAndroid.show(msg, ToastAndroid.LONG);
   const navigation = useNavigation();
-  const { responseMsg ,loading} = useSelector((state: any) => state.products);
+  const { responseMsg, loading } = useSelector((state: any) => state.products);
 
   const handleAddToWishList = async () => {
     if (inWishList) {
@@ -133,7 +136,7 @@ const ProductImageSwiper = ({ item, productId, inWishList }) => {
             onPress: async () => {
 
               await dispatch(removeFromWishList(productId, token))
-             
+
             },
           },
         ],
@@ -144,8 +147,8 @@ const ProductImageSwiper = ({ item, productId, inWishList }) => {
     }
     else {
 
-           const res=   await dispatch(addToWishlist(productId, token));
-           console.log('dispatch <<<<<<',res)
+      const res = await dispatch(addToWishlist(productId, token));
+      console.log('dispatch <<<<<<', res)
       // alert(responseMsg);
     }
 
@@ -157,19 +160,18 @@ const ProductImageSwiper = ({ item, productId, inWishList }) => {
         <IconButton
           icon="keyboard-backspace"
           iconColor='#433eb6'
-          size={30}
+          size={width*0.07}
           style={{ backgroundColor: '#E7E5DF' }}
           onPress={() => navigation.goBack()}
         />
-   {loading?<ActivityIndicator color={'white'} size={width*0.07} style={{right:width*0.07}} />:<IconButton
+        {loading ? <ActivityIndicator color={color[1]} size={width * 0.07} style={{ right: width * 0.07,  }} /> : <IconButton
           icon="heart"
           iconColor={inWishList ? '#433eb6' : 'grey'}
-          size={width*0.07}
+          size={width * 0.07}
           style={{ backgroundColor: '#E7E5DF' }}
           onPress={() => handleAddToWishList()}
 
-        />}     
-        
+        />}
       </View>
       <SwiperFlatList
         index={0}
@@ -248,7 +250,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     left: width * 0.06,
     marginTop: height * 0.01,
-    fontFamily: 'RobotoSlab_semiBold'
+    fontFamily: 'RobotoSlab_semiBold',
+  
   },
   ratingContainer: {
     width: width * 0.45,
@@ -259,9 +262,10 @@ const styles = StyleSheet.create({
     marginTop: height * 0.01,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.3,
-    borderColor: 'black',
-    borderRadius: 10
+    backgroundColor: '#F4F4F4',
+    elevation:3,
+    borderRadius: 10,
+    marginBottom : 5
   },
   priceContainer: {
     marginTop: height * 0.02,
