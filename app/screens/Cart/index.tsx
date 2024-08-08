@@ -13,6 +13,7 @@ const color = ["#090979", "#433eb6", "#433eb6"];
 const Cart = ({ navigation }) => {
     const dispatch = useDispatch();
     const cartData = useSelector((state: any) => state.products.cartItems);
+    const {token} = useSelector((state)=>state.auth);
     const [checkoutData, setCheckoutData] = useState([]);
 
 
@@ -28,6 +29,14 @@ const Cart = ({ navigation }) => {
             )
         );
     };
+    const handleNavigate = ()=>{
+     if(token.length===0){
+        alert('please login first');
+        return;
+     }
+     navigation.navigate('Checkout', { checkoutData })
+
+    }
 
     return (
         <View style={styles.container}>
@@ -67,7 +76,7 @@ const Cart = ({ navigation }) => {
                         iconColor={'#433eb6'}
                         size={height * 0.05}
                         style={{ alignSelf: 'flex-start' }}
-                        onPress={() => navigation.navigate('Checkout', { checkoutData })}
+                        onPress={() => handleNavigate()}
                     />
                 </View>
                 <View style={styles.totalPriceContainer}>
