@@ -8,6 +8,7 @@ import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/Actions/authActions";
 import { useEffect } from "react";
+import { clearWishList } from "../../../redux/Actions/productActions";
 
 const { width, height } = Dimensions.get('window');
 const color = ['#E7E5DF', '#E7E5DF'];
@@ -39,6 +40,7 @@ const Profile = ({ navigation }) => {
                 {
                     text: "OK",
                     onPress: () => {
+                        dispatch(clearWishList());
                         dispatch(logout());
                     },
                 },
@@ -95,10 +97,16 @@ const Profile = ({ navigation }) => {
                     iconColor='#433eb6'
                     size={width * 0.07}
                     onPress={()=>console.log(userInfo)}
-                    style={{right:width*0.02}}
+                    style={{right:width*0.01}}
                 />
 
             </View>
+            <TouchableOpacity onPress={()=> navigation.navigate('MyOrders')} activeOpacity={0.6} style={styles.infoItems}>
+                <View style={{ left: width * 0.04 }}>
+                    <Icon source={'truck-fast-outline'} size={width * 0.07} color="#433eb6" />
+                </View>
+                <Text style={styles.infoText}>{'My orders'}</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleLogout} activeOpacity={0.6} style={styles.infoItems}>
                 <View style={{ left: width * 0.04 }}>
                     <Icon source={'logout'} size={width * 0.07} color="#433eb6" />
@@ -119,7 +127,7 @@ const styles = StyleSheet.create({
 
     },
     contentContainer: {
-        paddingTop: height * 0.2,
+        paddingTop: height * 0.1,
         // justifyContent: 'center',
         alignItems: 'center',
         paddingBottom: 10
@@ -130,7 +138,7 @@ const styles = StyleSheet.create({
         height: 'auto',
         // borderWidth:1,
         // borderColor:'#433eb6',
-        borderRadius: 1,
+        // borderRadius: 1,
         gap: height * 0.025,
         alignItems: 'center'
 
