@@ -1,28 +1,37 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import ProductItem, { SkeletonList } from "../../components/ProductItem";
 import { getWishListProducts } from "../../../redux/Actions/productActions";
 import { LinearGradient } from "expo-linear-gradient";
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
 
-
 const Wishlist = ({ navigation }) => {
     const { wishList, loading } = useSelector(state => state.products);
     const { token } = useSelector(state => state.auth);
     const dispatch = useDispatch();
-    const isFocused = useIsFocused();
 
-    useEffect(() => {
-        if (isFocused) {
-            console.log('is focused !!!')
+    useFocusEffect(
+        useCallback(() => {
+            console.log('Screen is focused');
+            if(token.length===0){
+                alert('please login first');
+                navigation.navigate('AuthNav');
+                return;
+            }
             dispatch(getWishListProducts(token));
-        }
-    }, [isFocused, dispatch, token]);
+
+            // Optional: Return a cleanup function if needed
+            return () => {
+                console.log('Screen is unfocused');
+                // Perform any cleanup here
+            };
+        }, [dispatch, token])
+    );
 
     const renderItem = useCallback(({ item }) => (
         <ProductItem item={item} navigation={navigation} />
@@ -32,6 +41,9 @@ const Wishlist = ({ navigation }) => {
 
     const memoizedWishList = useMemo(() => wishList, [wishList]);
 
+    const handleGoBack = useCallback(() => {
+        navigation.goBack();
+    }, [navigation]);
 
     return (
         <View style={styles.Container}>
@@ -46,25 +58,26 @@ const Wishlist = ({ navigation }) => {
                     iconColor='#433eb6'
                     size={width * 0.042}
                     style={{ backgroundColor: '#E7E5DF' }}
-                    onPress={() => navigation.goBack()}
+                    onPress={handleGoBack}
                 />
                 <Text style={styles.headerText}>Wishlist</Text>
             </LinearGradient>
 
-            {loading ? <SkeletonList /> : <FlatList
-                style={{ marginTop: 5 }}
-                data={memoizedWishList}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
-                contentContainerStyle={styles.contentContainer}
-                showsVerticalScrollIndicator={false}
-                numColumns={2}
-                columnWrapperStyle={{ gap: width * 0.04 }}
-            />}
+            {loading ? <SkeletonList /> : (
+                <FlatList
+                    style={{ marginTop: 5 }}
+                    data={memoizedWishList}
+                    keyExtractor={keyExtractor}
+                    renderItem={renderItem}
+                    contentContainerStyle={styles.contentContainer}
+                    showsVerticalScrollIndicator={false}
+                    numColumns={2}
+                    columnWrapperStyle={{ gap: width * 0.04 }}
+                />
+            )}
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     Container: {
         flex: 1,
