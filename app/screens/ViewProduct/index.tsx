@@ -29,7 +29,7 @@ const ViewProduct = (props) => {
   const check = (productId) => wishList.some(wishItem => wishItem._id === productId);
   const handleCart = async (item) => {
     await dispatch(addToCart(item));
-    alert('items added to cart');
+    ToastAndroid.show('added to cart', ToastAndroid.LONG);
   }
 
   const getFutureDate = (daysAhead) => {
