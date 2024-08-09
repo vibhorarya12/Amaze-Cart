@@ -56,18 +56,18 @@ const ViewProduct = (props) => {
                     : productInfo.title}</Text>
       <View style={styles.ratingContainer}>
         <StarRatingDisplay
-          rating={productInfo.rating?productInfo.rating:3.5}
+          rating={productInfo.rating}
 
           starSize={width * 0.055}
           starStyle={{ width: width * 0.03 }}
           color="#FFA400"
 
         />
-        <Text style={{ fontSize: width * 0.04, fontWeight: '600', fontFamily: 'RobotoSlab_semiBold' }}>{productInfo.rating?productInfo.rating:3.5}
+        <Text style={{ fontSize: width * 0.04, fontWeight: '600', fontFamily: 'RobotoSlab_semiBold' }}>{Number(productInfo.rating).toFixed(1)}
         </Text>
       </View>
       <View style={styles.priceContainer}>
-        <Text style={{ fontSize: width * 0.05, fontWeight: '500', fontFamily: 'RobotoSlab_semiBold' }} >{"₹" + productInfo.price + "99"}</Text>
+        <Text style={{ fontSize: width * 0.05, fontWeight: '500', fontFamily: 'RobotoSlab_semiBold' }} >{"₹ " + productInfo.price}</Text>
         <Text style={{ fontSize: width * 0.035, opacity: 0.5, fontFamily: 'RobotoSlab_regular' }}>exclucing delivery charges</Text>
       </View>
       <View style={styles.descriptionContainer}>

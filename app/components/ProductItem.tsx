@@ -13,20 +13,24 @@ const ProductItem = ({ item , navigation }) => {
     const truncatedTitle = item.title.length > 28 ? item.title.substring(0, 25) + "..." : item.title;
     return (<TouchableOpacity onPress={()=>navigation.navigate('ViewProduct', {productInfo:item})} activeOpacity={0.8} style={styles.constainer}>
         <Image resizeMode={"cover"} source={{ uri: item.images[0] }} style={styles.img} />
-
         <Text style={styles.title}>{truncatedTitle}</Text>
-        <Text style={styles.priceText}>{"₹ " + item.price + "99"}</Text>
-
-
+        <Text style={styles.priceText}>{"₹ " + item.price}</Text>
+       <View style={{flexDirection:'row', gap:5,  borderColor
+        :'black', alignSelf:'flex-start', justifyContent
+        :'center',
+       }}>
+        
         <StarRatingDisplay
-            rating={3.5}
+            rating={item.rating}
             style={{ alignSelf: 'flex-start', paddingLeft: 5 }}
             starSize={width * 0.055}
             starStyle={{ width: width * 0.03, paddingBottom: 10 }}
             color="#FFA400"
 
         />
-
+        <Text style={{ fontSize: width * 0.04,  fontFamily: 'RobotoSlab_regular' }}>{Number(item.rating).toFixed(1)}
+        </Text>
+        </View> 
 
     </TouchableOpacity >)
 }
