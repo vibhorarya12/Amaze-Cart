@@ -19,7 +19,7 @@ export default function App() {
       return(
         <Spinner
         visible={true}
-        color="#090979"
+        color="#F4F2F2"
         size={50}
       /> 
       )
