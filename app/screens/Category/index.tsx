@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, Dimensions, Image, BackHandler} from "react-native"
+import { View, Text, StyleSheet, FlatList, Dimensions, Image, BackHandler } from "react-native"
 import { Sample_Products_Data } from "../../../assets/SampleData/Products";
 import ProductItem, { SkeletonList } from "../../components/ProductItem";
 import Header from "../../components/Header";
@@ -8,7 +8,7 @@ import { URL } from "../../constants";
 import axios from "axios";
 import { Button, Checkbox, IconButton, RadioButton } from "react-native-paper";
 import { Sale_img } from "../../../assets/Images";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView ,BottomSheetModal } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView, BottomSheetModal } from '@gorhom/bottom-sheet';
 import ErrorView from "../../components/ErrorView";
 const { width, height } = Dimensions.get('window');
 const color = ["#090979", "#433eb6", "#433eb6"];
@@ -24,7 +24,8 @@ const Category = (props) => {
   const handleOpen = () => bottomSheetRef.current?.present();
   const handleClose = () => bottomSheetRef.current?.close();
   const [type, setType] = useState('price');
-  const [from , setFrom] = useState('');
+  const [from, setFrom] = useState('');
+  console.log(URL);
 
   const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
   const handleRequest = async () => {
@@ -47,43 +48,49 @@ const Category = (props) => {
   const handleSort = () => {
     setItems(prevItems => {
       const sortedItems = [...prevItems].sort((a, b) => {
-        if (from === 'lowToHigh') {
-          return a.price - b.price;
-        } else if (from === 'highToLow') {
-          return b.price - a.price;
+        if (type === 'ratings') {
+          if (from === 'lowToHigh') {
+            return a.rating - b.rating;
+          } else if (from === 'highToLow') {
+            return b.rating - a.rating;
+          }
         } else {
-          return 0; 
+          if (from === 'lowToHigh') {
+            return a.price - b.price;
+          } else if (from === 'highToLow') {
+            return b.price - a.price;
+          }
         }
+        return 0;
       });
       return sortedItems;
     });
     handleClose();
   };
 
-  
 
   useEffect(() => {
     setFrom('');
     setType('price');
     handleRequest();
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-      
+
     return () => backHandler.remove();
 
   }, [category])
 
   const handleBackPress = () => {
     if (bottomSheetRef.current?.index !== -1) {
-        bottomSheetRef.current?.close();
-        return true;
+      bottomSheetRef.current?.close();
+      return true;
     }
-   return false;
-    
-};
+    return false;
+
+  };
   return (<View style={styles.Conatiner}>
 
 
-  {items.length!=0?<View style={styles.headerContainer}>
+    {items.length != 0 ? <View style={styles.headerContainer}>
       <IconButton
         icon="keyboard-backspace"
         iconColor='#433eb6'
@@ -93,15 +100,15 @@ const Category = (props) => {
       />
       <Image resizeMode={"contain"} source={Sale_img} style={styles.salesImage} />
       <IconButton
-       icon={ from !=''?"filter-check":'filter'}
+        icon={from != '' ? "filter-check" : 'filter'}
         iconColor='#433eb6'
         size={height * 0.025}
         style={{ backgroundColor: '#E7E5DF' }}
         onPress={() => handleOpen()}
       />
-    </View>:null}
+    </View> : null}
 
-    
+
     {loading ? <SkeletonList /> : <FlatList style={{ marginTop: 5 }} data={items} keyExtractor={(item) => item._id}
       renderItem={({ item }) => <ProductItem item={item} navigation={props.navigation} />}
       contentContainerStyle={styles.contentContainer}
@@ -109,9 +116,9 @@ const Category = (props) => {
       numColumns={2}
       columnWrapperStyle={{ gap: width * 0.04 }}
     />}
-    {items.length===0 && !loading ?<ErrorView handleClick={handleRequest}/>:null}
+    {items.length === 0 && !loading ? <ErrorView handleClick={handleRequest} /> : null}
 
-    <BottomSheetModal style={{ gap: 10 }} backdropComponent={renderBackDrop} ref={bottomSheetRef}  snapPoints={snapPoints} enablePanDownToClose={true} >
+    <BottomSheetModal style={{ gap: 10 }} backdropComponent={renderBackDrop} ref={bottomSheetRef} snapPoints={snapPoints} enablePanDownToClose={true} >
       <BottomSheetView style={{ borderColor: 'black' }}>
         <Text style={styles.btmSheetHeader}>Sort By</Text>
       </BottomSheetView>
@@ -119,16 +126,16 @@ const Category = (props) => {
         <RadioButton
           value="price"
           color="#433eb6"
-          status={ type==='price'?'checked':'unchecked'}
-          onPress={()=>setType('price')}
+          status={type === 'price' ? 'checked' : 'unchecked'}
+          onPress={() => setType('price')}
 
         />
         <Text style={styles.radioBtnText}>Price</Text>
         <RadioButton
           value="ratings"
           color="#433eb6"
-          status={ type==='ratings'?'checked':'unchecked'}
-          onPress={()=>setType('ratings')}
+          status={type === 'ratings' ? 'checked' : 'unchecked'}
+          onPress={() => setType('ratings')}
 
 
         />
@@ -142,8 +149,8 @@ const Category = (props) => {
         <RadioButton
           value="lowToHigh"
           color="#433eb6"
-          status={ from==='lowToHigh'?'checked':'unchecked'}
-          onPress={()=>setFrom('lowToHigh')}
+          status={from === 'lowToHigh' ? 'checked' : 'unchecked'}
+          onPress={() => setFrom('lowToHigh')}
 
 
         />
@@ -153,16 +160,16 @@ const Category = (props) => {
         <RadioButton
           value="HighToLow"
           color="#433eb6"
-          status={ from==='highToLow'?'checked':'unchecked'}
-          onPress={()=>setFrom('highToLow')}
+          status={from === 'highToLow' ? 'checked' : 'unchecked'}
+          onPress={() => setFrom('highToLow')}
 
         />
       </BottomSheetView>
       {/* <Button title="click"  onPress={()=>handleSort()}/> */}
-   {from !=''?<Button   onPress={()=>handleSort()} mode={'contained-tonal'} style={{backgroundColor:'#433eb6' , width:width*0.36, marginLeft:4, marginTop:3}} textColor="white">
+      {from != '' ? <Button onPress={() => handleSort()} mode={'contained-tonal'} style={{ backgroundColor: '#433eb6', width: width * 0.36, marginLeft: 4, marginTop: 3 }} textColor="white">
         apply
-      </Button>:null }
-      
+      </Button> : null}
+
     </BottomSheetModal>
 
   </View>)
@@ -226,8 +233,8 @@ const styles = StyleSheet.create({
     fontSize: width * 0.054,
     fontFamily: 'RobotoSlab_semiBold',
     paddingLeft: 10,
-    paddingBottom:5
-    
+    paddingBottom: 5
+
 
   }
 
