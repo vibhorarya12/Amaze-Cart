@@ -19,7 +19,7 @@ const Homenav = () => {
 
 
     return (
-        <BottomSheetModalProvider>
+       
         <Tab.Navigator
             backBehavior={'history'}
             screenOptions={{
@@ -229,7 +229,7 @@ const Homenav = () => {
                 {props =><SearchResults {...props} />}
             </Tab.Screen>
         </Tab.Navigator>
-        </BottomSheetModalProvider>
+       
     );
 }
 

@@ -5,7 +5,7 @@ import { getItem } from "../Utils/utils";
 import Homenav from "./HomeNav";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const Navigation = () => {
     const token : string = useSelector((state:any)=> state.auth.token);
@@ -13,7 +13,7 @@ const Navigation = () => {
    
     useEffect(() => {
 
-       console.log('token from navigation check <<<<', token)
+    //    console.log('token from navigation check <<<<')
     }, [guestLogin, token])
 
     
@@ -24,7 +24,9 @@ const Navigation = () => {
         // </NavigationContainer>
          
             <NavigationContainer>
+                <BottomSheetModalProvider>
          {guestLogin === true || token.length > 1 ? <Homenav /> : <Onboardnav />}
+         </BottomSheetModalProvider>
         </NavigationContainer>
     
     
