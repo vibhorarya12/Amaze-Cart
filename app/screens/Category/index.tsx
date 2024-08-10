@@ -25,7 +25,7 @@ const Category = (props) => {
   const handleClose = () => bottomSheetRef.current?.close();
   const [type, setType] = useState('price');
   const [from, setFrom] = useState('');
-  console.log(URL);
+ 
 
   const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
   const handleRequest = async () => {
