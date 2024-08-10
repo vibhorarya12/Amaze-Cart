@@ -19,8 +19,8 @@ const Wishlist = ({ navigation }) => {
         useCallback(() => {
             console.log('Screen is focused');
             if(token.length===0){
-                alert('please login first');
-                navigation.navigate('AuthNav');
+                // alert('please login first');
+                navigation.navigate('Profile');
                 return;
             }
             dispatch(getWishListProducts(token));
