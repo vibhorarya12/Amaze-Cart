@@ -1,16 +1,14 @@
-import Onboarding from 'react-native-onboarding-swiper';
 import { Intro_img_one, Intro_img_three, Intro_img_two } from '../../../assets/Images';
-import { Dimensions, Image, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image,  SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useNavigation } from '@react-navigation/native';
-import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 
 
 const { width, height } = Dimensions.get('window');
 
-const color = ["#433eb6", "#090979"];
+const color = ["#090979", "#433eb6", "#433eb6"];
 
 
 
@@ -43,15 +41,15 @@ const Intro = () => {
 
   return (<SafeAreaView style={styles.container}>
     <StatusBar translucent={true} backgroundColor={'transparent'} />
-    <View style={styles.imageContainer}>
+    <View  style={styles.imageContainer}>
 
 
 
       <SwiperFlatList
 
-        // autoplay
-        // autoplayDelay={3}
-        // autoplayLoop={true}
+        autoplay
+        autoplayDelay={3}
+        autoplayLoop={true}
         paginationStyle={{ bottom: height * 0.04, opacity: 0.7, position: 'absolute' }}
         
         index={0}
@@ -85,13 +83,13 @@ const Intro = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, 
-    backgroundColor: '#E8E2E2'  , gap:height*0.06},
+    backgroundColor: '#CFCFEA'  , gap:height*0.06},
 
   imageContainer: {
     width: width,
     height: height * 0.89,
     justifyContent: 'center',
-    backgroundColor: '#E8E2E2',
+    backgroundColor: '#CFCFEA',
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     // elevation: 2
@@ -127,11 +125,11 @@ const styles = StyleSheet.create({
   },
 
   gradientBtn: {
-    width: width * 0.9,
+    width: width * 0.92,
     height: width * 0.15,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
+    borderRadius: 25,
 
 
   },
@@ -148,7 +146,7 @@ const styles = StyleSheet.create({
     height: height * 0.89,
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
-    opacity:0.8
+    opacity:0.7
     
   }
 });
