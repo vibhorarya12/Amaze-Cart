@@ -10,3 +10,7 @@
 ![Untitled design (4)](https://github.com/user-attachments/assets/6272123d-921c-4d5d-830d-16ad87f16553)
 
 ![Untitled design (5)](https://github.com/user-attachments/assets/080b4d9a-5119-45ca-8a9e-61996078cfd2)
+
+### 🗒️ Amazecart is a full-stack eCommerce app built with a React Native frontend, using Redux Toolkit and Redux Saga for state management. The backend is powered by Node.js with a MongoDB Atlas database. The app integrates Razorpay as the payment gateway and utilizes Firebase for OTP phone authentication. For a polished UI, React Native Paper is also employed.
+## Tech stack 💻
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Firebase](https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=ffcd34) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
