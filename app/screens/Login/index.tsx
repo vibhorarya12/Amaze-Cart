@@ -3,8 +3,8 @@ import { Alert, Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, T
 import { theme_color, theme_primary, URL } from "../../constants";
 import { Logo_img } from "../../../assets/Images";
 
-import {  TextInput } from 'react-native-paper';
-import { useNavigation } from "@react-navigation/native";
+import {  IconButton, TextInput } from 'react-native-paper';
+import { CommonActions, useNavigation } from "@react-navigation/native";
 
 import { useDispatch, useSelector } from "react-redux";
 import { guestLogin } from "../../../redux/Actions/authActions";
@@ -21,7 +21,7 @@ const color = [ "#090979", "#433eb6",  "#433eb6"];
 const Login = () => {
     const [loading , setLoading] = useState(false);
   const navigation = useNavigation();
-  const [phone, setPhone] = useState('5555555555'); 
+  const [phone, setPhone] = useState(''); 
   const dispatch = useDispatch();
   const guestLoginCheck :boolean = useSelector((state:any)=> state.auth.guestLogin);
   const tenDigitRegex = /^\d{10}$/; // regular expression for phone validation"
