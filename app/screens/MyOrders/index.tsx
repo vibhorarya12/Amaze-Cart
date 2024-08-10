@@ -59,14 +59,15 @@ const MyOrders = ({ navigation }) => {
     </LinearGradient>
     {/* <Button  title="show" onPress={()=>console.log(order)}/> */}
     <Spinner textContent="" visible={loading} color={color[0]} />
-    {error && order.length ===0 ?<ErrorView handleClick={fetchOrders} />:<FlatList
+    {error && order.length ===0 &&<ErrorView handleClick={fetchOrders} /> }
+ {order.length>0 &&<FlatList
       style={styles.flatList}
       data={order}
       keyExtractor={(item: string) => item._id}
       renderItem={({ item }) => <OrderItems item={item} key={item._id} navigation={navigation} />}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
-    /> }
+    />}
 
   {order.length ===0 && !error && !loading ?<View style={styles.emptyContainer}>
       <Icon
