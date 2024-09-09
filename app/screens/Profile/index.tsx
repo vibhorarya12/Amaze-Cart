@@ -8,13 +8,20 @@ import { logout } from "../../../redux/Actions/authActions";
 import { useCallback, useEffect, useRef } from "react";
 import { clearWishList } from "../../../redux/Actions/productActions";
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-
+interface CustomBottomSheetProps {
+    bottomSheetModalRef: React.RefObject<BottomSheetModal>;
+    snapPoints: string[];
+    children: React.ReactNode;
+    enablePanDownToClose:boolean
+  }
 const { width, height } = Dimensions.get('window');
 const color = ['#E7E5DF', '#E7E5DF'];
 const Profile = ({ navigation }) => {
     const dispatch = useDispatch();
     const snapPoints = ['90%'];
     const bottomSheetRef = useRef<BottomSheetModal>(null);
+    // for address update
+    const bottomSheetRefEdit = useRef<BottomSheetModal>(null);
     const renderBackDrop = useCallback((props: any) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, [])
     const { token, loading, guestLogin, name } = useSelector((state) => state.auth);
     const userInfo = useSelector((state) => state.auth);
@@ -120,7 +127,7 @@ const Profile = ({ navigation }) => {
                         icon="square-edit-outline"
                         iconColor='#433eb6'
                         size={width * 0.07}
-                        onPress={() => console.log(userInfo)}
+                        onPress={() => bottomSheetRefEdit.current?.present()}
                         style={{ right: width * 0.01 }}
                     />
 
@@ -141,41 +148,85 @@ const Profile = ({ navigation }) => {
 
             </View>}
         {/* bottomsheetModal for about section */}
-        <BottomSheetModal backdropComponent={renderBackDrop} backgroundStyle={{ backgroundColor: '#f2f3f2' }} ref={bottomSheetRef} snapPoints={snapPoints}
-            enablePanDownToClose={true} style={{ justifyContent: 'center', alignItems: 'center', gap: 10, }}>
-            <BottomSheetView style={styles.aboutContainer}>
-                <Avatar.Image style={styles.avatar} size={width * 0.4} source={{ uri: 'https://avatars.githubusercontent.com/u/135149764?v=4' }} />
-                <Text style={{
-                    fontSize: width * 0.06,
-                    fontFamily: 'RobotoSlab_semiBold', color: '#433eb6'
-                }}>
-                    About
-                </Text>
-                <Text  style={[styles.infoText, {textAlign:'justify'}]}>
-                    Amazecart was developed by Vibhor Arya, a skilled React Native developer with expertise in full-stack development. With a strong background in building comprehensive applications, Vibhor leveraged his proficiency in React Native, Node.js, and MongoDB to create a robust eCommerce platform. His commitment to delivering high-quality user experiences is reflected in the integration of state management with Redux, secure payment processing via Razorpay, and OTP authentication through Firebase, all while maintaining a polished interface using React Native Paper
-                </Text>
-             <BottomSheetView style={styles.iconContainer}>
-             <IconButton
-                icon="github"
-                iconColor='#433eb6'
-                size={width * 0.08}
-                style={{ backgroundColor: '#E7E5DF' }}
-                onPress={()=>Linking.openURL('https://github.com/vibhorarya12')
-                    .catch((err) => console.error('Failed to open URL:', err))}
-               
-            />
-            <Text style={{
-                    fontSize: width * 0.045,
-                    fontFamily: 'RobotoSlab_semiBold', color: '#433eb6'
-                }}>
-                    Follow
-                </Text>
-             </BottomSheetView>
-            </BottomSheetView>
-        </BottomSheetModal>
+        <CustomBottomSheet
+                bottomSheetModalRef={bottomSheetRef}
+                snapPoints={snapPoints}
+                enablePanDownToClose={true}
+            >
+                <BottomSheetView style={styles.aboutContainer}>
+                    <Avatar.Image style={styles.avatar} size={width * 0.4} source={{ uri: 'https://avatars.githubusercontent.com/u/135149764?v=4' }} />
+                    <Text style={{
+                        fontSize: width * 0.06,
+                        fontFamily: 'RobotoSlab_semiBold', color: '#433eb6'
+                    }}>
+                        About
+                    </Text>
+                    <Text style={[styles.infoText, {textAlign:'justify'}]}>
+                        Amazecart was developed by Vibhor Arya, a skilled React Native developer with expertise in full-stack development. With a strong background in building comprehensive applications, Vibhor leveraged his proficiency in React Native, Node.js, and MongoDB to create a robust eCommerce platform. His commitment to delivering high-quality user experiences is reflected in the integration of state management with Redux, secure payment processing via Razorpay, and OTP authentication through Firebase, all while maintaining a polished interface using React Native Paper
+                    </Text>
+                    <BottomSheetView style={styles.iconContainer}>
+                        <IconButton
+                            icon="github"
+                            iconColor='#433eb6'
+                            size={width * 0.08}
+                            style={{ backgroundColor: '#E7E5DF' }}
+                            onPress={() => Linking.openURL('https://github.com/vibhorarya12')
+                                .catch((err) => console.error('Failed to open URL:', err))}
+                        />
+                        <Text style={{
+                            fontSize: width * 0.045,
+                            fontFamily: 'RobotoSlab_semiBold', color: '#433eb6'
+                        }}>
+                            Follow
+                        </Text>
+                    </BottomSheetView>
+                </BottomSheetView>
+            </CustomBottomSheet>
+            {/* custom modal for updating address */}
+            <CustomBottomSheet
+                bottomSheetModalRef={bottomSheetRefEdit}
+                snapPoints={snapPoints}
+                enablePanDownToClose={true}
+            >
+                    <Text>Update address</Text>
+
+                </CustomBottomSheet>
+
 
     </ScrollView>)
 }
+
+
+
+const CustomBottomSheet: React.FC<CustomBottomSheetProps> = ({
+    bottomSheetModalRef,
+    snapPoints,
+    children,
+    enablePanDownToClose
+  }) => {
+    const renderBackdrop = useCallback(
+      (props: any) => <BottomSheetBackdrop  pressBehavior={'none'} appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
+      []
+    );
+  
+    return (
+      <BottomSheetModal
+        backdropComponent={renderBackdrop}
+        ref={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose={enablePanDownToClose}
+        backgroundStyle={{backgroundColor:'#f2f3f2'}}
+        
+      >
+        
+        <BottomSheetView style={styles.contentContainer}>
+        {children}
+        </BottomSheetView>
+      </BottomSheetModal>
+    );
+  };
+
+
 
 
 const styles = StyleSheet.create({
