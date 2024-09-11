@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/Actions/authActions";
 import { useCallback, useEffect, useRef } from "react";
 import { clearWishList } from "../../../redux/Actions/productActions";
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetTextInput, BottomSheetView } from "@gorhom/bottom-sheet";
+import { LinearGradient } from "expo-linear-gradient";
 interface CustomBottomSheetProps {
     bottomSheetModalRef: React.RefObject<BottomSheetModal>;
     snapPoints: string[];
     children: React.ReactNode;
-    enablePanDownToClose:boolean
-  }
+    enablePanDownToClose: boolean
+}
 const { width, height } = Dimensions.get('window');
 const color = ['#E7E5DF', '#E7E5DF'];
 const Profile = ({ navigation }) => {
@@ -149,48 +150,68 @@ const Profile = ({ navigation }) => {
             </View>}
         {/* bottomsheetModal for about section */}
         <CustomBottomSheet
-                bottomSheetModalRef={bottomSheetRef}
-                snapPoints={snapPoints}
-                enablePanDownToClose={true}
-            >
-                <BottomSheetView style={styles.aboutContainer}>
-                    <Avatar.Image style={styles.avatar} size={width * 0.4} source={{ uri: 'https://avatars.githubusercontent.com/u/135149764?v=4' }} />
+            bottomSheetModalRef={bottomSheetRef}
+            snapPoints={snapPoints}
+            enablePanDownToClose={true}
+        >
+            <BottomSheetView style={styles.aboutContainer}>
+                <Avatar.Image style={styles.avatar} size={width * 0.4} source={{ uri: 'https://avatars.githubusercontent.com/u/135149764?v=4' }} />
+                <Text style={{
+                    fontSize: width * 0.06,
+                    fontFamily: 'RobotoSlab_semiBold', color: '#433eb6'
+                }}>
+                    About
+                </Text>
+                <Text style={[styles.infoText, { textAlign: 'justify' }]}>
+                    Amazecart was developed by Vibhor Arya, a skilled React Native developer with expertise in full-stack development. With a strong background in building comprehensive applications, Vibhor leveraged his proficiency in React Native, Node.js, and MongoDB to create a robust eCommerce platform. His commitment to delivering high-quality user experiences is reflected in the integration of state management with Redux, secure payment processing via Razorpay, and OTP authentication through Firebase, all while maintaining a polished interface using React Native Paper
+                </Text>
+                <BottomSheetView style={styles.iconContainer}>
+                    <IconButton
+                        icon="github"
+                        iconColor='#433eb6'
+                        size={width * 0.08}
+                        style={{ backgroundColor: '#E7E5DF' }}
+                        onPress={() => Linking.openURL('https://github.com/vibhorarya12')
+                            .catch((err) => console.error('Failed to open URL:', err))}
+                    />
                     <Text style={{
-                        fontSize: width * 0.06,
+                        fontSize: width * 0.045,
                         fontFamily: 'RobotoSlab_semiBold', color: '#433eb6'
                     }}>
-                        About
+                        Follow
                     </Text>
-                    <Text style={[styles.infoText, {textAlign:'justify'}]}>
-                        Amazecart was developed by Vibhor Arya, a skilled React Native developer with expertise in full-stack development. With a strong background in building comprehensive applications, Vibhor leveraged his proficiency in React Native, Node.js, and MongoDB to create a robust eCommerce platform. His commitment to delivering high-quality user experiences is reflected in the integration of state management with Redux, secure payment processing via Razorpay, and OTP authentication through Firebase, all while maintaining a polished interface using React Native Paper
-                    </Text>
-                    <BottomSheetView style={styles.iconContainer}>
-                        <IconButton
-                            icon="github"
-                            iconColor='#433eb6'
-                            size={width * 0.08}
-                            style={{ backgroundColor: '#E7E5DF' }}
-                            onPress={() => Linking.openURL('https://github.com/vibhorarya12')
-                                .catch((err) => console.error('Failed to open URL:', err))}
-                        />
-                        <Text style={{
-                            fontSize: width * 0.045,
-                            fontFamily: 'RobotoSlab_semiBold', color: '#433eb6'
-                        }}>
-                            Follow
-                        </Text>
-                    </BottomSheetView>
                 </BottomSheetView>
-            </CustomBottomSheet>
-            {/* custom modal for updating address */}
-            <CustomBottomSheet
-                bottomSheetModalRef={bottomSheetRefEdit}
-                snapPoints={snapPoints}
-                enablePanDownToClose={true}
-            >
-                    <Text>Update address</Text>
+            </BottomSheetView>
+        </CustomBottomSheet>
+        {/* custom modal for updating address */}
+        <CustomBottomSheet
+            bottomSheetModalRef={bottomSheetRefEdit}
+            snapPoints={["60%"]}
+            enablePanDownToClose={true}
+        >
 
-                </CustomBottomSheet>
+            <Text style={{
+                fontSize: width * 0.05,
+                fontFamily: 'RobotoSlab_semiBold', color: '#433eb6'
+            }}>
+                Update your address
+            </Text>
+            <BottomSheetView style={{  borderColor: 'black', width: width * 0.9, display:'flex',  alignItems:'center'}}>
+            <BottomSheetTextInput  style={{width: width*0.9 ,  borderWidth:1, borderColor:'black', borderRadius:10 , height:height*0.07, padding:20}} multiline={true}
+            />
+            <TouchableOpacity disabled={loading} >
+                    <LinearGradient style={styles.bottomSheetBtn}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        colors={["#090979", "#433eb6", "#433eb6"]}>
+                        <Text style={{ fontSize: width * 0.04, fontFamily: 'RobotoSlab_semiBold', color: 'white' }} >
+                            Update
+                        </Text>
+                    </LinearGradient>
+                </TouchableOpacity>
+            </BottomSheetView>
+
+        </CustomBottomSheet>
 
 
     </ScrollView>)
@@ -203,28 +224,29 @@ const CustomBottomSheet: React.FC<CustomBottomSheetProps> = ({
     snapPoints,
     children,
     enablePanDownToClose
-  }) => {
+}) => {
     const renderBackdrop = useCallback(
-      (props: any) => <BottomSheetBackdrop  pressBehavior={'none'} appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
-      []
+        (props: any) => <BottomSheetBackdrop pressBehavior={'none'} appearsOnIndex={0} disappearsOnIndex={-1} {...props} />,
+        []
     );
-  
+
     return (
-      <BottomSheetModal
-        backdropComponent={renderBackdrop}
-        ref={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        enablePanDownToClose={enablePanDownToClose}
-        backgroundStyle={{backgroundColor:'#f2f3f2'}}
-        
-      >
-        
-        <BottomSheetView style={styles.contentContainer}>
-        {children}
-        </BottomSheetView>
-      </BottomSheetModal>
+        <BottomSheetModal
+            backdropComponent={renderBackdrop}
+            ref={bottomSheetModalRef}
+            snapPoints={snapPoints}
+            enablePanDownToClose={enablePanDownToClose}
+            backgroundStyle={{ backgroundColor: '#f2f3f2' }}
+            keyboardBehavior={'fillParent'}
+
+        >
+
+            <BottomSheetView style={styles.contentContainer}>
+                {children}
+            </BottomSheetView>
+        </BottomSheetModal>
     );
-  };
+};
 
 
 
@@ -306,20 +328,31 @@ const styles = StyleSheet.create({
         height: height * 0.7,
         alignItems: 'center',
         gap: 10,
-       
+
 
 
     },
-    iconContainer:{
+    iconContainer: {
         width: width * 0.9,
-        height:height*0.08,
+        height: height * 0.08,
         // borderWidth:1,
-        borderColor:'black',
-        flexDirection:'row',
-        alignItems:'center',
-        borderRadius:20,
-        justifyContent:'center',
-        gap:5
+        borderColor: 'black',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 20,
+        justifyContent: 'center',
+        gap: 5
+    },
+    bottomSheetBtn: {
+        width: width * 0.75,
+        height: width * 0.14,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: height * 0.03,
+        marginTop: height * 0.012,
+
+
     }
 })
 
